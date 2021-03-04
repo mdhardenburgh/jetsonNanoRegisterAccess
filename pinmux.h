@@ -21,6 +21,18 @@
  * section, but I digress...
  * 
  * Lets start with Section 9.5 first, Pad Controls.
+ * 
+ * Most MPIO pads have thier own per pad controls (which lives in the pinmux
+ * register) and control group per pad, however some MPIO pads are 
+ * grouped into control groups and dont have per pad controls, and some have a 
+ * combination thereof. All ST (STandard MPIO pad) and DD (Dual Driver MPIO pad)
+ * pads have thier own indvidiual control group except for the ST_EMMC pads. 
+ * For example, GPIO_PE6 gets its own per pad controls and control group, 9.15.144
+ * lists that pad's per pad register fields at address offset 0x3248 and 21.1.4.61
+ * lists that pad control group register fields at adderss offset 0x9c8.
+ * GPIO_PE6 does not have the DRV_TYPE listed in it's per pad register field,
+ * and instead has DRVDN and DRVUP listed in it's pad control group register
+ * fields. 
  *
  * But first, a caviat. I want to emphasize here that during normal operation,
  * per pad controls is driven by the pinmux control registers as described in
@@ -40,10 +52,32 @@
  * are 162 of these Pinmux Control Registers (list in section 9.15) and 152 Pad 
  * Control Group Registers (listed in section 21.1.4.4 to 21.1.4.157). A pad 
  * control group is a group of MPIO pads that share common settings and are 
- * controlled together.
+ * controlled together. Control groups are sometimes refered to as I/O bricks.
+ * 
  *
- * The per pad controls may include (not all of them have these controls) PUPD,
+ * All possible per pad controls are listed on Table 25 on page 229. The per 
+ * pad controls may include (not all of them have these controls such as PE6) PUPD, 
  * TRISTATE_CONTROL, DPD_PARKING, E_INPUT, E_LPDR, E_OD (Output Disable. 
- * PERMENTLY dispables the pad), E_IO_HV, E_HSM, SCHMT, DRV_TYPE[1:0].
+ * PERMENTLY dispables the pad), E_IO_HV, E_HSM, SCHMT, DRV_TYPE[1:0]. Not all
+ * pads have all of these controls. The per pad options will be discussed in 
+ * more detail when I get to section 9.6 and Table 29: Pinmux Register Format,
+ * but its rather straight forward.
  *
- * The pad control group controlls may include...    
+ * Pad Controls
+ * _____________________________________________________________________________________________
+ *                                   Per Pad Options
+ * _________________________________________________________________________________________________
+ * Control              | Description
+ * PUPD                 | Internal Pull up, pull down option
+ * TRISTATE_CONTROL     |
+ *
+ * The pad control group register map is shown in table 26 on page 231. The pad
+ * controls group controls may include. SCH (Schmitt trigger for the control group),
+ * PREEMP (pre-emphasis circuit), PU, PD, PRK, DRV_TYPE, DRVDN, DRVUP, SLWR, 
+ * SLWF. The information for the register format for the per pad controls are 
+ * not straight forward, but instead is in THREE DIFFERNT PLACES. LOOKING AT YOU NVIDIA!!!
+ *
+ * The first place is in section 9.5.2. All ST (STandard MPIO pad) and DD (Dual
+ * Driver MPIO pad) pads have thier each indvidiual control group except for 
+ * the ST_EMMC pads. Additionally, Nvidia mentions to reference section 21.1.2
+ * 
