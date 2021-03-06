@@ -20,7 +20,7 @@ fields.
  
 ### Pad Controls
  
-| Per Pad Options from Table 25. Register Descriptions are in 9.15.                                           |
+Per Pad Options from Table 25. Register Descriptions are in 9.15.                                           
 | Control              | Description                                                                          |
 | ---------------------|------------------------------------------------------------------------------------- |
 | PUPD                 | Internal Pull up, pull down option                                                   |
@@ -33,9 +33,9 @@ fields.
 | E_HSM                | Enable or disable high speed mode. For SPI or I2C.                                   |
 | SCHMT                | Enable or disable the Schmitt trigger.                                               |
 | DRV_TYPE[1:0]        | Enables different combination of impedance code mapping for the pads                 |
-| ----------------------------------------------------------------------------------------------------------- |
+| ---------------------|------------------------------------------------------------------------------------- |
 | Per Control Group options from 9.5.2. Register Descriptions are in 9.5.2, 21.1.2 and 21.1.4.4 to 21.1.4.157 |
-| ----------------------------------------------------------------------------------------------------------- |
+| ---------------------|------------------------------------------------------------------------------------- |
 | DRVDN/UP             | Drive Down / Up. Driver Output Pull-Up/Pull-Down drive strength code.                |
 | SLWR/ SLWF           | Slew Falling / Rising. Driver Output Pull-Up/Pull-Down slew control code.            |
 
@@ -44,7 +44,7 @@ These pinmux registers contain the per pad controls.
 Do another one for the other register in 21.1.4 to .144
 
 | Section  | Name                            | Offset | Read/Write | Reset      |
-| ----------------------------------------------------------------------------- | 
+| ---------|---------------------------------|--------|------------|----------- | 
 | 9.15.1   | PINMUX_AUX_SDMMC1_CLK_0         | 0x3000 | R/W        | 0x00002074 |
 | 9.15.2   | PINMUX_AUX_SDMMC1_CMD_0         | 0x3004 | R/W        | 0x00002078 |
 | 9.15.3   | PINMUX_AUX_SDMMC1_DAT3_0        | 0x3008 | R/W        | 0x00002078 |
