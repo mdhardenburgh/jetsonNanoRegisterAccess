@@ -20,24 +20,24 @@ fields.
  
 ### Pad Controls
  
-Per Pad Options from Table 25. Register Descriptions are in 9.15.                                           
-| Control              | Description                                                                          |
-| ----------------------------------------------------------------------------------------------------------- |
-| PUPD                 | Internal Pull up, pull down option                                                   |
-| TRISTATE_CONTROL     | Enable tristate or High Impedance(Z). Effectivly disables the output diriver         |
-| DPD_PARKING_CONTROL  | Keeps the state of the pin through deep sleep                                        |
-| E_INPUT              | Enable or disable input reciever                                                     |
-| E_LDPR               | Enable or disable base drivers                                                       |
-| E_OD                 | Turn your jetson into a brick                                                        |
-| E_IO_HV              | Enable or disable "high" voltage IO mode. Send and recieve 3.3V logic.               |
-| E_HSM                | Enable or disable high speed mode. For SPI or I2C.                                   |
-| SCHMT                | Enable or disable the Schmitt trigger.                                               |
-| DRV_TYPE[1:0]        | Enables different combination of impedance code mapping for the pads                 |
-| ----------------------------------------------------------------------------------------------------------- |
-| Per Control Group options from 9.5.2. Register Descriptions are in 9.5.2, 21.1.2 and 21.1.4.4 to 21.1.4.157 |
-| ----------------------------------------------------------------------------------------------------------- |
-| DRVDN/UP             | Drive Down / Up. Driver Output Pull-Up/Pull-Down drive strength code.                |
-| SLWR/ SLWF           | Slew Falling / Rising. Driver Output Pull-Up/Pull-Down slew control code.            |
+ Per Pad Options from Table 25. Register Descriptions are in 9.15.                                           
+ | Control              | Description                                                                          |
+ | ----------------------------------------------------------------------------------------------------------- |
+ | PUPD                 | Internal Pull up, pull down option                                                   |
+ | TRISTATE_CONTROL     | Enable tristate or High Impedance(Z). Effectivly disables the output diriver         |
+ | DPD_PARKING_CONTROL  | Keeps the state of the pin through deep sleep                                        |
+ | E_INPUT              | Enable or disable input reciever                                                     |
+ | E_LDPR               | Enable or disable base drivers                                                       |
+ | E_OD                 | Turn your jetson into a brick                                                        |
+ | E_IO_HV              | Enable or disable "high" voltage IO mode. Send and recieve 3.3V logic.               |
+ | E_HSM                | Enable or disable high speed mode. For SPI or I2C.                                   |
+ | SCHMT                | Enable or disable the Schmitt trigger.                                               |
+ | DRV_TYPE[1:0]        | Enables different combination of impedance code mapping for the pads                 |
+ | ----------------------------------------------------------------------------------------------------------- |
+ | Per Control Group options from 9.5.2. Register Descriptions are in 9.5.2, 21.1.2 and 21.1.4.4 to 21.1.4.157 |
+ | ----------------------------------------------------------------------------------------------------------- |
+ | DRVDN/UP             | Drive Down / Up. Driver Output Pull-Up/Pull-Down drive strength code.                |
+ | SLWR/ SLWF           | Slew Falling / Rising. Driver Output Pull-Up/Pull-Down slew control code.            |
 
 ### Register map for the pinmux registers from 9.15. Base address is 0x70000000.
 These pinmux registers contain the per pad controls. 
