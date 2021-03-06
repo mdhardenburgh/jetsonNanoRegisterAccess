@@ -35,6 +35,7 @@ Per Pad Options from Table 25. Register Descriptions are in 9.15.
 | SCHMT                | Enable or disable the Schmitt trigger.                                               |
 | DRV_TYPE[1:0]        | Enables different combination of impedance code mapping for the pads                 |
 | ----------------------------------------------------------------------------------------------------------- |
+
 | Per Control Group options from 9.5.2. Register Descriptions are in 9.5.2, 21.1.2 and 21.1.4.4 to 21.1.4.157 |
 | ----------------------------------------------------------------------------------------------------------- |
 | DRVDN/UP             | Drive Down / Up. Driver Output Pull-Up/Pull-Down drive strength code.                |
