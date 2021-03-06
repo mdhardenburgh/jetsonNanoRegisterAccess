@@ -23,7 +23,7 @@ fields.
 Per Pad Options from Table 25. Register Descriptions are in 9.15. 
 
 | Control              | Description                                                                          |
-| ----------------------------------------------------------------------------------------------------------- |
+| ---------------------|------------------------------------------------------------------------------------- |
 | PUPD                 | Internal Pull up, pull down option                                                   |
 | TRISTATE_CONTROL     | Enable tristate or High Impedance(Z). Effectivly disables the output diriver         |
 | DPD_PARKING_CONTROL  | Keeps the state of the pin through deep sleep                                        |
