@@ -1,3 +1,4 @@
+# Pinmux and Pad control options
 
 This datasheet is a little hard to understand, like every other paragraph
 was written by a different person who only skimmed the last sentence of 
@@ -33,9 +34,9 @@ Per Pad Options from Table 25. Register Descriptions are in 9.15.
 | E_HSM                | Enable or disable high speed mode. For SPI or I2C.                                   |
 | SCHMT                | Enable or disable the Schmitt trigger.                                               |
 | DRV_TYPE[1:0]        | Enables different combination of impedance code mapping for the pads                 |
-| ---------------------|------------------------------------------------------------------------------------- |
+|                                                                                                             |
 | Per Control Group options from 9.5.2. Register Descriptions are in 9.5.2, 21.1.2 and 21.1.4.4 to 21.1.4.157 |
-| ---------------------|------------------------------------------------------------------------------------- |
+|                                                                                                             |
 | DRVDN/UP             | Drive Down / Up. Driver Output Pull-Up/Pull-Down drive strength code.                |
 | SLWR/ SLWF           | Slew Falling / Rising. Driver Output Pull-Up/Pull-Down slew control code.            |
 
