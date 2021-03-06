@@ -21,7 +21,7 @@ fields.
 ### Pad Controls
  
 | Per Pad Options from Table 25. Register Descriptions are in 9.15.                                           |
-| ----------------------------------------------------------------------------------------------------------- |
+|                                                                                                             |
 | Control              | Description                                                                          |
 | ----------------------------------------------------------------------------------------------------------- |
 | PUPD                 | Internal Pull up, pull down option                                                   |
