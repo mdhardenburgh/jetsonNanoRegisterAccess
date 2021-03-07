@@ -42,7 +42,6 @@ Per Pad Options from Table 25. Register Descriptions are in 9.15.
 
 ### Register map for the pinmux registers from 9.15. Base address is 0x70000000.
 These pinmux registers contain the per pad controls. 
-Do another one for the other register in 21.1.4 to .144
 
 | Section  | Name                            | Offset | Read/Write | Reset      |
 | ---------|---------------------------------|--------|------------|----------- | 
@@ -174,3 +173,44 @@ Do another one for the other register in 21.1.4 to .144
 | 9.15.126 | PINMUX_AUX_LCD_BL_EN_0          | 0x3200 | R/W        | 0x00000074 |
 | 9.15.127 | PINMUX_AUX_LCD_RST_0            | 0x3204 | R/W        | 0x00000074 |
 | 9.15.128 | PINMUX_AUX_LCD_GPIO1_0          | 0x3208 | R/W        | 0x00000074 | 
+| 9.15.129 | PINMUX_AUX_LCD_GPIO2_0          | 0x320c | R/W        | 0x00000074 |
+| 9.15.130 | PINMUX_AUX_AP_READY_0           | 0x3210 | R/W        | 0x00000074 |
+| 9.15.131 | PINMUX_AUX_TOUCH_RST_0          | 0x3214 | R/W        | 0x00000074 |
+| 9.15.132 | PINMUX_AUX_TOUCH_CLK_0          | 0x3218 | R/W        | 0x00000074 | 
+| 9.15.133 | PINMUX_AUX_MODEM_WAKE_AP_0      | 0x321c | R/W        | 0x00000074 |
+| 9.15.134 | PINMUX_AUX_TOUCH_INT_0          | 0x3220 | R/W        | 0x00000074 |
+| 9.15.135 | PINMUX_AUX_MOTION_INT_0         | 0x3224 | R/W        | 0x00000074 |
+| 9.15.136 | PINMUX_AUX_ALS_PROX_INT_0       | 0x3228 | R/W        | 0x00000074 |
+| 9.15.137 | PINMUX_AUX_TEMP_ALERT_0         | 0x322c | R/W        | 0x00000074 |
+| 9.15.138 | PINMUX_AUX_BUTTON_POWER_ON_0    | 0x3230 | R/W        | 0x00000078 |
+| 9.15.139 | PINMUX_AUX_BUTTON_VOL_UP_0      | 0x3234 | R/W        | 0x00000078 |
+| 9.15.140 | PINMUX_AUX_BUTTON_VOL_DOWN_0    | 0x3238 | R/W        | 0x00000078 |
+| 9.15.141 | PINMUX_AUX_BUTTON_SLIDE_SW_0    | 0x323c | R/W        | 0x00000078 |
+| 9.15.142 | PINMUX_AUX_BUTTON_HOME_0        | 0x3240 | R/W        | 0x00000078 |
+| 9.15.143 | PINMUX_AUX_GPIO_PA6_0           | 0x3244 | R/W        | 0x00000030 |
+| 9.15.144 | PINMUX_AUX_GPIO_PE6_0           | 0x3248 | R/W        | 0x00000074 |
+| 9.15.145 | PINMUX_AUX_GPIO_PE7_0           | 0x324c | R/W        | 0x00000074 |
+| 9.15.146 | PINMUX_AUX_GPIO_PH6_0           | 0x3250 | R/W        | 0x00000074 |
+| 9.15.147 | PINMUX_AUX_GPIO_PK0_0           | 0x3254 | R/W        | 0x00006074 |
+| 9.15.148 | PINMUX_AUX_GPIO_PK1_0           | 0x3258 | R/W        | 0x00006074 |
+| 9.15.149 | PINMUX_AUX_GPIO_PK2_0           | 0x325c | R/W        | 0x00006074 |
+| 9.15.150 | PINMUX_AUX_GPIO_PK3_0           | 0x3260 | R/W        | 0x00006074 |
+| 9.15.151 | PINMUX_AUX_GPIO_PK4_0           | 0x3264 | R/W        | 0x00006074 |
+| 9.15.152 | PINMUX_AUX_GPIO_PK5_0           | 0x3268 | R/W        | 0x00006074 |
+| 9.15.153 | PINMUX_AUX_GPIO_PK6_0           | 0x326c | R/W        | 0x00006074 |
+| 9.15.154 | PINMUX_AUX_GPIO_PK7_0           | 0x3270 | R/W        | 0x00006074 |
+| 9.15.155 | PINMUX_AUX_GPIO_PL0_0           | 0x3274 | R/W        | 0x00006074 |
+| 9.15.156 | PINMUX_AUX_GPIO_PL1_0           | 0x3278 | R/W        | 0x00006074 |
+| 9.15.157 | PINMUX_AUX_GPIO_PZ0_0           | 0x327c | R/W        | 0x00000074 |
+| 9.15.158 | PINMUX_AUX_GPIO_PZ1_0           | 0x3280 | R/W        | 0x00000074 |
+| 9.15.159 | PINMUX_AUX_GPIO_PZ2_0           | 0x3284 | R/W        | 0x00000074 |
+| 9.15.160 | PINMUX_AUX_GPIO_PZ3_0           | 0x3288 | R/W        | 0x00000074 | 
+| 9.15.161 | PINMUX_AUX_GPIO_PZ4_0           | 0x328c | R/W        | 0x00000074 |
+| 9.15.162 | PINMUX_AUX_GPIO_PZ5_0           | 0x3290 | R/W        | 0x00000074 |
+
+### Register map for the pinmux registers from 21.1.4.4 to 21.1.4.144. Base address is 0x70000000.
+These registers contain the per pad group controls. 
+
+| Section    | Name                            | Offset | Read/Write | Reset      |
+|------------|---------------------------------|--------|------------|------------| 
+| 21.1.4.4   | ALS_PROX_INT_CFG                | 0x8e4  | R/W        | 0x00000000 |
