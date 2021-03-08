@@ -209,7 +209,7 @@ These pinmux registers contain the per pad controls.
 | 9.15.162 | PINMUX_AUX_GPIO_PZ5_0           | 0x3290 | R/W        | 0x00000074 |
 
 ### Register map for the pinmux registers from 21.1.4.4 to 21.1.4.144. Base address is 0x70000000.
-These registers contain the per pad group controls. 
+These registers contain the per pad group control register. 
 
 | Section    | Name of Pad Control Register    | Offset | Read/Write | Reset      |
 |------------|---------------------------------|--------|------------|------------| 
@@ -286,3 +286,71 @@ These registers contain the per pad group controls.
 | 21.1.4.74  | GPIO_PZ0_CFG                    | 0x9fc  | R/W        | 0x00000000 |
 | 21.1.4.75  | GPIO_PZ1_CFG                    | 0xa00  | R/W        | 0x00000000 |
 | 21.1.4.76  | GPIO_PZ2_CFG                    | 0xa04  | R/W        | 0x00000000 |
+| 21.1.4.77  | GPIO_PZ3_CFG                    | 0xa08  | R/W        | 0x00000000 |
+| 21.1.4.78  | GPIO_PZ4_CFG                    | 0xa0c  | R/W        | 0x00000000 |
+| 21.1.4.79  | GPIO_PZ5_CFG                    | 0xa10  | R/W        | 0x00000000 |
+| 21.1.4.80  | GPIO_X1_AUD_CFG                 | 0xa14  | R/W        | 0x00000000 |
+| 21.1.4.81  | GPIO_X3_AUD_CFG                 | 0xa18  | R/W        | 0x00000000 |
+| 21.1.4.82  | GPS_EN_CFG                      | 0xa1c  | R/W        | 0x00000000 |
+| 21.1.4.83  | GPS_RST_CFG                     | 0xa20  | R/W        | 0x00000000 |
+| 21.1.4.84  | HDMI_CEC_CFG                    | 0xa24  | R/W        | 0x00000000 |
+| 21.1.4.85  | HDMI_INT_DP_HPD_CFG             | 0xa28  | R/W        | 0x00000000 |
+| 21.1.4.86  | JTAG_RTCK_CFG                   | 0xa2c  | R/W        | 0x00000000 |
+| 21.1.4.87  | LCD_BL_EN_CFG                   | 0xa30  | R/W        | 0x00000000 |
+| 21.1.4.88  | LCD_BL_PWM_CFG                  | 0xa34  | R/W        | 0x00000000 |
+| 21.1.4.89  | LCD_GPIO1_CFG                   | 0xa38  | R/W        | 0x00000000 |
+| 21.1.4.90  | LCD_GPIO2_CFG                   | 0xa3c  | R/W        | 0x00000000 |
+| 21.1.4.91  | LCD_RST_CFG                     | 0xa40  | R/W        | 0x00000000 |
+| 21.1.4.92  | LCD_TE_CFG                      | 0xa44  | R/W        | 0x00000000 |
+| 21.1.4.93  | MODEM_WAKE_AP_CFG               | 0xa48  | R/W        | 0x00000000 |
+| 21.1.4.94  | MOTION_INT_CFG                  | 0xa4c  | R/W        | 0x00000000 |
+| 21.1.4.95  | NFC_EN_CFG                      | 0xa50  | R/W        | 0x00000000 |
+| 21.1.4.96  | NFC_INT_CFG                     | 0xa54  | R/W        | 0x00000000 |
+| 21.1.4.97  | PEX_L0_CLKREQ_N_CFG             | 0xa58  | R/W        | 0x00000000 |
+| 21.1.4.98  | PEX_L0_RST_N_CFG                | 0xa5c  | R/W        | 0x00000000 |
+| 21.1.4.99  | PEX_L1_CLKREQ_N_CFG             | 0xa60  | R/W        | 0x00000000 |
+| 21.1.4.100 | PEX_L1_RST_N_CFG                | 0xa64  | R/W        | 0x00000000 |
+| 21.1.4.101 | PEX_WAKE_N_CFG                  | 0xa68  | R/W        | 0x00000000 |
+| 21.1.4.102 | PWR_I2C_SCL_CFG                 | 0xa6c  | R/W        | 0x00000000 |
+| 21.1.4.103 | PWR_I2C_SDA_CFG                 | 0xa70  | R/W        | 0x00000000 |
+| 21.1.4.104 | PWR_INT_N_CFG                   | 0xa74  | R/W        | 0x00000000 |
+| 21.1.4.105 | QSPI_COMP_CFG                   | 0xa78  | R/W        | 0x00808000 |
+| 21.1.4.106 | QSPI_SCK_CFG                    | 0xa90  | R/W        | 0x50000000 |
+| 21.1.4.107 | SATA_LED_ACTIVE_CFG             | 0xa94  | R/W        | 0x00000000 |
+| 21.1.4.108 | SDMMC1_PAD_CFG                  | 0xa98  | R/W        | 0x00808000 |
+| 21.1.4.109 | EMMC2_PAD_E_CFG                 | 0xa9c  | R/W        | 0x07ffc310 |
+| 21.1.4.110 | EMMC2_PAD_DRV_TYPE_CFG          | 0xaa0  | R/W        | 0x00155555 |
+| 21.1.4.111 | EMMC2_PAD_PUPD_CFG              | 0xaa4  | R/W        | 0x026aaaa6 |
+| 21.1.4.112 | SDMMC3_PAD_CFG                  | 0xab0  | R/W        | 0x00808000 |
+| 21.1.4.113 | EMMC4_PAD_E_CFG                 | 0xab4  | R/W        | 0x07ffc310 |
+| 21.1.4.114 | EMMC4_PAD_DRV_TYPE_CFG          | 0xab8  | R/W        | 0x00155555 |
+| 21.1.4.115 | EMMC4_PAD_PUPD_CFG              | 0xabc  | R/W        | 0x026aaaa6 |
+| 21.1.4.116 | SHUTDOWN_CFG                    | 0xac8  | R/W        | 0x00000000 |
+| 21.1.4.117 | SPDIF_IN_CFG                    | 0xacc  | R/W        | 0x00000000 |
+| 21.1.4.118 | SPDIF_OUT_CFG                   | 0xad0  | R/W        | 0x00000000 |
+| 21.1.4.119 | SPI1_CS0_CFG                    | 0xad4  | R/W        | 0x00000000 |
+| 21.1.4.120 | SPI1_CS1_CFG                    | 0xad8  | R/W        | 0x00000000 |
+| 21.1.4.121 | SPI1_MISO_CFG                   | 0xadc  | R/W        | 0x00000000 |
+| 21.1.4.122 | SPI1_MOSI_CFG                   | 0xae0  | R/W        | 0x00000000 |
+| 21.1.4.123 | SPI1_SCK_CFG                    | 0xae4  | R/W        | 0x00000000 |
+| 21.1.4.124 | SPI2_CS0_CFG                    | 0xae8  | R/W        | 0x00000000 |
+| 21.1.4.125 | SPI2_CS1_CFG                    | 0xaec  | R/W        | 0x00000000 |
+| 21.1.4.126 | SPI2_MISO_CFG                   | 0xaf0  | R/W        | 0x00000000 |
+| 21.1.4.127 | SPI2_MOSI_CFG                   | 0xaf4  | R/W        | 0x00000000 |
+| 21.1.4.128 | SPI2_SCK_CFG                    | 0xaf8  | R/W        | 0x00000000 |
+| 21.1.4.129 | SPI4_CS0_CFG                    | 0xafc  | R/W        | 0x00000000 |
+| 21.1.4.130 | SPI4_MISO_CFG                   | 0xb00  | R/W        | 0x00000000 | 
+| 21.1.4.131 | SPI4_MOSI_CFG                   | 0xb04  | R/W        | 0x00000000 |
+| 21.1.4.132 | SPI4_SCK_CFG                    | 0xb08  | R/W        | 0x00000000 |
+| 21.1.4.133 | TEMP_ALERT_CFG                  | 0xb0c  | R/W        | 0x00000000 |
+| 21.1.4.134 | TOUCH_CLK_CFG                   | 0xb10  | R/W        | 0x00000000 |
+| 21.1.4.135 | TOUCH_INT_CFG                   | 0xb14  | R/W        | 0x00000000 |
+| 21.1.4.136 | TOUCH_RST_CFG                   | 0xb18  | R/W        | 0x00000000 |
+| 21.1.4.137 | UART1_CTS_CFG                   | 0xb1c  | R/W        | 0x00000000 |
+| 21.1.4.138 | UART1_RTS_CFG                   | 0xb20  | R/W        | 0x00000000 |
+| 21.1.4.139 | UART1_RX_CFG                    | 0xb24  | R/W        | 0x00000000 |
+| 21.1.4.140 | UART1_TX_CFG                    | 0xb28  | R/W        | 0x00000000 |
+| 21.1.4.141 | UART2_CTS_CFG                   | 0xb2c  | R/W        | 0x00000000 |
+| 21.1.4.142 | UART2_RTS_CFG                   | 0xb30  | R/W        | 0x00000000 |
+| 21.1.4.143 | UART2_RX_CFG                    | 0xb34  | R/W        | 0x00000000 |
+| 21.1.4.144 | UART2_TX_CFG                    | 0xb38  | R/W        | 0x00000000 |
