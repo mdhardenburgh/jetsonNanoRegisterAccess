@@ -43,4 +43,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+## Disclamer
+As stated in the section titled "licensing" above, this software is provided
+without any warranty. In addition, the public interfaces may change without
+warning at any time. This means I am not responsible for permentently bricking
+your jetson, getting you fired or causing a thermonuclear apocolypse. While I 
+have done my best to release a product that is of quality, it falls to be
+YOUR reseponsiblity to vet the code's suitability and verify its operation.
