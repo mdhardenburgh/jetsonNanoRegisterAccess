@@ -32,6 +32,10 @@
  * 
  * @section Description
  *
+ * The per pad group options controller. A good number of pads have have thier 
+ * own pad control grop. Typically, control group options is the slew rate or 
+ * drive strenth. For EMMC2_PAD_E, EMMC2_PAD_PUPD, EMMC4_PAD_E, EMMC4_PAD_PUPD 
+ * registers there are other different options.
  *
  */
 
@@ -41,196 +45,12046 @@
 #include <cstdint>
 
 
-enum class padGroupBitFields : uint32_t{SLWF = 30, PREEMP = 15, DRV_TYPE = 13, SCHMT = 12, /* OD = 11, */ IO_HV = 10,  HSM = 9, LPDR = 8,  LOCK = 7, INPUT = 6, PARK = 5, TRISTATE = 4, PUPD = 2, PM = 0};
-
-enum class SLEW : uint32_t{HIGHEST, HIGH, LOW, LOWEST};
-
-enum class E_PREEMP : uint32_t{DISABLE, ENABLE};
-
-enum class DRV_TYPE : uint32_t{DRIVE_1X, DRIVE_2X, DRIVE_3X, DRIVE_4X};
-
-enum class E_SCHMT : uint32_t{DISABLE, ENABLE};
-
-// enum class E_OD : uint32_t{DISABLE, ENABLE}; //This bit field with PERMENTLY BRICK YOUR JETSON
-
-enum class E_IO_HV : uint32_t{DISABLE, ENABLE};
-
-enum class E_HSM : uint32_t{DISABLE, ENABLE};
-
-enum class E_LPDR : uint32_t{DISABLE, ENABLE};
-
-enum class E_LOCK : uint32_t{DISABLE, ENABLE};
-
-enum class E_INPUT : uint32_t{DISABLE, ENABLE};
-
-enum class PARK : uint32_t{NORMAL, PARKED};
-
-enum class TRISTATE : uint32_t{PASSTHROUGH, TRISTATE};
-
-/**
- *
- */ 
-enum class PUPD : uint32_t{NONE, PULL_DONW, PULL_UP, RSVD};
-   
-/**
- * refer to bit field [1:0] in section 9.15.1 to 9.15.162
- * to find what the pinmux can be multiplexed to. 
- */
-enum class PM : uint32_t{PINMUX_0, PINMUX_1, PINMUX_2, PINMUX_3};  
-
-class PadGroupController
+// 21.1.4.4
+struct ALS_PROX_INT_CFG
 {
-    public:
-        
-        PadGroupController();
-        ~PadGroupController();
-        
-        static const uint32_t baseAddress = 0x70000000;
-         
-        static const uint32_t ALS_PROX_INT_CFG = 0x8e4; // R/W     0x00000000
-        static const uint32_t AP_READY_CFG    = 0x8e8; // R/W     0x00000000
-        static const uint32_t AP_WAKE_BT_CFG  = 0x8ec; // R/W     0x00000000
-        static const uint32_t AP_WAKE_NFC_CFG = 0x8f0; // R/W     0x00000000
-        static const uint32_t AUD_MCLK_CFG    = 0x8f4; // R/W     0x00000000
-        static const uint32_t BATT_BCL_CFG    = 0x8f8; // R/W     0x00000000
-        static const uint32_t BT_RST_CFG      = 0x8fc; // R/W     0x00000000
-        static const uint32_t BT_WAKE_AP_CFG  = 0x900; // R/W     0x00000000
-        static const uint32_t BUTTON_HOME_CFG = 0x904; // R/W     0x00000000
-        static const uint32_t BUTTON_POWER_ON_CFG = 0x908; // R/W     0x00000000
-        static const uint32_t BUTTON_SLIDE_SW_CFG = 0x90c; // R/W     0x00000000
-        static const uint32_t BUTTON_VOL_DOWN_CFG = 0x910; // R/W     0x00000000
-        static const uint32_t BUTTON_VOL_UP_CFG = 0x914; // R/W     0x00000000
-        static const uint32_t CAM1_MCLK_CFG   = 0x918; // R/W     0x00000000
-        static const uint32_t CAM1_PWDN_CFG   = 0x91c; // R/W     0x00000000
-        static const uint32_t CAM1_STROBE_CFG = 0x920; // R/W     0x00000000
-        static const uint32_t CAM2_MCLK_CFG   = 0x924; // R/W     0x00000000
-        static const uint32_t CAM2_PWDN_CFG   = 0x928; // R/W     0x00000000
-        static const uint32_t CAM_AF_EN_CFG   = 0x92c; // R/W     0x00000000
-        static const uint32_t CAM_FLASH_EN_CFG = 0x930; // R/W     0x00000000
-        static const uint32_t CAM_I2C_SCL_CFG = 0x934; // R/W     0x00000000
-        static const uint32_t CAM_I2C_SDA_CFG = 0x938; // R/W     0x00000000
-        static const uint32_t CAM_RST_CFG     = 0x93c; // R/W     0x00000000
-        static const uint32_t CLK_32K_IN_CFG  = 0x940; // R/W     0x00000000
-        static const uint32_t CLK_32K_OUT_CFG = 0x944; // R/W     0x00000000
-        static const uint32_t CLK_REQ_CFG     = 0x948; // R/W     0x00000000
-        static const uint32_t CORE_PWR_REQ_CFG = 0x94c; // R/W     0x00000000
-        static const uint32_t CPU_PWR_REQ_CFG =  0x950; // R/W     0x00000000
-        static const uint32_t DAP1_DIN_CFG    =  0x954; // R/W     0x00000000
-        static const uint32_t DAP1_DOUT_CFG   =  0x958; // R/W     0x00000000
-        static const uint32_t DAP1_FS_CFG     =  0x95c; // R/W     0x00000000
-        static const uint32_t DAP1_SCLK_CFG   =  0x960; // R/W     0x00000000
-        static const uint32_t DAP2_DIN_CFG    =  0x964; // R/W     0x00000000
-        static const uint32_t DAP2_DOUT_CFG   =  0x968; // R/W     0x00000000
-        static const uint32_t DAP2_FS_CFG     =  0x96c; // R/W     0x00000000
-        static const uint32_t DAP2_SCLK_CFG   =  0x970; // R/W     0x00000000
-        static const uint32_t DAP4_DIN_CFG    =  0x974; // R/W     0x00000000
-        static const uint32_t DAP4_DOUT_CFG   =  0x978; // R/W     0x00000000
-        static const uint32_t DAP4_FS_CFG     =  0x97c; // R/W     0x00000000
-        static const uint32_t DAP4_SCLK_CFG   =  0x980; // R/W     0x00000000
-        static const uint32_t DMIC1_CLK_CFG   =  0x984; // R/W     0x00000000
-        static const uint32_t DMIC1_DAT_CFG   =  0x988; // R/W     0x00000000
-        static const uint32_t DMIC2_CLK_CFG   =  0x98c; // R/W     0x00000000
-        static const uint32_t DMIC2_DAT_CFG   =  0x990; // R/W     0x00000000
-        static const uint32_t DMIC3_CLK_CFG   =  0x994; // R/W     0x00000000
-        static const uint32_t DMIC3_DAT_CFG   =  0x998; // R/W     0x00000000
-        static const uint32_t DP_HPD_CFG      =  0x99c; // R/W     0x00000000
-        static const uint32_t DVFS_CLK_CFG    =  0x9a0; // R/W     0x00000000
-        static const uint32_t DVFS_PWM_CFG    =  0x9a4; // R/W     0x00000000
-        static const uint32_t GEN1_I2C_SCL_CFG  = 0x9a8; // R/W     0x00000000
-        static const uint32_t GEN1_I2C_SDA_CFG  = 0x9ac; // R/W     0x00000000
-        static const uint32_t GEN2_I2C_SCL_CFG  = 0x9b0; // R/W     0x00000000
-        static const uint32_t GEN2_I2C_SDA_CFG  = 0x9b4; // R/W     0x00000000
-        static const uint32_t GEN3_I2C_SCL_CFG  = 0x9b8; // R/W     0x00000000
-        static const uint32_t GEN3_I2C_SDA_CFG  = 0x9bc; // R/W     0x00000000
-        static const uint32_t GPIO_PA6_CFG    = 0x9c0; // R/W     0x00000000
-        static const uint32_t GPIO_PCC7_CFG   = 0x9c4; // R/W     0x00000000
-        static const uint32_t GPIO_PE6_CFG    = 0x9c8; // R/W     0x00000000
-        static const uint32_t GPIO_PE7_CFG    = 0x9cc; // R/W     0x00000000
-        static const uint32_t GPIO_PH6_CFG    = 0x9d0; // R/W     0x00000000
-        static const uint32_t GPIO_PK0_CFG    = 0x9d4; // R/W     0x00000000
-        static const uint32_t GPIO_PK1_CFG    = 0x9d8; // R/W     0x00000000
-        static const uint32_t GPIO_PK2_CFG    = 0x9dc; // R/W     0x00000000
-        static const uint32_t GPIO_PK3_CFG    = 0x9e0; // R/W     0x00000000
-        static const uint32_t GPIO_PK4_CFG    = 0x9e4; // R/W     0x00000000
-        static const uint32_t GPIO_PK5_CFG    = 0x9e8; // R/W     0x00000000
-        static const uint32_t GPIO_PK6_CFG    = 0x9ec; // R/W     0x00000000
-        static const uint32_t GPIO_PK7_CFG    = 0x9f0; // R/W     0x00000000
-        static const uint32_t GPIO_PL0_CFG    = 0x9f4; // R/W     0x00000000
-        static const uint32_t GPIO_PL1_CFG    = 0x9f8; // R/W     0x00000000
-        static const uint32_t GPIO_PZ0_CFG    = 0x9fc; // R/W     0x00000000
-        static const uint32_t GPIO_PZ1_CFG    = 0xa00; // R/W     0x00000000
-        static const uint32_t GPIO_PZ2_CFG    = 0xa04; // R/W     0x00000000
-        static const uint32_t GPIO_PZ3_CFG    = 0xa08; // R/W     0x00000000
-        static const uint32_t GPIO_PZ4_CFG    = 0xa0c; // R/W     0x00000000
-        static const uint32_t GPIO_PZ5_CFG    = 0xa10; // R/W     0x00000000
-        static const uint32_t GPIO_X1_AUD_CFG = 0xa14; // R/W     0x00000000
-        static const uint32_t GPIO_X3_AUD_CFG = 0xa18; // R/W     0x00000000
-        static const uint32_t GPS_EN_CFG      = 0xa1c; // R/W     0x00000000
-        static const uint32_t GPS_RST_CFG     = 0xa20; // R/W     0x00000000
-        static const uint32_t HDMI_CEC_CFG    = 0xa24; // R/W     0x00000000
-        static const uint32_t HDMI_INT_DP_HPD_CFG = 0xa28; // R/W     0x00000000
-        static const uint32_t JTAG_RTCK_CFG   = 0xa2c; // R/W     0x00000000
-        static const uint32_t LCD_BL_EN_CFG   = 0xa30; // R/W     0x00000000
-        static const uint32_t LCD_BL_PWM_CFG  = 0xa34; // R/W     0x00000000
-        static const uint32_t LCD_GPIO1_CFG   = 0xa38; // R/W     0x00000000
-        static const uint32_t LCD_GPIO2_CFG   = 0xa3c; // R/W     0x00000000
-        static const uint32_t LCD_RST_CFG     = 0xa40; // R/W     0x00000000
-        static const uint32_t LCD_TE_CFG      = 0xa44; // R/W     0x00000000
-        static const uint32_t MODEM_WAKE_AP_CFG = 0xa48; // R/W     0x00000000
-        static const uint32_t MOTION_INT_CFG  = 0xa4c // R/W     0x00000000
-        static const uint32_t NFC_EN_CFG      = 0xa50 // R/W     0x00000000
-        static const uint32_t NFC_INT_CFG     = 0xa54 // R/W     0x00000000
-        static const uint32_t PEX_L0_CLKREQ_N_CFG = 0xa58 // R/W     0x00000000
-        static const uint32_t PEX_L0_RST_N_CFG    = 0xa5c // R/W     0x00000000
-        static const uint32_t PEX_L1_CLKREQ_N_CFG = 0xa60 // R/W     0x00000000
-        static const uint32_t PEX_L1_RST_N_CFG    = 0xa64 // R/W     0x00000000
-        static const uint32_t PEX_WAKE_N_CFG  = 0xa68; // R/W     0x00000000
-        static const uint32_t PWR_I2C_SCL_CFG = 0xa6c; // R/W     0x00000000
-        static const uint32_t PWR_I2C_SDA_CFG = 0xa70; // R/W     0x00000000
-        static const uint32_t PWR_INT_N_CFG   = 0xa74; // R/W     0x00000000
-        static const uint32_t QSPI_COMP_CFG   = 0xa78; // R/W     0x00808000
-        static const uint32_t QSPI_SCK_CFG    = 0xa90; // R/W     0x50000000
-        static const uint32_t SATA_LED_ACTIVE_CFG =  0xa94 // R/W     0x00000000
-        static const uint32_t SDMMC1_PAD_CFG  = 0xa98; // R/W     0x00808000
-        static const uint32_t EMMC2_PAD_E_CFG = 0xa9c; // R/W     0x07ffc310
-        static const uint32_t EMMC2_PAD_DRV_TYPE_CFG  = 0xaa0; // R/W     0x00155555
-        static const uint32_t EMMC2_PAD_PUPD_CFG      = 0xaa4; // R/W     0x026aaaa6
-        static const uint32_t SDMMC3_PAD_CFG  = 0xab0; // R/W     0x00808000
-        static const uint32_t EMMC4_PAD_E_CFG = 0xab4; // R/W     0x07ffc310
-        static const uint32_t EMMC4_PAD_DRV_TYPE_CFG = 0xab8; // R/W     0x00155555
-        static const uint32_t EMMC4_PAD_PUPD_CFG     = 0xabc; // R/W     0x026aaaa6
-        static const uint32_t SHUTDOWN_CFG   = 0xac8; // R/W     0x00000000
-        static const uint32_t SPDIF_IN_CFG   = 0xacc; // R/W     0x00000000
-        static const uint32_t SPDIF_OUT_CFG  = 0xad0; // R/W     0x00000000
-        static const uint32_t SPI1_CS0_CFG   = 0xad4; // R/W     0x00000000
-        static const uint32_t SPI1_CS1_CFG   = 0xad8; // R/W     0x00000000
-        static const uint32_t SPI1_MISO_CFG  = 0xadc; // R/W     0x00000000
-        static const uint32_t SPI1_MOSI_CFG  = 0xae0; // R/W     0x00000000
-        static const uint32_t SPI1_SCK_CFG   = 0xae4; // R/W     0x00000000
-        static const uint32_t SPI2_CS0_CFG   = 0xae8; // R/W     0x00000000
-        static const uint32_t SPI2_CS1_CFG   = 0xaec; // R/W     0x00000000
-        static const uint32_t SPI2_MISO_CFG  = 0xaf0; // R/W     0x00000000
-        static const uint32_t SPI2_MOSI_CFG  = 0xaf4; // R/W     0x00000000
-        static const uint32_t SPI2_SCK_CFG   = 0xaf8; // R/W     0x00000000
-        static const uint32_t SPI4_CS0_CFG   = 0xafc; // R/W     0x00000000
-        static const uint32_t SPI4_MISO_CFG  = 0xb00; // R/W     0x00000000
-        static const uint32_t SPI4_MOSI_CFG  = 0xb04; // R/W     0x00000000
-        static const uint32_t SPI4_SCK_CFG   = 0xb08; // R/W     0x00000000
-        static const uint32_t TEMP_ALERT_CFG = 0xb0c; // R/W     0x00000000
-        static const uint32_t TOUCH_CLK_CFG  = 0xb10; // R/W     0x00000000
-        static const uint32_t TOUCH_INT_CFG  = 0xb14; // R/W     0x00000000
-        static const uint32_t TOUCH_RST_CFG  = 0xb18; // R/W     0x00000000
-        static const uint32_t UART1_CTS_CFG  = 0xb1c; // R/W     0x00000000
-        static const uint32_t UART1_RTS_CFG  = 0xb20; // R/W     0x00000000
-        static const uint32_t UART1_RX_CFG   = 0xb24; // R/W     0x00000000
-        static const uint32_t UART1_TX_CFG   = 0xb28; // R/W     0x00000000
-        static const uint32_t UART2_CTS_CFG  = 0xb2c; // R/W     0x00000000
-        static const uint32_t UART2_RTS_CFG  = 0xb30; // R/W     0x00000000
-        static const uint32_t UART2_RX_CFG   = 0xb34; // R/W     0x00000000
-        static const uint32_t UART2_TX_CFG   = 0xb38; // R/W     0x00000000
-    
-    private:
+    const uint32_t address = 0x70000000 + 0x8E4;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);        
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);        
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
 
 };
+
+//21.1.4.5
+struct AP_READY_CFG 
+{
+    const uint32_t address = 0x70000000 + 0x8E8;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);        
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);        
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+
+};
+
+// 21.1.4.6
+struct AP_WAKE_BT_CFG
+{
+    const uint32_t address = 0x70000000 + 0x8EC;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);        
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);        
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+
+};
+
+//21.1.4.7
+struct AP_WAKE_NFC_CFG
+{
+    const uint32_t address = 0x70000000 + 0x8F0;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);        
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);        
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+
+};
+
+//21.1.4.8
+struct AUD_MCLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x8F4;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);        
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);        
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+
+};
+
+//21.1.4.9
+struct BATT_BCL_CFG
+{
+    const uint32_t address = 0x70000000 + 0x8F8;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.10
+struct BT_RST_CFG
+{
+    const uint32_t address = 0x70000000 + 0x8FC;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.11
+struct BT_WAKE_AP_CFG
+{
+    const uint32_t address = 0x70000000 + 0x900;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.12
+struct BUTTON_HOME_CFG
+{
+    const uint32_t address = 0x70000000 + 0x904;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.13
+struct BUTTON_POWER_ON_CFG
+{
+    const uint32_t address = 0x70000000 + 0x908;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.14
+struct BUTTON_SLIDE_SW_CFG
+{
+    const uint32_t address = 0x70000000 + 0x90C;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.15
+struct BUTTON_VOL_DOWN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x910;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.16
+struct BUTTON_VOL_UP_CFG
+{
+    const uint32_t address = 0x70000000 + 0x914;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.17
+struct CAM1_MCLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x918;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.18
+struct CAM1_PWDN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x91C;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.19
+struct CAM1_STROBE_CFG
+{
+    const uint32_t address = 0x70000000 + 0x920;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.20
+struct CAM2_MCLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x924;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.21
+struct CAM2_PWDN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x928;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.22
+struct CAM_AF_EN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x92C;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.23
+struct CAM_FLASH_EN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x930;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.24
+struct CAM_I2C_SCL_CFG
+{
+    const uint32_t address = 0x70000000 + 0x934;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.25
+struct CAM_I2C_SDA_CFG
+{
+    const uint32_t address = 0x70000000 + 0x938;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+}; 
+
+// 21.1.4.26
+struct CAM_RST_CFG
+{
+    const uint32_t address = 0x70000000 + 0x93C;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.27
+struct CLK_32K_IN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x940;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.28
+struct CLK_32K_OUT_CFG
+{
+    const uint32_t address = 0x70000000 + 0x944;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.29
+struct CLK_REQ_CFG
+{
+    const uint32_t address = 0x7000 + 0x948;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.30
+
+struct CORE_PWR_REQ_CFG
+{
+    const uint32_t address = 0x70000000 +  0x94c;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.31
+struct CPU_PWR_REQ_CFG
+{
+    uint32_t address = 0x70000000 + 0x950;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.32
+struct DAP1_DIN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x954;
+    
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.33
+struct DAP1_DOUT_CFG
+{
+    const uint32_t address = 0x70000000 + 0x958;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+
+// 21.1.4.34
+struct DAP1_FS_CFG
+{
+    const uint32_t address = 0x70000000 + 0x95C;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.35
+struct DAP1_SCLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x960;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.36
+struct DAP2_DIN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x964;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.37
+struct DAP2_DOUT_CFG
+{
+    const uint32_t address = 0x70000000 + 0x968;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.38
+struct DAP2_FS_CFG
+{
+    const uint32_t address = 0x70000000 + 0x96C;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.39
+struct DAP2_SCLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x970;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.40
+struct DAP4_DIN_CFG
+{
+    const uint32_t address = 0x70000000 + 0x974;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.41
+struct DAP4_DOUT_CFG
+{
+    const uint32_t address = 0x70000000 + 0x978;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.42
+struct DAP4_FS_CFG
+{
+    const uint32_t address = 0x70000000 + 0x97C;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.43
+struct DAP4_SCLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x980;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.44
+struct DMIC1_CLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x984;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.45
+struct DMIC1_DAT_CFG
+{
+    const uint32_t address = 0x70000000 + 0x988;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.46
+struct DMIC2_CLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x98C;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.47
+struct DMIC2_DAT_CFG
+{
+    const uint32_t address = 0x70000000 + 0x990;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.48
+struct DMIC3_CLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x994;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.49
+struct DMIC3_DAT_CFG
+{
+    const uint32_t address = 0x70000000 + 0x998;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.50
+struct DP_HPD_CFG
+{
+    const uint32_t address = 0x70000000 + 0x99C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.51
+struct DVFS_CLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9A0;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.52
+struct DVFS_PWM_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9A4;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.53
+struct GEN1_I2C_SCL_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9A8;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.54
+struct GEN1_I2C_SDA_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9AC;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.55
+struct GEN2_I2C_SCL_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9B0;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.56
+struct GEN2_I2C_SDA_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9B4;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.57
+struct GEN3_I2C_SCL_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9B8;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.58
+struct GEN3_I2C_SDA_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9BC;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+   
+// 21.1.4.59
+struct GPIO_PA6_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9C0;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.60
+struct GPIO_PCC7_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9C4;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.61
+struct GPIO_PE6_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9C8;
+
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.62
+struct GPIO_PE7_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9CC;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.63
+struct GPIO_PH6_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9D0;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.64
+struct GPIO_PK0_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9D4;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.65
+struct GPIO_PK1_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9D8;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.66
+struct GPIO_PK2_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9DC;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.67
+struct GPIO_PK3_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9E0;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.68
+struct GPIO_PK4_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9E4;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.69
+struct GPIO_PK5_CFG 
+{
+    const uint32_t address = 0x70000000 + 0x9E8;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.70
+struct GPIO_PK6_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9EC;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.71
+struct GPIO_PK7_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9F0;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.72
+struct GPIO_PL0_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9F4;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.73
+struct GPIO_PL1_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9F8;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.74
+struct GPIO_PZ0_CFG
+{
+    const uint32_t address = 0x70000000 + 0x9FC;
+
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+
+// 21.1.4.75
+struct GPIO_PZ1_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA00;
+
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+// 21.1.4.76
+struct GPIO_PZ2_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA04;
+
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+// 21.1.4.77
+struct GPIO_PZ3_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA08;
+
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+// 21.1.4.78
+struct GPIO_PZ4_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA0C;
+
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+// 21.1.4.79
+struct GPIO_PZ5_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA10;
+
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+// 21.1.4.80
+struct GPIO_X1_AUD_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA14;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.81
+struct GPIO_X3_AUD_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA18;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.82
+struct GPS_EN_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA1C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.83
+struct GPS_RST_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA20;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.84
+struct GPS_RST_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA244;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.85
+struct HDMI_INT_DP_HPD_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA28;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.86
+struct JTAG_RTCK_CFGJTAG_RTCK_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA2C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.87
+struct LCD_BL_EN_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA30;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.88
+struct LCD_BL_PWM_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA34;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.89
+struct LCD_GPIO1_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA38;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.90
+struct LCD_GPIO2_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA3C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.91
+struct LCD_RST_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA40;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.92
+struct LCD_TE_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA44;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.93
+struct MODEM_WAKE_AP_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA48;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.94
+struct MOTION_INT_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA4C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.95
+struct NFC_EN_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA50;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.96
+struct NFC_INT_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA54;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.97
+struct PEX_L0_CLKREQ_N_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA58;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.98
+struct PEX_L0_RST_N_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA5C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.99
+struct PEX_L1_CLKREQ_N_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA60;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.100
+struct PEX_L1_RST_N_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA64;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.101
+struct PEX_WAKE_N_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA68;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.102
+struct PWR_I2C_SCL_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA6C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.103
+struct PWR_I2C_SDA_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA70;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.104
+struct PWR_I2C_SDA_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA74;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.105
+struct QSPI_COMP_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA78;
+ 
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+// 21.1.4.106
+struct QSPI_SCK_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA90;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.107
+struct SATA_LED_ACTIVE_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA94;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.108
+struct SDMMC1_PAD_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA98;
+ 
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+ 
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+// 21.1.4.109
+struct EMMC2_PAD_E_CFG
+{
+    const uint32_t address = 0x70000000 + 0xA9C;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+
+    const uint32_t DAT7_PARK_bit = 26;
+    const uint32_t DAT7_PARK_bitWidth = 1;
+    const uint32_t DAT7_PARK_NORMAL = (0 << DAT7_PARK_bit);
+    const uint32_t DAT7_PARK_PARKED = (1 << DAT7_PARK_bit);
+
+    const uint32_t DAT6_PARK_bit = 25;
+    const uint32_t DAT6_PARK_bitWidth = 1;
+    const uint32_t DAT6_PARK_NORMAL = (0 << DAT6_PARK_bit);
+    const uint32_t DAT6_PARK_PARKED = (1 << DAT6_PARK_bit);
+
+    const uint32_t DAT5_PARK_bit = 24;
+    const uint32_t DAT5_PARK_bitWidth = 1;
+    const uint32_t DAT5_PARK_NORMAL = (0 << DAT5_PARK_bit);
+    const uint32_t DAT5_PARK_PARKED = (1 << DAT5_PARK_bit);
+
+    const uint32_t DAT4_PARK_bit = 23;
+    const uint32_t DAT4_PARK_bitWidth = 1;
+    const uint32_t DAT4_PARK_NORMAL = (0 << DAT4_PARK_bit);
+    const uint32_t DAT4_PARK_PARKED = (1 << DAT4_PARK_bit);
+
+    const uint32_t DAT3_PARK_bit = 22;
+    const uint32_t DAT3_PARK_bitWidth = 1;
+    const uint32_t DAT3_PARK_NORMAL = (0 << DAT3_PARK_bit);
+    const uint32_t DAT3_PARK_PARKED = (1 << DAT3_PARK_bit);
+
+    const uint32_t DAT2_PARK_bit = 21;
+    const uint32_t DAT2_PARK_bitWidth = 1;
+    const uint32_t DAT2_PARK_NORMAL = (0 << DAT2_PARK_bit);
+    const uint32_t DAT2_PARK_PARKED = (1 << DAT2_PARK_bit);
+
+    const uint32_t DAT1_PARK_bit = 20;
+    const uint32_t DAT1_PARK_bitWidth = 1;
+    const uint32_t DAT1_PARK_NORMAL = (0 << DAT1_PARK_bit);
+    const uint32_t DAT1_PARK_PARKED = (1 << DAT1_PARK_bit);
+
+    const uint32_t DAT0_PARK_bit = 19;
+    const uint32_t DAT0_PARK_bitWidth = 1;
+    const uint32_t DAT0_PARK_NORMAL = (0 << DAT0_PARK_bit);
+    const uint32_t DAT0_PARK_PARKED = (1 << DAT0_PARK_bit);
+
+    const uint32_t CMD_PARK_bit = 18;
+    const uint32_t CMD_PARK_bitWidth = 1;
+    const uint32_t CMD_PARK_NORMAL = (0 << CMD_PARK_bit);
+    const uint32_t CMD_PARK_PARKED = (1 << CMD_PARK_bit);
+
+    const uint32_t DQSB_PARK_bit = 17;
+    const uint32_t DQSB_PARK_bitWidth = 1;
+    const uint32_t DQSB_PARK_NORMAL = (0 << DQSB_PARK_bit);
+    const uint32_t DQSB_PARK_PARKED = (1 << DQSB_PARK_bit);
+
+    const uint32_t DQS_PARK_bit = 16;
+    const uint32_t DQS_PARK_bitWidth = 1;
+    const uint32_t DQS_PARK_NORMAL = (0 << DQS_PARK_bit);
+    const uint32_t DQS_PARK_PARKED = (1 << DQS_PARK_bit);
+
+    const uint32_t CLKB_PARK_bit = 15;
+    const uint32_t CLKB_PARK_bitWidth = 1;
+    const uint32_t CLKB_PARK_NORMAL = (0 << CLKB_PARK_bit);
+    const uint32_t CLKB_PARK_PARKED = (1 << CLKB_PARK_bit);
+
+    const uint32_t CLK_PARK_bit = 14;
+    const uint32_t CLK_PARK_bitWidth = 1;
+    const uint32_t CLK_PARK_NORMAL = (0 << CLK_PARK_bit);
+    const uint32_t CLK_PARK_PARKED = (1 << CLK_PARK_bit);
+
+    const uint32_t DRVUP_bit = 8;
+    const uint32_t DRVUP_bit_bitWidth = 6;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+    const uint32_t DRVUP_32 = (32 << DRVUP_bit);
+    const uint32_t DRVUP_33 = (33 << DRVUP_bit);
+    const uint32_t DRVUP_34 = (34 << DRVUP_bit);
+    const uint32_t DRVUP_35 = (35 << DRVUP_bit);
+    const uint32_t DRVUP_36 = (36 << DRVUP_bit);
+    const uint32_t DRVUP_37 = (37 << DRVUP_bit);
+    const uint32_t DRVUP_38 = (38 << DRVUP_bit);
+    const uint32_t DRVUP_39 = (39 << DRVUP_bit);
+    const uint32_t DRVUP_40 = (40 << DRVUP_bit);
+    const uint32_t DRVUP_41 = (41 << DRVUP_bit);
+    const uint32_t DRVUP_42 = (42 << DRVUP_bit);
+    const uint32_t DRVUP_43 = (43 << DRVUP_bit);
+    const uint32_t DRVUP_44 = (44 << DRVUP_bit);
+    const uint32_t DRVUP_45 = (45 << DRVUP_bit);
+    const uint32_t DRVUP_46 = (46 << DRVUP_bit);
+    const uint32_t DRVUP_47 = (47 << DRVUP_bit);
+    const uint32_t DRVUP_48 = (48 << DRVUP_bit);
+    const uint32_t DRVUP_49 = (49 << DRVUP_bit);
+    const uint32_t DRVUP_50 = (50 << DRVUP_bit);
+    const uint32_t DRVUP_51 = (51 << DRVUP_bit);
+    const uint32_t DRVUP_52 = (52 << DRVUP_bit);
+    const uint32_t DRVUP_53 = (53 << DRVUP_bit);
+    const uint32_t DRVUP_54 = (54 << DRVUP_bit);
+    const uint32_t DRVUP_55 = (55 << DRVUP_bit);
+    const uint32_t DRVUP_56 = (56 << DRVUP_bit);
+    const uint32_t DRVUP_57 = (57 << DRVUP_bit);
+    const uint32_t DRVUP_58 = (58 << DRVUP_bit);
+    const uint32_t DRVUP_59 = (59 << DRVUP_bit);
+    const uint32_t DRVUP_60 = (60 << DRVUP_bit);
+    const uint32_t DRVUP_61 = (61 << DRVUP_bit);
+    const uint32_t DRVUP_62 = (62 << DRVUP_bit);
+    const uint32_t DRVUP_63 = (63 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 2;
+    const uint32_t DRVDN_bitWidth 6;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+    const uint32_t DRVDN_32 = (32 << DRVDN_bit);
+    const uint32_t DRVDN_33 = (33 << DRVDN_bit);
+    const uint32_t DRVDN_34 = (34 << DRVDN_bit);
+    const uint32_t DRVDN_35 = (35 << DRVDN_bit);
+    const uint32_t DRVDN_36 = (36 << DRVDN_bit);
+    const uint32_t DRVDN_37 = (37 << DRVDN_bit);
+    const uint32_t DRVDN_38 = (38 << DRVDN_bit);
+    const uint32_t DRVDN_39 = (39 << DRVDN_bit);
+    const uint32_t DRVDN_40 = (40 << DRVDN_bit);
+    const uint32_t DRVDN_41 = (41 << DRVDN_bit);
+    const uint32_t DRVDN_42 = (42 << DRVDN_bit);
+    const uint32_t DRVDN_43 = (43 << DRVDN_bit);
+    const uint32_t DRVDN_44 = (44 << DRVDN_bit);
+    const uint32_t DRVDN_45 = (45 << DRVDN_bit);
+    const uint32_t DRVDN_46 = (46 << DRVDN_bit);
+    const uint32_t DRVDN_47 = (47 << DRVDN_bit);
+    const uint32_t DRVDN_48 = (48 << DRVDN_bit);
+    const uint32_t DRVDN_49 = (49 << DRVDN_bit);
+    const uint32_t DRVDN_50 = (50 << DRVDN_bit);
+    const uint32_t DRVDN_51 = (51 << DRVDN_bit);
+    const uint32_t DRVDN_52 = (52 << DRVDN_bit);
+    const uint32_t DRVDN_53 = (53 << DRVDN_bit);
+    const uint32_t DRVDN_54 = (54 << DRVDN_bit);
+    const uint32_t DRVDN_55 = (55 << DRVDN_bit);
+    const uint32_t DRVDN_56 = (56 << DRVDN_bit);
+    const uint32_t DRVDN_57 = (57 << DRVDN_bit);
+    const uint32_t DRVDN_58 = (58 << DRVDN_bit);
+    const uint32_t DRVDN_59 = (59 << DRVDN_bit);
+    const uint32_t DRVDN_60 = (60 << DRVDN_bit);
+    const uint32_t DRVDN_61 = (61 << DRVDN_bit);
+    const uint32_t DRVDN_62 = (62 << DRVDN_bit);
+    const uint32_t DRVDN_63 = (63 << DRVDN_bit);
+
+    const uint32_t E_PREEMP_bit = 1;
+    const uint32_t E_PREEMP_bitWidth = 1;
+    const uint32_t E_PREEMP_DISABLE = (0x0 << E_PREEMP_bitWidth);
+    const uint32_t E_PREEMP_ENABLE = (0x1 << E_PREEMP_bitWidth);
+
+    const uint32_t E_SCHMT_bit = 0;
+    const uint32_t E_SCHMT_bitWidth = 1;
+    const uint32_t E_SCHMT_DISABLE = (0x0 << E_SCHMT_bitWidth);
+    const uint32_t E_SCHMT_ENABLE = (0x1 << E_SCHMT_bitWidth);
+};
+
+/**
+ * DRV_TYPE[0]: 0 - 66/100 ohm driver; 1 - 33/50 ohm driver
+ * DRV_TYPE[1]: should be zero always - not used
+ */
+
+// 21.1.4.110
+struct EMMC2_PAD_DRV_TYPE_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAA0;
+
+    const uint32_t PAD_D7_DRV_TYPE_bit = 20;
+    const uint32_t PAD_D7_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D7_DRV_TYPE_66_100 = (0x0 << PAD_D7_DRV_TYPE_bit);
+    const uint32_t PAD_D7_DRV_TYPE_33_50 = (0x1 << PAD_D7_DRV_TYPE_bit);
+
+    const uint32_t PAD_D6_DRV_TYPE_bit = 18;
+    const uint32_t PAD_D6_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D6_DRV_TYPE_66_100 = (0x0 << PAD_D6_DRV_TYPE_bit);
+    const uint32_t PAD_D6_DRV_TYPE_33_50 = (0x1 << PAD_D6_DRV_TYPE_bit);
+
+    const uint32_t PAD_D5_DRV_TYPE_bit = 16;
+    const uint32_t PAD_D5_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D5_DRV_TYPE_66_100 = (0x0 << PAD_D5_DRV_TYPE_bit);
+    const uint32_t PAD_D5_DRV_TYPE_33_50 = (0x1 << PAD_D5_DRV_TYPE_bit);
+
+    const uint32_t PAD_D4_DRV_TYPE_bit = 14;
+    const uint32_t PAD_D4_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D4_DRV_TYPE_66_100 = (0x0 << PAD_D4_DRV_TYPE_bit);
+    const uint32_t PAD_D4_DRV_TYPE_33_50 = (0x1 << PAD_D4_DRV_TYPE_bit);
+
+    const uint32_t PAD_D3_DRV_TYPE_bit = 12;
+    const uint32_t PAD_D3_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D3_DRV_TYPE_66_100 = (0x0 << PAD_D3_DRV_TYPE_bit);
+    const uint32_t PAD_D3_DRV_TYPE_33_50 = (0x1 << PAD_D3_DRV_TYPE_bit);
+
+    const uint32_t PAD_D2_DRV_TYPE_bit = 10;
+    const uint32_t PAD_D2_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D2_DRV_TYPE_66_100 = (0x0 << PAD_D2_DRV_TYPE_bit);
+    const uint32_t PAD_D2_DRV_TYPE_33_50 = (0x1 << PAD_D2_DRV_TYPE_bit);
+
+    const uint32_t PAD_D1_DRV_TYPE_bit = 8;
+    const uint32_t PAD_D1_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D1_DRV_TYPE_66_100 = (0x0 << PAD_D1_DRV_TYPE_bit);
+    const uint32_t PAD_D1_DRV_TYPE_33_50 = (0x1 << PAD_D1_DRV_TYPE_bit);
+
+    const uint32_t PAD_D0_DRV_TYPE_bit = 6;
+    const uint32_t PAD_D0_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D0_DRV_TYPE_66_100 = (0x0 << PAD_D0_DRV_TYPE_bit);
+    const uint32_t PAD_D0_DRV_TYPE_33_50 = (0x1 << PAD_D0_DRV_TYPE_bit);
+
+    const uint32_t PAD_CLKB_DRV_TYPE_bit = 4;
+    const uint32_t PAD_CLKB_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_CLKB_DRV_TYPE_66_100 = (0x0 << PAD_CLKB_DRV_TYPE_bit);
+    const uint32_t PAD_CLKB_DRV_TYPE_33_50 = (0x1 << PAD_CLKB_DRV_TYPE_bit);
+
+    const uint32_t PAD_CLK_DRV_TYPE_bit = 2;
+    const uint32_t PAD_CLK_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_CLK_DRV_TYPE_66_100 = (0x0 << PAD_CLK_DRV_TYPE_bit);
+    const uint32_t PAD_CLK_DRV_TYPE_33_50 = (0x1 << PAD_CLK_DRV_TYPE_bit);
+
+    const uint32_t PAD_CMD_DRV_TYPE_bit = 0;
+    const uint32_t PAD_CMD_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_CMD_DRV_TYPE_66_100 = (0x0 << PAD_CMD_DRV_TYPE_bit);
+    const uint32_t PAD_CMD_DRV_TYPE_33_50 = (0x1 << PAD_CMD_DRV_TYPE_bit);
+};
+
+// 21.1.4.111
+struct EMMC2_PAD_PUPD_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAA4;
+
+    const uint32_t PAD_DQSB_PUPD_PULLU_bit = 25;
+    const uint32_t PAD_DQSB_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_DQSB_PUPD_PULLU_DIS = (0 << PAD_DQSB_PUPD_PULLU_bit);
+    const uint32_t PAD_DQSB_PUPD_PULLU_EN = (1 << PAD_DQSB_PUPD_PULLU_bit);
+
+    const uint32_t PAD_DQSB_PUPD_PULLD_bit = 24;
+    const uint32_t PAD_DQSB_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_DQSB_PUPD_PULLD_DIS = (0 << PAD_DQSB_PUPD_PULLD_bit);
+    const uint32_t PAD_DQSB_PUPD_PULLD_EN = (1 << PAD_DQSB_PUPD_PULLD_bit);
+
+    const uint32_t PAD_DQS_PUPD_PULLU_bit = 23;
+    const uint32_t PAD_DQS_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_DQS_PUPD_PULLU_DIS = (0 << PAD_DQS_PUPD_PULLU_bit);
+    const uint32_t PAD_DQS_PUPD_PULLU_EN = (1 << PAD_DQS_PUPD_PULLU_bit);
+
+    const uint32_t PAD_DQS_PUPD_PULLD_bit = 22;
+    const uint32_t PAD_DQS_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_DQS_PUPD_PULLD_DIS = (0 << PAD_DQS_PUPD_PULLD_bit);
+    const uint32_t PAD_DQS_PUPD_PULLD_EN = (1 << PAD_DQS_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D7_PUPD_PULLU_bit = 21;
+    const uint32_t PAD_D7_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D7_PUPD_PULLU_DIS = (0 << PAD_D7_PUPD_PULLU_bit);
+    const uint32_t PAD_D7_PUPD_PULLU_EN = (1 << PAD_D7_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D7_PUPD_PULLD_bit = 20;
+    const uint32_t PAD_D7_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D7_PUPD_PULLD_DIS = (0 << PAD_D7_PUPD_PULLD_bit);
+    const uint32_t PAD_D7_PUPD_PULLD_EN = (1 << PAD_D7_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D6_PUPD_PULLU_bit = 19;
+    const uint32_t PAD_D6_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D6_PUPD_PULLU_DIS = (0 << PAD_D6_PUPD_PULLU_bit);
+    const uint32_t PAD_D6_PUPD_PULLU_EN = (1 << PAD_D6_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D6_PUPD_PULLD_bit = 18;
+    const uint32_t PAD_D6_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D6_PUPD_PULLD_DIS = (0 << PAD_D6_PUPD_PULLD_bit);
+    const uint32_t PAD_D6_PUPD_PULLD_EN = (1 << PAD_D6_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D5_PUPD_PULLU_bit = 17;
+    const uint32_t PAD_D5_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D5_PUPD_PULLU_DIS = (0 << PAD_D5_PUPD_PULLU_bit);
+    const uint32_t PAD_D5_PUPD_PULLU_EN = (1 << PAD_D5_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D5_PUPD_PULLD_bit = 16;
+    const uint32_t PAD_D5_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D5_PUPD_PULLD_DIS = (0 << PAD_D5_PUPD_PULLD_bit);
+    const uint32_t PAD_D5_PUPD_PULLD_EN = (1 << PAD_D5_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D4_PUPD_PULLU_bit = 15;
+    const uint32_t PAD_D4_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D4_PUPD_PULLU_DIS = (0 << PAD_D4_PUPD_PULLU_bit);
+    const uint32_t PAD_D4_PUPD_PULLU_EN = (1 << PAD_D4_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D4_PUPD_PULLD_bit = 14;
+    const uint32_t PAD_D4_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D4_PUPD_PULLD_DIS = (0 << PAD_D4_PUPD_PULLD_bit);
+    const uint32_t PAD_D4_PUPD_PULLD_EN = (1 << PAD_D4_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D3_PUPD_PULLU_bit = 13;
+    const uint32_t PAD_D3_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D3_PUPD_PULLU_DIS = (0 << PAD_D3_PUPD_PULLU_bit);
+    const uint32_t PAD_D3_PUPD_PULLU_EN = (1 << PAD_D3_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D3_PUPD_PULLD_bit = 12;
+    const uint32_t PAD_D3_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D3_PUPD_PULLD_DIS = (0 << PAD_D3_PUPD_PULLD_bit);
+    const uint32_t PAD_D3_PUPD_PULLD_EN = (1 << PAD_D3_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D2_PUPD_PULLU_bit = 11;
+    const uint32_t PAD_D2_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D2_PUPD_PULLU_DIS = (0 << PAD_D2_PUPD_PULLU_bit);
+    const uint32_t PAD_D2_PUPD_PULLU_EN = (1 << PAD_D2_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D2_PUPD_PULLD_bit = 10;
+    const uint32_t PAD_D2_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D2_PUPD_PULLD_DIS = (0 << PAD_D2_PUPD_PULLD_bit);
+    const uint32_t PAD_D2_PUPD_PULLD_EN = (1 << PAD_D2_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D1_PUPD_PULLU_bit = 9;
+    const uint32_t PAD_D1_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D1_PUPD_PULLU_DIS = (0 << PAD_D1_PUPD_PULLU_bit);
+    const uint32_t PAD_D1_PUPD_PULLU_EN = (1 << PAD_D1_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D1_PUPD_PULLD_bit = 8;
+    const uint32_t PAD_D1_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D1_PUPD_PULLD_DIS = (0 << PAD_D1_PUPD_PULLD_bit);
+    const uint32_t PAD_D1_PUPD_PULLD_EN = (1 << PAD_D1_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D0_PUPD_PULLU_bit = 7;
+    const uint32_t PAD_D0_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D0_PUPD_PULLU_DIS = (0 << PAD_D0_PUPD_PULLU_bit);
+    const uint32_t PAD_D0_PUPD_PULLU_EN = (1 << PAD_D0_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D0_PUPD_PULLD_bit = 6;
+    const uint32_t PAD_D0_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D0_PUPD_PULLD_DIS = (0 << PAD_D0_PUPD_PULLD_bit);
+    const uint32_t PAD_D0_PUPD_PULLD_EN = (1 << PAD_D0_PUPD_PULLD_bit);
+
+    const uint32_t PAD_CLKB_PUPD_PULLU_bit = 5;
+    const uint32_t PAD_CLKB_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_CLKB_PUPD_PULLU_DIS = (0 << PAD_CLKB_PUPD_PULLU_bit);
+    const uint32_t PAD_CLKB_PUPD_PULLU_EN = (1 << PAD_CLKB_PUPD_PULLU_bit);
+
+    const uint32_t PAD_CLKB_PUPD_PULLD_bit = 4;
+    const uint32_t PAD_CLKB_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_CLKB_PUPD_PULLD_DIS = (0 << PAD_CLKB_PUPD_PULLD_bit);
+    const uint32_t PAD_CLKB_PUPD_PULLD_EN = (1 << PAD_CLKB_PUPD_PULLD_bit);
+
+    const uint32_t PAD_CLK_PUPD_PULLU_bit = 3;
+    const uint32_t PAD_CLK_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_CLK_PUPD_PULLU_DIS = (0 << PAD_CLK_PUPD_PULLU_bit);
+    const uint32_t PAD_CLK_PUPD_PULLU_EN = (1 << PAD_CLK_PUPD_PULLU_bit);
+
+    const uint32_t PAD_CLK_PUPD_PULLD_bit = 2;
+    const uint32_t PAD_CLK_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_CLK_PUPD_PULLD_DIS = (0 << PAD_CLK_PUPD_PULLD_bit);
+    const uint32_t PAD_CLK_PUPD_PULLD_EN = (1 << PAD_CLK_PUPD_PULLD_bit);
+
+    // PULLD: enables weak pull down; PULLDU:enables weak pull up.
+    const uint32_t PAD_CMD_PUPD_PULLU_bit = 1;
+    const uint32_t PAD_CMD_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_CMD_PUPD_PULLU_DIS = (0 << PAD_CMD_PUPD_PULLU_bit);
+    const uint32_t PAD_CMD_PUPD_PULLU_EN = (1 << PAD_CMD_PUPD_PULLU_bit);
+
+    const uint32_t PAD_CMD_PUPD_PULLD_bit = 0;
+    const uint32_t PAD_CMD_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_CMD_PUPD_PULLD_DIS = (0 << PAD_CMD_PUPD_PULLD_bit);
+    const uint32_t PAD_CMD_PUPD_PULLD_EN = (1 << PAD_CMD_PUPD_PULLD_bit);
+};
+
+/*
+ * Controls for BDSDMEM pads of SDMMC3.
+ *
+ * The following calibration codes need to be used for the pad under default conditions. In general, the calibration pad provides the
+ * code for the pad.
+ *
+ * To bypass calibration and provide default code for the required impedance, these values (in decimal) should be used.
+ *
+ * On power ON, Vio is 3.3 V only. Software runs calibration, when Vio is switched to 1.8 V. So, we should use 3.3 V DRV codes
+ * as default values.
+ *
+ */
+
+// 21.1.4.112
+struct SDMMC3_PAD_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAB0;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+ 
+    const uint32_t DRVUP_CZ_bit = 20;
+    const uint32_t DRVUP_CZ_bitWidth 7;
+    const uint32_t DRVUP_CZ_0 = (0 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_1 = (1 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_2 = (2 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_3 = (3 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_4 = (4 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_5 = (5 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_6 = (6 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_7 = (7 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_8 = (8 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_9 = (9 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_10 = (10 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_11 = (11 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_12 = (12 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_13 = (13 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_14 = (14 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_15 = (15 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_16 = (16 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_17 = (17 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_18 = (18 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_19 = (19 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_20 = (20 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_21 = (21 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_22 = (22 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_23 = (23 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_24 = (24 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_25 = (25 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_26 = (26 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_27 = (27 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_28 = (28 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_29 = (29 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_30 = (30 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_31 = (31 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_32 = (32 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_33 = (33 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_34 = (34 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_35 = (35 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_36 = (36 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_37 = (37 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_38 = (38 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_39 = (39 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_40 = (40 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_41 = (41 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_42 = (42 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_43 = (43 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_44 = (44 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_45 = (45 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_46 = (46 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_47 = (47 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_48 = (48 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_49 = (49 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_50 = (50 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_51 = (51 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_52 = (52 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_53 = (53 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_54 = (54 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_55 = (55 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_56 = (56 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_57 = (57 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_58 = (58 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_59 = (59 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_60 = (60 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_61 = (61 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_62 = (62 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_63 = (63 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_64 = (64 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_65 = (65 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_66 = (66 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_67 = (67 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_68 = (68 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_69 = (69 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_70 = (70 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_71 = (71 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_72 = (72 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_73 = (73 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_74 = (74 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_75 = (75 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_76 = (76 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_77 = (77 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_78 = (78 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_79 = (79 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_80 = (80 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_81 = (81 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_82 = (82 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_83 = (83 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_84 = (84 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_85 = (85 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_86 = (86 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_87 = (87 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_88 = (88 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_89 = (89 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_90 = (90 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_91 = (91 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_92 = (92 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_93 = (93 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_94 = (94 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_95 = (95 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_96 = (96 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_97 = (97 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_98 = (98 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_99 = (99 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_100 = (100 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_101 = (101 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_102 = (102 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_103 = (103 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_104 = (104 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_105 = (105 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_106 = (106 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_107 = (107 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_108 = (108 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_109 = (109 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_110 = (110 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_111 = (111 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_112 = (112 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_113 = (113 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_114 = (114 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_115 = (115 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_116 = (116 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_117 = (117 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_118 = (118 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_119 = (119 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_120 = (120 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_121 = (121 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_122 = (122 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_123 = (123 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_124 = (124 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_125 = (125 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_126 = (126 << DRVUP_CZ_bit);
+    const uint32_t DRVUP_CZ_127 = (127 << DRVUP_CZ_bit);
+
+    const uint32_t DRVDN_CZ_bit = 12;
+    const uint32_t DRVDN_CZ_bitWidth 7;
+    const uint32_t DRVDN_CZ_0 = (0 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_1 = (1 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_2 = (2 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_3 = (3 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_4 = (4 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_5 = (5 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_6 = (6 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_7 = (7 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_8 = (8 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_9 = (9 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_10 = (10 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_11 = (11 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_12 = (12 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_13 = (13 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_14 = (14 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_15 = (15 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_16 = (16 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_17 = (17 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_18 = (18 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_19 = (19 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_20 = (20 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_21 = (21 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_22 = (22 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_23 = (23 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_24 = (24 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_25 = (25 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_26 = (26 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_27 = (27 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_28 = (28 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_29 = (29 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_30 = (30 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_31 = (31 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_32 = (32 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_33 = (33 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_34 = (34 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_35 = (35 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_36 = (36 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_37 = (37 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_38 = (38 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_39 = (39 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_40 = (40 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_41 = (41 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_42 = (42 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_43 = (43 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_44 = (44 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_45 = (45 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_46 = (46 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_47 = (47 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_48 = (48 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_49 = (49 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_50 = (50 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_51 = (51 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_52 = (52 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_53 = (53 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_54 = (54 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_55 = (55 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_56 = (56 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_57 = (57 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_58 = (58 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_59 = (59 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_60 = (60 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_61 = (61 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_62 = (62 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_63 = (63 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_64 = (64 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_65 = (65 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_66 = (66 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_67 = (67 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_68 = (68 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_69 = (69 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_70 = (70 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_71 = (71 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_72 = (72 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_73 = (73 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_74 = (74 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_75 = (75 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_76 = (76 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_77 = (77 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_78 = (78 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_79 = (79 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_80 = (80 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_81 = (81 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_82 = (82 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_83 = (83 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_84 = (84 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_85 = (85 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_86 = (86 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_87 = (87 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_88 = (88 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_89 = (89 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_90 = (90 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_91 = (91 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_92 = (92 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_93 = (93 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_94 = (94 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_95 = (95 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_96 = (96 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_97 = (97 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_98 = (98 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_99 = (99 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_100 = (100 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_101 = (101 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_102 = (102 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_103 = (103 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_104 = (104 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_105 = (105 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_106 = (106 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_107 = (107 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_108 = (108 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_109 = (109 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_110 = (110 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_111 = (111 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_112 = (112 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_113 = (113 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_114 = (114 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_115 = (115 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_116 = (116 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_117 = (117 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_118 = (118 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_119 = (119 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_120 = (120 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_121 = (121 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_122 = (122 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_123 = (123 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_124 = (124 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_125 = (125 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_126 = (126 << DRVDN_CZ_bit);
+    const uint32_t DRVDN_CZ_127 = (127 << DRVDN_CZ_bit);
+};
+
+// 21.1.4.113
+struct EMMC4_PAD_E_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAB4;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+
+    const uint32_t DAT7_PARK_bit = 26;
+    const uint32_t DAT7_PARK_bitWidth = 1;
+    const uint32_t DAT7_PARK_NORMAL = (0 << DAT7_PARK_bit);
+    const uint32_t DAT7_PARK_PARKED = (1 << DAT7_PARK_bit);
+
+    const uint32_t DAT6_PARK_bit = 25;
+    const uint32_t DAT6_PARK_bitWidth = 1;
+    const uint32_t DAT6_PARK_NORMAL = (0 << DAT6_PARK_bit);
+    const uint32_t DAT6_PARK_PARKED = (1 << DAT6_PARK_bit);
+
+    const uint32_t DAT5_PARK_bit = 24;
+    const uint32_t DAT5_PARK_bitWidth = 1;
+    const uint32_t DAT5_PARK_NORMAL = (0 << DAT5_PARK_bit);
+    const uint32_t DAT5_PARK_PARKED = (1 << DAT5_PARK_bit);
+
+    const uint32_t DAT4_PARK_bit = 23;
+    const uint32_t DAT4_PARK_bitWidth = 1;
+    const uint32_t DAT4_PARK_NORMAL = (0 << DAT4_PARK_bit);
+    const uint32_t DAT4_PARK_PARKED = (1 << DAT4_PARK_bit);
+
+    const uint32_t DAT3_PARK_bit = 22;
+    const uint32_t DAT3_PARK_bitWidth = 1;
+    const uint32_t DAT3_PARK_NORMAL = (0 << DAT3_PARK_bit);
+    const uint32_t DAT3_PARK_PARKED = (1 << DAT3_PARK_bit);
+
+    const uint32_t DAT2_PARK_bit = 21;
+    const uint32_t DAT2_PARK_bitWidth = 1;
+    const uint32_t DAT2_PARK_NORMAL = (0 << DAT2_PARK_bit);
+    const uint32_t DAT2_PARK_PARKED = (1 << DAT2_PARK_bit);
+
+    const uint32_t DAT1_PARK_bit = 20;
+    const uint32_t DAT1_PARK_bitWidth = 1;
+    const uint32_t DAT1_PARK_NORMAL = (0 << DAT1_PARK_bit);
+    const uint32_t DAT1_PARK_PARKED = (1 << DAT1_PARK_bit);
+
+    const uint32_t DAT0_PARK_bit = 19;
+    const uint32_t DAT0_PARK_bitWidth = 1;
+    const uint32_t DAT0_PARK_NORMAL = (0 << DAT0_PARK_bit);
+    const uint32_t DAT0_PARK_PARKED = (1 << DAT0_PARK_bit);
+
+    const uint32_t CMD_PARK_bit = 18;
+    const uint32_t CMD_PARK_bitWidth = 1;
+    const uint32_t CMD_PARK_NORMAL = (0 << CMD_PARK_bit);
+    const uint32_t CMD_PARK_PARKED = (1 << CMD_PARK_bit);
+
+    const uint32_t DQSB_PARK_bit = 17;
+    const uint32_t DQSB_PARK_bitWidth = 1;
+    const uint32_t DQSB_PARK_NORMAL = (0 << DQSB_PARK_bit);
+    const uint32_t DQSB_PARK_PARKED = (1 << DQSB_PARK_bit);
+
+    const uint32_t DQS_PARK_bit = 16;
+    const uint32_t DQS_PARK_bitWidth = 1;
+    const uint32_t DQS_PARK_NORMAL = (0 << DQS_PARK_bit);
+    const uint32_t DQS_PARK_PARKED = (1 << DQS_PARK_bit);
+
+    const uint32_t CLKB_PARK_bit = 15;
+    const uint32_t CLKB_PARK_bitWidth = 1;
+    const uint32_t CLKB_PARK_NORMAL = (0 << CLKB_PARK_bit);
+    const uint32_t CLKB_PARK_PARKED = (1 << CLKB_PARK_bit);
+
+    const uint32_t CLK_PARK_bit = 14;
+    const uint32_t CLK_PARK_bitWidth = 1;
+    const uint32_t CLK_PARK_NORMAL = (0 << CLK_PARK_bit);
+    const uint32_t CLK_PARK_PARKED = (1 << CLK_PARK_bit);
+
+    const uint32_t DRVUP_bit = 8;
+    const uint32_t DRVUP_bit_bitWidth = 6;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+    const uint32_t DRVUP_32 = (32 << DRVUP_bit);
+    const uint32_t DRVUP_33 = (33 << DRVUP_bit);
+    const uint32_t DRVUP_34 = (34 << DRVUP_bit);
+    const uint32_t DRVUP_35 = (35 << DRVUP_bit);
+    const uint32_t DRVUP_36 = (36 << DRVUP_bit);
+    const uint32_t DRVUP_37 = (37 << DRVUP_bit);
+    const uint32_t DRVUP_38 = (38 << DRVUP_bit);
+    const uint32_t DRVUP_39 = (39 << DRVUP_bit);
+    const uint32_t DRVUP_40 = (40 << DRVUP_bit);
+    const uint32_t DRVUP_41 = (41 << DRVUP_bit);
+    const uint32_t DRVUP_42 = (42 << DRVUP_bit);
+    const uint32_t DRVUP_43 = (43 << DRVUP_bit);
+    const uint32_t DRVUP_44 = (44 << DRVUP_bit);
+    const uint32_t DRVUP_45 = (45 << DRVUP_bit);
+    const uint32_t DRVUP_46 = (46 << DRVUP_bit);
+    const uint32_t DRVUP_47 = (47 << DRVUP_bit);
+    const uint32_t DRVUP_48 = (48 << DRVUP_bit);
+    const uint32_t DRVUP_49 = (49 << DRVUP_bit);
+    const uint32_t DRVUP_50 = (50 << DRVUP_bit);
+    const uint32_t DRVUP_51 = (51 << DRVUP_bit);
+    const uint32_t DRVUP_52 = (52 << DRVUP_bit);
+    const uint32_t DRVUP_53 = (53 << DRVUP_bit);
+    const uint32_t DRVUP_54 = (54 << DRVUP_bit);
+    const uint32_t DRVUP_55 = (55 << DRVUP_bit);
+    const uint32_t DRVUP_56 = (56 << DRVUP_bit);
+    const uint32_t DRVUP_57 = (57 << DRVUP_bit);
+    const uint32_t DRVUP_58 = (58 << DRVUP_bit);
+    const uint32_t DRVUP_59 = (59 << DRVUP_bit);
+    const uint32_t DRVUP_60 = (60 << DRVUP_bit);
+    const uint32_t DRVUP_61 = (61 << DRVUP_bit);
+    const uint32_t DRVUP_62 = (62 << DRVUP_bit);
+    const uint32_t DRVUP_63 = (63 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 2;
+    const uint32_t DRVDN_bitWidth 6;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+    const uint32_t DRVDN_32 = (32 << DRVDN_bit);
+    const uint32_t DRVDN_33 = (33 << DRVDN_bit);
+    const uint32_t DRVDN_34 = (34 << DRVDN_bit);
+    const uint32_t DRVDN_35 = (35 << DRVDN_bit);
+    const uint32_t DRVDN_36 = (36 << DRVDN_bit);
+    const uint32_t DRVDN_37 = (37 << DRVDN_bit);
+    const uint32_t DRVDN_38 = (38 << DRVDN_bit);
+    const uint32_t DRVDN_39 = (39 << DRVDN_bit);
+    const uint32_t DRVDN_40 = (40 << DRVDN_bit);
+    const uint32_t DRVDN_41 = (41 << DRVDN_bit);
+    const uint32_t DRVDN_42 = (42 << DRVDN_bit);
+    const uint32_t DRVDN_43 = (43 << DRVDN_bit);
+    const uint32_t DRVDN_44 = (44 << DRVDN_bit);
+    const uint32_t DRVDN_45 = (45 << DRVDN_bit);
+    const uint32_t DRVDN_46 = (46 << DRVDN_bit);
+    const uint32_t DRVDN_47 = (47 << DRVDN_bit);
+    const uint32_t DRVDN_48 = (48 << DRVDN_bit);
+    const uint32_t DRVDN_49 = (49 << DRVDN_bit);
+    const uint32_t DRVDN_50 = (50 << DRVDN_bit);
+    const uint32_t DRVDN_51 = (51 << DRVDN_bit);
+    const uint32_t DRVDN_52 = (52 << DRVDN_bit);
+    const uint32_t DRVDN_53 = (53 << DRVDN_bit);
+    const uint32_t DRVDN_54 = (54 << DRVDN_bit);
+    const uint32_t DRVDN_55 = (55 << DRVDN_bit);
+    const uint32_t DRVDN_56 = (56 << DRVDN_bit);
+    const uint32_t DRVDN_57 = (57 << DRVDN_bit);
+    const uint32_t DRVDN_58 = (58 << DRVDN_bit);
+    const uint32_t DRVDN_59 = (59 << DRVDN_bit);
+    const uint32_t DRVDN_60 = (60 << DRVDN_bit);
+    const uint32_t DRVDN_61 = (61 << DRVDN_bit);
+    const uint32_t DRVDN_62 = (62 << DRVDN_bit);
+    const uint32_t DRVDN_63 = (63 << DRVDN_bit);
+
+    const uint32_t E_PREEMP_bit = 1;
+    const uint32_t E_PREEMP_bitWidth = 1;
+    const uint32_t E_PREEMP_DISABLE = (0x0 << E_PREEMP_bitWidth);
+    const uint32_t E_PREEMP_ENABLE = (0x1 << E_PREEMP_bitWidth);
+
+    const uint32_t E_SCHMT_bit = 0;
+    const uint32_t E_SCHMT_bitWidth = 1;
+    const uint32_t E_SCHMT_DISABLE = (0x0 << E_SCHMT_bitWidth);
+    const uint32_t E_SCHMT_ENABLE = (0x1 << E_SCHMT_bitWidth);
+};
+
+/**
+ * DRV_TYPE[0]: 0 - 66/100 ohm driver; 1 - 33/50 ohm driver
+ * DRV_TYPE[1]: should be zero always - not used
+ */
+
+// 21.1.4.114
+struct EMMC4_PAD_DRV_TYPE_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAB8;
+
+    const uint32_t PAD_D7_DRV_TYPE_bit = 20;
+    const uint32_t PAD_D7_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D7_DRV_TYPE_66_100 = (0x0 << PAD_D7_DRV_TYPE_bit);
+    const uint32_t PAD_D7_DRV_TYPE_33_50 = (0x1 << PAD_D7_DRV_TYPE_bit);
+
+    const uint32_t PAD_D6_DRV_TYPE_bit = 18;
+    const uint32_t PAD_D6_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D6_DRV_TYPE_66_100 = (0x0 << PAD_D6_DRV_TYPE_bit);
+    const uint32_t PAD_D6_DRV_TYPE_33_50 = (0x1 << PAD_D6_DRV_TYPE_bit);
+
+    const uint32_t PAD_D5_DRV_TYPE_bit = 16;
+    const uint32_t PAD_D5_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D5_DRV_TYPE_66_100 = (0x0 << PAD_D5_DRV_TYPE_bit);
+    const uint32_t PAD_D5_DRV_TYPE_33_50 = (0x1 << PAD_D5_DRV_TYPE_bit);
+
+    const uint32_t PAD_D4_DRV_TYPE_bit = 14;
+    const uint32_t PAD_D4_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D4_DRV_TYPE_66_100 = (0x0 << PAD_D4_DRV_TYPE_bit);
+    const uint32_t PAD_D4_DRV_TYPE_33_50 = (0x1 << PAD_D4_DRV_TYPE_bit);
+
+    const uint32_t PAD_D3_DRV_TYPE_bit = 12;
+    const uint32_t PAD_D3_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D3_DRV_TYPE_66_100 = (0x0 << PAD_D3_DRV_TYPE_bit);
+    const uint32_t PAD_D3_DRV_TYPE_33_50 = (0x1 << PAD_D3_DRV_TYPE_bit);
+
+    const uint32_t PAD_D2_DRV_TYPE_bit = 10;
+    const uint32_t PAD_D2_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D2_DRV_TYPE_66_100 = (0x0 << PAD_D2_DRV_TYPE_bit);
+    const uint32_t PAD_D2_DRV_TYPE_33_50 = (0x1 << PAD_D2_DRV_TYPE_bit);
+
+    const uint32_t PAD_D1_DRV_TYPE_bit = 8;
+    const uint32_t PAD_D1_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D1_DRV_TYPE_66_100 = (0x0 << PAD_D1_DRV_TYPE_bit);
+    const uint32_t PAD_D1_DRV_TYPE_33_50 = (0x1 << PAD_D1_DRV_TYPE_bit);
+
+    const uint32_t PAD_D0_DRV_TYPE_bit = 6;
+    const uint32_t PAD_D0_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_D0_DRV_TYPE_66_100 = (0x0 << PAD_D0_DRV_TYPE_bit);
+    const uint32_t PAD_D0_DRV_TYPE_33_50 = (0x1 << PAD_D0_DRV_TYPE_bit);
+
+    const uint32_t PAD_CLKB_DRV_TYPE_bit = 4;
+    const uint32_t PAD_CLKB_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_CLKB_DRV_TYPE_66_100 = (0x0 << PAD_CLKB_DRV_TYPE_bit);
+    const uint32_t PAD_CLKB_DRV_TYPE_33_50 = (0x1 << PAD_CLKB_DRV_TYPE_bit);
+
+    const uint32_t PAD_CLK_DRV_TYPE_bit = 2;
+    const uint32_t PAD_CLK_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_CLK_DRV_TYPE_66_100 = (0x0 << PAD_CLK_DRV_TYPE_bit);
+    const uint32_t PAD_CLK_DRV_TYPE_33_50 = (0x1 << PAD_CLK_DRV_TYPE_bit);
+
+    const uint32_t PAD_CMD_DRV_TYPE_bit = 0;
+    const uint32_t PAD_CMD_DRV_TYPE_bitWidth = 1;
+    const uint32_t PAD_CMD_DRV_TYPE_66_100 = (0x0 << PAD_CMD_DRV_TYPE_bit);
+    const uint32_t PAD_CMD_DRV_TYPE_33_50 = (0x1 << PAD_CMD_DRV_TYPE_bit);
+};
+
+// 21.1.4.115
+struct EMMC4_PAD_PUPD_CFG
+{
+    const uint32_t address = 0x70000000 + 0xABC;
+
+    const uint32_t PAD_DQSB_PUPD_PULLU_bit = 25;
+    const uint32_t PAD_DQSB_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_DQSB_PUPD_PULLU_DIS = (0 << PAD_DQSB_PUPD_PULLU_bit);
+    const uint32_t PAD_DQSB_PUPD_PULLU_EN = (1 << PAD_DQSB_PUPD_PULLU_bit);
+
+    const uint32_t PAD_DQSB_PUPD_PULLD_bit = 24;
+    const uint32_t PAD_DQSB_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_DQSB_PUPD_PULLD_DIS = (0 << PAD_DQSB_PUPD_PULLD_bit);
+    const uint32_t PAD_DQSB_PUPD_PULLD_EN = (1 << PAD_DQSB_PUPD_PULLD_bit);
+
+    const uint32_t PAD_DQS_PUPD_PULLU_bit = 23;
+    const uint32_t PAD_DQS_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_DQS_PUPD_PULLU_DIS = (0 << PAD_DQS_PUPD_PULLU_bit);
+    const uint32_t PAD_DQS_PUPD_PULLU_EN = (1 << PAD_DQS_PUPD_PULLU_bit);
+
+    const uint32_t PAD_DQS_PUPD_PULLD_bit = 22;
+    const uint32_t PAD_DQS_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_DQS_PUPD_PULLD_DIS = (0 << PAD_DQS_PUPD_PULLD_bit);
+    const uint32_t PAD_DQS_PUPD_PULLD_EN = (1 << PAD_DQS_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D7_PUPD_PULLU_bit = 21;
+    const uint32_t PAD_D7_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D7_PUPD_PULLU_DIS = (0 << PAD_D7_PUPD_PULLU_bit);
+    const uint32_t PAD_D7_PUPD_PULLU_EN = (1 << PAD_D7_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D7_PUPD_PULLD_bit = 20;
+    const uint32_t PAD_D7_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D7_PUPD_PULLD_DIS = (0 << PAD_D7_PUPD_PULLD_bit);
+    const uint32_t PAD_D7_PUPD_PULLD_EN = (1 << PAD_D7_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D6_PUPD_PULLU_bit = 19;
+    const uint32_t PAD_D6_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D6_PUPD_PULLU_DIS = (0 << PAD_D6_PUPD_PULLU_bit);
+    const uint32_t PAD_D6_PUPD_PULLU_EN = (1 << PAD_D6_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D6_PUPD_PULLD_bit = 18;
+    const uint32_t PAD_D6_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D6_PUPD_PULLD_DIS = (0 << PAD_D6_PUPD_PULLD_bit);
+    const uint32_t PAD_D6_PUPD_PULLD_EN = (1 << PAD_D6_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D5_PUPD_PULLU_bit = 17;
+    const uint32_t PAD_D5_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D5_PUPD_PULLU_DIS = (0 << PAD_D5_PUPD_PULLU_bit);
+    const uint32_t PAD_D5_PUPD_PULLU_EN = (1 << PAD_D5_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D5_PUPD_PULLD_bit = 16;
+    const uint32_t PAD_D5_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D5_PUPD_PULLD_DIS = (0 << PAD_D5_PUPD_PULLD_bit);
+    const uint32_t PAD_D5_PUPD_PULLD_EN = (1 << PAD_D5_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D4_PUPD_PULLU_bit = 15;
+    const uint32_t PAD_D4_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D4_PUPD_PULLU_DIS = (0 << PAD_D4_PUPD_PULLU_bit);
+    const uint32_t PAD_D4_PUPD_PULLU_EN = (1 << PAD_D4_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D4_PUPD_PULLD_bit = 14;
+    const uint32_t PAD_D4_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D4_PUPD_PULLD_DIS = (0 << PAD_D4_PUPD_PULLD_bit);
+    const uint32_t PAD_D4_PUPD_PULLD_EN = (1 << PAD_D4_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D3_PUPD_PULLU_bit = 13;
+    const uint32_t PAD_D3_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D3_PUPD_PULLU_DIS = (0 << PAD_D3_PUPD_PULLU_bit);
+    const uint32_t PAD_D3_PUPD_PULLU_EN = (1 << PAD_D3_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D3_PUPD_PULLD_bit = 12;
+    const uint32_t PAD_D3_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D3_PUPD_PULLD_DIS = (0 << PAD_D3_PUPD_PULLD_bit);
+    const uint32_t PAD_D3_PUPD_PULLD_EN = (1 << PAD_D3_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D2_PUPD_PULLU_bit = 11;
+    const uint32_t PAD_D2_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D2_PUPD_PULLU_DIS = (0 << PAD_D2_PUPD_PULLU_bit);
+    const uint32_t PAD_D2_PUPD_PULLU_EN = (1 << PAD_D2_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D2_PUPD_PULLD_bit = 10;
+    const uint32_t PAD_D2_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D2_PUPD_PULLD_DIS = (0 << PAD_D2_PUPD_PULLD_bit);
+    const uint32_t PAD_D2_PUPD_PULLD_EN = (1 << PAD_D2_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D1_PUPD_PULLU_bit = 9;
+    const uint32_t PAD_D1_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D1_PUPD_PULLU_DIS = (0 << PAD_D1_PUPD_PULLU_bit);
+    const uint32_t PAD_D1_PUPD_PULLU_EN = (1 << PAD_D1_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D1_PUPD_PULLD_bit = 8;
+    const uint32_t PAD_D1_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D1_PUPD_PULLD_DIS = (0 << PAD_D1_PUPD_PULLD_bit);
+    const uint32_t PAD_D1_PUPD_PULLD_EN = (1 << PAD_D1_PUPD_PULLD_bit);
+
+    const uint32_t PAD_D0_PUPD_PULLU_bit = 7;
+    const uint32_t PAD_D0_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_D0_PUPD_PULLU_DIS = (0 << PAD_D0_PUPD_PULLU_bit);
+    const uint32_t PAD_D0_PUPD_PULLU_EN = (1 << PAD_D0_PUPD_PULLU_bit);
+
+    const uint32_t PAD_D0_PUPD_PULLD_bit = 6;
+    const uint32_t PAD_D0_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_D0_PUPD_PULLD_DIS = (0 << PAD_D0_PUPD_PULLD_bit);
+    const uint32_t PAD_D0_PUPD_PULLD_EN = (1 << PAD_D0_PUPD_PULLD_bit);
+
+    const uint32_t PAD_CLKB_PUPD_PULLU_bit = 5;
+    const uint32_t PAD_CLKB_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_CLKB_PUPD_PULLU_DIS = (0 << PAD_CLKB_PUPD_PULLU_bit);
+    const uint32_t PAD_CLKB_PUPD_PULLU_EN = (1 << PAD_CLKB_PUPD_PULLU_bit);
+
+    const uint32_t PAD_CLKB_PUPD_PULLD_bit = 4;
+    const uint32_t PAD_CLKB_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_CLKB_PUPD_PULLD_DIS = (0 << PAD_CLKB_PUPD_PULLD_bit);
+    const uint32_t PAD_CLKB_PUPD_PULLD_EN = (1 << PAD_CLKB_PUPD_PULLD_bit);
+
+    const uint32_t PAD_CLK_PUPD_PULLU_bit = 3;
+    const uint32_t PAD_CLK_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_CLK_PUPD_PULLU_DIS = (0 << PAD_CLK_PUPD_PULLU_bit);
+    const uint32_t PAD_CLK_PUPD_PULLU_EN = (1 << PAD_CLK_PUPD_PULLU_bit);
+
+    const uint32_t PAD_CLK_PUPD_PULLD_bit = 2;
+    const uint32_t PAD_CLK_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_CLK_PUPD_PULLD_DIS = (0 << PAD_CLK_PUPD_PULLD_bit);
+    const uint32_t PAD_CLK_PUPD_PULLD_EN = (1 << PAD_CLK_PUPD_PULLD_bit);
+
+    // PULLD: enables weak pull down; PULLDU:enables weak pull up.
+    const uint32_t PAD_CMD_PUPD_PULLU_bit = 1;
+    const uint32_t PAD_CMD_PUPD_PULLU_bitWidth = 1;
+    const uint32_t PAD_CMD_PUPD_PULLU_DIS = (0 << PAD_CMD_PUPD_PULLU_bit);
+    const uint32_t PAD_CMD_PUPD_PULLU_EN = (1 << PAD_CMD_PUPD_PULLU_bit);
+
+    const uint32_t PAD_CMD_PUPD_PULLD_bit = 0;
+    const uint32_t PAD_CMD_PUPD_PULLD_bitWidth = 1;
+    const uint32_t PAD_CMD_PUPD_PULLD_DIS = (0 << PAD_CMD_PUPD_PULLD_bit);
+    const uint32_t PAD_CMD_PUPD_PULLD_EN = (1 << PAD_CMD_PUPD_PULLD_bit);
+};
+
+// 21.1.4.116
+struct SHUTDOWN_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAC8;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.117
+struct SPDIF_IN_CFG
+{
+    const uint32_t address = 0x70000000 + 0xACC;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.118
+struct SPDIF_OUT_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAD0;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.119
+struct SPI1_CS0_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAD4;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.120
+struct SPI1_CS1_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAD8;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.121
+struct SPI1_MISO_CFG
+{
+    const uint32_t address = 0x70000000 + 0xADC;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.122
+struct SPI1_MOSI_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAE0;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.123
+struct SPI1_SCK_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAE4;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.124
+struct SPI2_CS0_CFG 
+{
+    const uint32_t address = 0x70000000 + 0xAE8;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.125
+struct SPI2_CS1_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAEC;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.126
+struct SPI2_MISO_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAF0;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.127
+struct SPI2_MOSI_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAF4;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.128
+struct SPI2_SCK_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAF8;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.129
+struct SPI4_CS0_CFG
+{
+    const uint32_t address = 0x70000000 + 0xAFC;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.130
+struct SPI4_MISO_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB00;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.131
+struct SPI4_MOSI_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB04;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.132
+struct SPI4_SCK_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB08;
+
+    const uint32_t SLWF_bit = 30;
+    const uint32_t SLWF_bitWidth = 2;
+    const uint32_t SLWF_HIGHEST = (0x0 << SLWF_bit);
+    const uint32_t SLWF_HIGH = (0x1 << SLWF_bit);
+    const uint32_t SLWF_LOW = (0x2 << SLWF_bit);
+    const uint32_t SLWF_LOWEST = (0x3 << SLWF_bit);
+
+    const uint32_t SLWR_bit = 28;
+    const uint32_t SLWR_bitWidth = 2;
+    const uint32_t SLWR_HIGHEST = (0x0 << SLWR_bit);
+    const uint32_t SLWR_HIGH = (0x1 << SLWR_bit);
+    const uint32_t SLWR_LOW = (0x2 << SLWR_bit);
+    const uint32_t SLWR_LOWEST = (0x3 << SLWR_bit);
+};
+
+// 21.1.4.133
+struct TEMP_ALERT_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB0C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.134
+struct TOUCH_CLK_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB10;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.135
+struct TOUCH_INT_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB14;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.136
+struct TOUCH_RST_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB18;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.137
+struct UART1_CTS_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB1C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.138
+struct UART1_RTS_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB20;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.139
+struct UART1_RX_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB24;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.140
+struct UART1_TX_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB28;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.141
+struct UART2_CTS_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB2C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.142
+struct UART2_RTS_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB30;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.143
+struct UART2_RX_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB34;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.144
+struct UART2_TX_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB38;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.145
+struct UART3_CTS_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB3C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.146
+struct UART3_RTS_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB40;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.147
+struct UART3_RX_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB44;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.148
+struct UART3_TX_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB48;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.149
+struct UART4_CTS_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB4C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.150
+struct UART4_RTS_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB50;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.151
+struct UART4_RX_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB54;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.152
+struct UART4_TX_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB58;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.153
+struct USB_VBUS_EN0_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB5C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.154
+struct USB_VBUS_EN1_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB60;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.155
+struct WIFI_EN_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB64;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.156
+struct WIFI_RST_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB68;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
+// 21.1.4.157
+struct WIFI_WAKE_AP_CFG
+{
+    const uint32_t address = 0x70000000 + 0xB6C;
+    
+    const uint32_t DRVUP_bit = 20;
+    const uint32_t DRVUP_bitWidth 5;
+    const uint32_t DRVUP_0 = (0 << DRVUP_bit);
+    const uint32_t DRVUP_1 = (1 << DRVUP_bit);
+    const uint32_t DRVUP_2 = (2 << DRVUP_bit);
+    const uint32_t DRVUP_3 = (3 << DRVUP_bit);
+    const uint32_t DRVUP_4 = (4 << DRVUP_bit);
+    const uint32_t DRVUP_5 = (5 << DRVUP_bit);
+    const uint32_t DRVUP_6 = (6 << DRVUP_bit);
+    const uint32_t DRVUP_7 = (7 << DRVUP_bit);
+    const uint32_t DRVUP_8 = (8 << DRVUP_bit);
+    const uint32_t DRVUP_9 = (9 << DRVUP_bit);
+    const uint32_t DRVUP_10 = (10 << DRVUP_bit);
+    const uint32_t DRVUP_11 = (11 << DRVUP_bit);
+    const uint32_t DRVUP_12 = (12 << DRVUP_bit);
+    const uint32_t DRVUP_13 = (13 << DRVUP_bit);
+    const uint32_t DRVUP_14 = (14 << DRVUP_bit);
+    const uint32_t DRVUP_15 = (15 << DRVUP_bit);
+    const uint32_t DRVUP_16 = (16 << DRVUP_bit);
+    const uint32_t DRVUP_17 = (17 << DRVUP_bit);
+    const uint32_t DRVUP_18 = (18 << DRVUP_bit);
+    const uint32_t DRVUP_19 = (19 << DRVUP_bit);
+    const uint32_t DRVUP_20 = (20 << DRVUP_bit);
+    const uint32_t DRVUP_21 = (21 << DRVUP_bit);
+    const uint32_t DRVUP_22 = (22 << DRVUP_bit);
+    const uint32_t DRVUP_23 = (23 << DRVUP_bit);
+    const uint32_t DRVUP_24 = (24 << DRVUP_bit);
+    const uint32_t DRVUP_25 = (25 << DRVUP_bit);
+    const uint32_t DRVUP_26 = (26 << DRVUP_bit);
+    const uint32_t DRVUP_27 = (27 << DRVUP_bit);
+    const uint32_t DRVUP_28 = (28 << DRVUP_bit);
+    const uint32_t DRVUP_29 = (29 << DRVUP_bit);
+    const uint32_t DRVUP_30 = (30 << DRVUP_bit);
+    const uint32_t DRVUP_31 = (31 << DRVUP_bit);
+
+    const uint32_t DRVDN_bit = 12;
+    const uint32_t DRVDN_bitWidth = 5;
+    const uint32_t DRVDN_0 = (0 << DRVDN_bit);
+    const uint32_t DRVDN_1 = (1 << DRVDN_bit);
+    const uint32_t DRVDN_2 = (2 << DRVDN_bit);
+    const uint32_t DRVDN_3 = (3 << DRVDN_bit);
+    const uint32_t DRVDN_4 = (4 << DRVDN_bit);
+    const uint32_t DRVDN_5 = (5 << DRVDN_bit);
+    const uint32_t DRVDN_6 = (6 << DRVDN_bit);
+    const uint32_t DRVDN_7 = (7 << DRVDN_bit);
+    const uint32_t DRVDN_8 = (8 << DRVDN_bit);
+    const uint32_t DRVDN_9 = (9 << DRVDN_bit);
+    const uint32_t DRVDN_10 = (10 << DRVDN_bit);
+    const uint32_t DRVDN_11 = (11 << DRVDN_bit);
+    const uint32_t DRVDN_12 = (12 << DRVDN_bit);
+    const uint32_t DRVDN_13 = (13 << DRVDN_bit);
+    const uint32_t DRVDN_14 = (14 << DRVDN_bit);
+    const uint32_t DRVDN_15 = (15 << DRVDN_bit);
+    const uint32_t DRVDN_16 = (16 << DRVDN_bit);
+    const uint32_t DRVDN_17 = (17 << DRVDN_bit);
+    const uint32_t DRVDN_18 = (18 << DRVDN_bit);
+    const uint32_t DRVDN_19 = (19 << DRVDN_bit);
+    const uint32_t DRVDN_20 = (20 << DRVDN_bit);
+    const uint32_t DRVDN_21 = (21 << DRVDN_bit);
+    const uint32_t DRVDN_22 = (22 << DRVDN_bit);
+    const uint32_t DRVDN_23 = (23 << DRVDN_bit);
+    const uint32_t DRVDN_24 = (24 << DRVDN_bit);
+    const uint32_t DRVDN_25 = (25 << DRVDN_bit);
+    const uint32_t DRVDN_26 = (26 << DRVDN_bit);
+    const uint32_t DRVDN_27 = (27 << DRVDN_bit);
+    const uint32_t DRVDN_28 = (28 << DRVDN_bit);
+    const uint32_t DRVDN_29 = (29 << DRVDN_bit);
+    const uint32_t DRVDN_30 = (30 << DRVDN_bit);
+    const uint32_t DRVDN_31 = (31 << DRVDN_bit);
+};
+
 
 #endif //PINMUX_CONTROLLER_H
