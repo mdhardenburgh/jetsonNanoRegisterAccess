@@ -44,6 +44,120 @@
 
 #include <cstdint>
 
+const uint32_t DRV_TYPE_BIT_DRIVE_1X = 0;
+const uint32_t DRV_TYPE_BIT_DRIVE_2X = 1;
+const uint32_t DRV_TYPE_BIT_DRIVE_3X = 2;
+const uint32_t DRV_TYPE_BIT_DRIVE_4X = 3;
+
+const uint32_t E_SCHMT_TRIG_BIT_DISABLE = 0;
+const uint32_t E_SCHMT_TRIG_BIT_ENABLE = 1;
+ 
+const uint32_t E_HSM_BIT_DISABLE = 0;
+const uint32_t E_HSM_BIT_ENABLE = 1;
+
+const uint32_t LOCK_BIT_DISABLE = 0;
+const uint32_t LOCK_BIT_ENABLE = 1;
+
+const uint32_t E_INPUT_BIT_DISABLE = 0;
+const uint32_t E_INPUT_BIT_ENABLE = 1;
+
+const uint32_t PARK_BIT_NORMAL = 0;
+const uint32_t PARK_BIT_PARKED = 1;
+
+const uint32_t TRISTATE_BIT_PASSTHROUGH = 0;
+const uint32_t TRISTATE_BIT_TRISTATE = 1;
+
+const uint32_t PUPD_BIT_NONE = 0;
+const uint32_t PUPD_BIT_PULL_DOWN = 1;
+const uint32_t PUPD_BIT_PULL_UP = 2;
+const uint32_t PUPD_BIT_RSVD = 3;
+
+const uint32_t PM_BIT_SDMMC1 = 0;
+const uint32_t PM_BIT_RSVD0 = 0;
+const uint32_t PM_BIT_PE0 = 0;
+const uint32_t PM_BIT_PE1 = 0;
+const uint32_t PM_BIT_SATA = 0;
+const uint32_t PM_BIT_SPI1 = 0;
+const uint32_t PM_BIT_SPI2 = 0;
+const uint32_t PM_BIT_SPI4 = 0;
+const uint32_t PM_BIT_QSPI = 0;
+const uint32_t PM_BIT_DMIC1 = 0;
+const uint32_t PM_BIT_DMIC2 = 0;
+const uint32_t PM_BIT_DMIC3 = 0;
+const uint32_t PM_BIT_I2C1 = 0;
+const uint32_t PM_BIT_I2C2 = 0;
+const uint32_t PM_BIT_I2C3 = 0;
+const uint32_t PM_BIT_I2CPMU = 0;
+const uint32_t PM_BIT_UARTA = 0;
+const uint32_t PM_BIT_UARTB = 0;
+const uint32_t PM_BIT_UARTC = 0;
+const uint32_t PM_BIT_UARTD = 0;
+const uint32_t PM_BIT_I2S4B = 0;
+const uint32_t PM_BIT_I2S1 = 0;
+const uint32_t PM_BIT_I2S2 = 0;
+const uint32_t PM_BIT_EXTPERIPH3 = 0;
+const uint32_t PM_BIT_JTAG = 0;
+const uint32_t PM_BIT_SOC = 0;
+const uint32_t PM_BIT_BCL = 0;
+const uint32_t PM_BIT_AUD = 0;
+const uint32_t PM_BIT_CEC = 0;
+const uint32_t PM_BIT_DP = 0;
+const uint32_t PM_BIT_SPDIF_STATE_0 = 0;
+const uint32_t PM_BIT_USB = 0;
+const uint32_t PM_BIT_VGP1 = 0;
+const uint32_t PM_BIT_VIMCLK = 0;
+const uint32_t PM_BIT_VIMCLK2 = 0;
+const uint32_t PM_BIT_VGP4 = 0;
+const uint32_t PM_BIT_VGP5 = 0;
+const uint32_t PM_BIT_VGP6 = 0;
+const uint32_t PM_BIT_DISPLAYA = 0;
+const uint32_t PM_BIT_DISPLAYB = 0;
+const uint32_t PM_BIT_TOUCH = 0;
+const uint32_t PM_BIT_IQC0 = 0;
+const uint32_t PM_BIT_IQC1 = 0;
+const uint32_t PM_BIT_SDMMC3 = 0;
+const uint32_t PM_BIT_VGP3 = 1;
+const uint32_t PM_BIT_VGP2 = 1;
+const uint32_t PM_BIT_BLINK = 1;
+const uint32_t PM_BIT_UART = 1;
+const uint32_t PM_BIT_SPI4_STATE_1 = 1;
+const uint32_t PM_BIT_I2S4A = 1;
+const uint32_t PM_BIT_I2CVI = 1;
+const uint32_t PM_BIT_I2S3 = 1;
+const uint32_t PM_BIT_I2S4 = 1;
+const uint32_t PM_BIT_I2S5A = 1;
+const uint32_t PM_BIT_I2S5A = 1;
+const uint32_t PM_BIT_DTV = 1;
+const uint32_t PM_BIT_RSVD1 = 1;
+const uint32_t PM_BIT_CLDVFS = 1;
+const uint32_t PM_BIT_UARTB_STATE_1 = 1;
+const uint32_t PM_BIT_SDMMC1_STATE_1 = 1;
+const uint32_t PM_BIT_CCLA = 1;
+const uint32_t PM_BIT_SPDIF = 2;
+const uint32_t PM_BIT_RSVD2 = 2;
+const uint32_t PM_BIT_SPI3 = 2;
+const uint32_t PM_BIT_PWM2 = 2;
+const uint32_t PM_BIT_PWM3 = 2;
+const uint32_t PM_BIT_UART_STATE_3 = 3;
+const uint32_t PM_BIT_RSVD3 = 3;
+
+/*
+DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+onst uint32_t E_OD_BIT_DISABLE = 0;
+const uint32_t E_OD_BIT_ENABLE = 1;
+*/
+
+const uint32_t E_IO_HV_BIT_DISABLE = 0;
+const uint32_t E_IO_HV_BIT_ENABLE = 1;
+
+const uint32_t E_LPDR_BIT_DISABLE = 0;
+const uint32_t E_LPDR_BIT_ENABLE = 1;
+
+const uint32_t E_PREEMP_BIT_DISABLE = 0;
+const uint32_t E_PREEMP_BIT_ENABLE = 1;
+
+const uint32_t pinMuxControlBase = 0x70000000 + 0x3000;
+ 
 // 9.15.1
 struct PINMUX_AUX_SDMMC1_CLK_0
 {
@@ -51,54 +165,30 @@ struct PINMUX_AUX_SDMMC1_CLK_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.2
@@ -108,54 +198,30 @@ struct PINMUX_AUX_SDMMC1_CMD_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.3
@@ -165,54 +231,30 @@ struct PINMUX_AUX_SDMMC1_DAT3_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.4
@@ -222,54 +264,30 @@ struct PINMUX_AUX_SDMMC1_DAT2_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.5
@@ -279,54 +297,30 @@ struct PINMUX_AUX_SDMMC1_DAT1_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.6
@@ -336,54 +330,30 @@ struct PINMUX_AUX_SDMMC1_DAT0_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.7
@@ -393,54 +363,30 @@ struct PINMUX_AUX_SDMMC3_CLK_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.8
@@ -450,54 +396,30 @@ struct PINMUX_AUX_SDMMC3_CMD_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.9
@@ -507,54 +429,30 @@ struct PINMUX_AUX_SDMMC3_DAT0_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.10
@@ -564,54 +462,30 @@ struct PINMUX_AUX_SDMMC3_DAT1_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.11
@@ -621,54 +495,30 @@ struct PINMUX_AUX_SDMMC3_DAT2_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.12
@@ -678,54 +528,30 @@ struct PINMUX_AUX_SDMMC3_DAT3_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.13
@@ -735,60 +561,36 @@ struct PINMUX_AUX_PEX_L0_RST_N_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_PE0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.14
@@ -798,60 +600,36 @@ struct PINMUX_AUX_PEX_L0_CLKREQ_N_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_PE0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.15
@@ -861,60 +639,36 @@ struct PINMUX_AUX_PEX_WAKE_N_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_PE = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.16
@@ -924,60 +678,36 @@ struct PINMUX_AUX_PEX_L1_RST_N_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_PE1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.17
@@ -987,60 +717,36 @@ struct PINMUX_AUX_PEX_L1_CLKREQ_N_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_PE1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.18
@@ -1050,55 +756,33 @@ struct PINMUX_AUX_SATA_LED_ACTIVE_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SATA = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.19
@@ -1108,59 +792,33 @@ struct PINMUX_AUX_SPI1_MOSI_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
  
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.20
@@ -1170,59 +828,33 @@ struct PINMUX_AUX_SPI1_MISO_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
  
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.21
@@ -1232,59 +864,33 @@ struct PINMUX_AUX_SPI1_SCK_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
  
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.22
@@ -1294,59 +900,33 @@ struct PINMUX_AUX_SPI1_CS0_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
  
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.23
@@ -1356,59 +936,33 @@ struct PINMUX_AUX_SPI1_CS1_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
  
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.24
@@ -1418,54 +972,30 @@ struct PINMUX_AUX_SPI2_MOSI_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI2 = (0 << PM_bit);
-    const uint32_t PM_DTV = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.25
@@ -1475,54 +1005,30 @@ struct PINMUX_AUX_SPI2_MISO_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI2 = (0 << PM_bit);
-    const uint32_t PM_DTV = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.26
@@ -1532,54 +1038,30 @@ struct PINMUX_AUX_SPI2_SCK_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI2 = (0 << PM_bit);
-    const uint32_t PM_DTV = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.27
@@ -1589,54 +1071,30 @@ struct PINMUX_AUX_SPI2_CSO_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI2 = (0 << PM_bit);
-    const uint32_t PM_DTV = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.28
@@ -1646,54 +1104,30 @@ struct PINMUX_AUX_SPI2_CS1_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI2 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.29
@@ -1703,59 +1137,33 @@ struct PINMUX_AUX_SPI4_MOSI_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI4 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.30
@@ -1765,59 +1173,33 @@ struct PINMUX_AUX_SPI4_MISO_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI4 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.31
@@ -1827,59 +1209,33 @@ struct PINMUX_AUX_SPI4_SCK_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI4 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.32
@@ -1889,59 +1245,33 @@ struct PINMUX_AUX_SPI4_CS0_0
 
     const uint32_t E_PREEMP_bit = 15;
     const uint32_t E_PREEMP_bitWidth = 1;
-    const uint32_t E_PREEMP_DISABLE = (0 << E_PREEMP_bit);
-    const uint32_t E_PREEMP_ENABLE = (1 << E_PREEMP_bit);
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPI4 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.33
@@ -1951,54 +1281,30 @@ struct PINMUX_AUX_QSPI_SCK_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_QSPI = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.34
@@ -2008,54 +1314,30 @@ struct PINMUX_AUX_QSPI_CS_N_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_QSPI = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.35
@@ -2065,54 +1347,30 @@ struct PINMUX_AUX_QSPI_IO0_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_QSPI = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.36
@@ -2122,54 +1380,30 @@ struct PINMUX_AUX_QSPI_IO1_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_QSPI = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.37
@@ -2179,54 +1413,30 @@ struct PINMUX_AUX_QSPI_IO2_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_QSPI = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.38
@@ -2236,54 +1446,30 @@ struct PINMUX_AUX_QSPI_IO3_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_QSPI = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.39
@@ -2293,47 +1479,27 @@ struct PINMUX_AUX_DMIC1_CLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DMIC1 = (0 << PM_bit);
-    const uint32_t PM_I2S3 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.40
@@ -2343,55 +1509,33 @@ struct PINMUX_AUX_DMIC1_DAT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DMIC1 = (0 << PM_bit);
-    const uint32_t PM_I2S3 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.41
@@ -2401,55 +1545,33 @@ struct PINMUX_AUX_DMIC2_CLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DMIC2 = (0 << PM_bit);
-    const uint32_t PM_I2S3 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.42
@@ -2459,55 +1581,33 @@ struct PINMUX_AUX_DMIC2_DAT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DMIC2 = (0 << PM_bit);
-    const uint32_t PM_I2S3 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.43
@@ -2517,55 +1617,33 @@ struct PINMUX_AUX_DMIC3_CLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DMIC3 = (0 << PM_bit);
-    const uint32_t PM_I2S5A = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.44
@@ -2575,55 +1653,33 @@ struct PINMUX_AUX_DMIC3_DAT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DMIC3 = (0 << PM_bit);
-    const uint32_t PM_I2S5A = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.45
@@ -2633,60 +1689,36 @@ struct PINMUX_AUX_GEN1_I2C_SCL_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2C1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.46
@@ -2696,60 +1728,36 @@ struct PINMUX_AUX_GEN1_I2C_SDA_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2C1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.47
@@ -2759,60 +1767,36 @@ struct PINMUX_AUX_GEN2_I2C_SCL_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2C2 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.48
@@ -2822,60 +1806,36 @@ struct PINMUX_AUX_GEN2_I2C_SDA_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2C2 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.49
@@ -2885,60 +1845,36 @@ struct PINMUX_AUX_GEN3_I2C_SCL_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2C3 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.50
@@ -2948,60 +1884,36 @@ struct PINMUX_AUX_GEN3_I2C_SDA_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2C3 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.51
@@ -3011,60 +1923,36 @@ struct PINMUX_AUX_CAM_I2C_SCL_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2C3 = (0 << PM_bit);
-    const uint32_t PM_I2CVI = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.52
@@ -3074,60 +1962,36 @@ struct PINMUX_AUX_CAM_I2C_SDA_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2C3 = (0 << PM_bit);
-    const uint32_t PM_I2CVI = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.53
@@ -3137,60 +2001,36 @@ struct PINMUX_AUX_PWR_I2C_SCL_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2CPMU = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.54
@@ -3200,60 +2040,36 @@ struct PINMUX_AUX_PWR_I2C_SDA_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2CPMU = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.55
@@ -3263,55 +2079,33 @@ struct PINMUX_AUX_UART1_TX_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTA = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.56
@@ -3321,55 +2115,33 @@ struct PINMUX_AUX_UART1_RX_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTA = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.57
@@ -3379,55 +2151,33 @@ struct PINMUX_AUX_UART1_RTS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTA = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.58
@@ -3437,55 +2187,33 @@ struct PINMUX_AUX_UART1_CTS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTA = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.59
@@ -3495,55 +2223,33 @@ struct PINMUX_AUX_UART2_TX_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTB = (0 << PM_bit);
-    const uint32_t PM_I2S4A = (1 << PM_bit);
-    const uint32_t PM_SPDIF = (2 << PM_bit);
-    const uint32_t PM_UART = (3 << PM_bit);
 };
 
 // 9.15.60
@@ -3553,55 +2259,33 @@ struct PINMUX_AUX_UART2_RX_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTB = (0 << PM_bit);
-    const uint32_t PM_I2S4A = (1 << PM_bit);
-    const uint32_t PM_SPDIF = (2 << PM_bit);
-    const uint32_t PM_UART = (3 << PM_bit);
 };
 
 // 9.15.61
@@ -3611,55 +2295,33 @@ struct PINMUX_AUX_UART2_RTS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTB = (0 << PM_bit);
-    const uint32_t PM_I2S4A = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_UART = (3 << PM_bit);
 };
 
 // 9.15.62
@@ -3669,55 +2331,33 @@ struct PINMUX_AUX_UART2_CTS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTB = (0 << PM_bit);
-    const uint32_t PM_I2S4A = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_UART = (3 << PM_bit);
 };
 
 // 9.15.63
@@ -3727,55 +2367,33 @@ struct PINMUX_AUX_UART3_TX_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTC = (0 << PM_bit);
-    const uint32_t PM_I2S4 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.64
@@ -3785,55 +2403,33 @@ struct PINMUX_AUX_UART3_RX_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTC = (0 << PM_bit);
-    const uint32_t PM_SPI4 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.65
@@ -3843,55 +2439,33 @@ struct PINMUX_AUX_UART3_RTS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTC = (0 << PM_bit);
-    const uint32_t PM_SPI4 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.66
@@ -3901,55 +2475,33 @@ struct PINMUX_AUX_UART3_CTS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTC = (0 << PM_bit);
-    const uint32_t PM_SPI4 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.67
@@ -3959,55 +2511,33 @@ struct PINMUX_AUX_UART4_TX_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTD = (0 << PM_bit);
-    const uint32_t PM_UART = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.68
@@ -4017,55 +2547,33 @@ struct PINMUX_AUX_UART4_RX_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTD = (0 << PM_bit);
-    const uint32_t PM_UART = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.69
@@ -4075,55 +2583,33 @@ struct PINMUX_AUX_UART4_RTS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTD = (0 << PM_bit);
-    const uint32_t PM_UART = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.70
@@ -4133,55 +2619,33 @@ struct PINMUX_AUX_UART4_CTS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_UARTD = (0 << PM_bit);
-    const uint32_t PM_UART = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.71
@@ -4191,54 +2655,30 @@ struct PINMUX_AUX_DAP1_FS_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.72
@@ -4248,54 +2688,30 @@ struct PINMUX_AUX_DAP1_DIN_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
    
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.73
@@ -4305,54 +2721,30 @@ struct PINMUX_AUX_DAP1_DOUT_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.74
@@ -4362,54 +2754,30 @@ struct PINMUX_AUX_DAP1_SCLK_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.75
@@ -4419,54 +2787,30 @@ struct PINMUX_AUX_DAP2_FS_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S2 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.76
@@ -4476,54 +2820,30 @@ struct PINMUX_AUX_DAP2_DIN_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
    
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S2 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.77
@@ -4533,54 +2853,30 @@ struct PINMUX_AUX_DAP2_DOUT_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S2 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.78
@@ -4590,54 +2886,30 @@ struct PINMUX_AUX_DAP2_SCLK_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
      
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S2 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.79
@@ -4647,55 +2919,33 @@ struct PINMUX_AUX_DAP4_FS_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S4B = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 };
 
 // 9.15.80
@@ -4705,55 +2955,33 @@ struct PINMUX_AUX_DAP4_DIN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S4B = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -4764,55 +2992,33 @@ struct PINMUX_AUX_DAP4_DOUT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S4B = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -4823,55 +3029,33 @@ struct PINMUX_AUX_DAP4_SCLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_I2S4B = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -4882,55 +3066,33 @@ struct PINMUX_AUX_CAM1_MCLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_EXTPERIPH3 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -4941,55 +3103,33 @@ struct PINMUX_AUX_CAM2_MCLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_EXTPERIPH3 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5000,55 +3140,33 @@ struct PINMUX_AUX_JTAG_RTCK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_JTAG = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5059,25 +3177,15 @@ struct PINMUX_AUX_CLK_32K_IN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
 };
 
@@ -5088,55 +3196,33 @@ struct PINMUX_AUX_CLK_32K_OUT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SOC = (0 << PM_bit);
-    const uint32_t PM_BLINK = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5147,60 +3233,36 @@ struct PINMUX_AUX_BATT_BCL_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_BCL = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5211,30 +3273,18 @@ struct PINMUX_AUX_CLK_REQ_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
 };
 
@@ -5245,30 +3295,18 @@ struct PINMUX_AUX_CPU_PWR_REQ_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
 };
 
@@ -5279,30 +3317,18 @@ struct PINMUX_AUX_PWR_INT_N_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
 };
 
@@ -5313,30 +3339,18 @@ struct PINMUX_AUX_SHUTDOWN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
 };
 
@@ -5347,30 +3361,18 @@ struct PINMUX_AUX_CORE_PWR_REQ_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
 };
 
@@ -5381,55 +3383,33 @@ struct PINMUX_AUX_AUD_MCLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_AUD = (0 << PM_bit); // AUD_CLK maps to EXTPERIPH1
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5440,55 +3420,33 @@ struct PINMUX_AUX_DVFS_PWM_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_CLDVFS = (1 << PM_bit);
-    const uint32_t PM_SPI3 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5499,55 +3457,33 @@ struct PINMUX_AUX_DVFS_CLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_CLDVFS = (1 << PM_bit);
-    const uint32_t PM_SPI3 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5558,55 +3494,33 @@ struct PINMUX_AUX_GPIO_X1_AUD_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_SPI3 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5617,55 +3531,33 @@ struct PINMUX_AUX_GPIO_X3_AUD_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATEf_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_SPI3 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5676,60 +3568,36 @@ struct PINMUX_AUX_GPIO_PCC7_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5740,60 +3608,36 @@ struct PINMUX_AUX_HDMI_CEC_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_CEC = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5804,60 +3648,36 @@ struct PINMUX_AUX_HDMI_INT_DP_HPD_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DP = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5868,55 +3688,33 @@ struct PINMUX_AUX_SPDIF_OUT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPDIF = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5927,55 +3725,33 @@ struct PINMUX_AUX_SPDIF_IN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SPDIF = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -5986,60 +3762,36 @@ struct PINMUX_AUX_USB_VBUS_EN0_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_USB = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6050,60 +3802,36 @@ struct PINMUX_AUX_USB_VBUS_EN1_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_IO_HV_bit = 10;
     const uint32_t E_IO_HV_bitWidth = 1;
-    const uint32_t E_IO_HV_DISABLE = (0 << E_IO_HV_bit);
-    const uint32_t E_IO_HV_ENABLE = (1 << E_IO_HV_bit);
  
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_USB = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6114,55 +3842,33 @@ struct PINMUX_AUX_DP_HPD0_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DP = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6173,55 +3879,33 @@ struct PINMUX_AUX_WIFI_EN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6232,55 +3916,33 @@ struct PINMUX_AUX_WIFI_RST_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6291,55 +3953,33 @@ struct PINMUX_AUX_WIFI_WAKE_AP_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6350,55 +3990,33 @@ struct PINMUX_AUX_AP_WAKE_BT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_UARTB = (1 << PM_bit);
-    const uint32_t PM_SPDIF = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6409,55 +4027,33 @@ struct PINMUX_AUX_BT_RST_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_UARTB = (1 << PM_bit);
-    const uint32_t PM_SPDIF = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6468,55 +4064,33 @@ struct PINMUX_AUX_BT_WAKE_AP_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6527,55 +4101,33 @@ struct PINMUX_AUX_AP_WAKE_NFC_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6586,55 +4138,33 @@ struct PINMUX_AUX_NFC_EN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6645,55 +4175,33 @@ struct PINMUX_AUX_NFC_INT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6704,55 +4212,33 @@ struct PINMUX_AUX_GPS_EN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6763,55 +4249,33 @@ struct PINMUX_AUX_GPS_RST_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6822,55 +4286,33 @@ struct PINMUX_AUX_CAM_RST_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_VGP1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6881,55 +4323,33 @@ struct PINMUX_AUX_CAM_AF_EN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_VIMCLK = (0 << PM_bit);
-    const uint32_t PM_VGP2 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6940,55 +4360,33 @@ struct PINMUX_AUX_CAM_FLASH_EN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_VIMCLK = (0 << PM_bit);
-    const uint32_t PM_VGP3 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -6999,55 +4397,33 @@ struct PINMUX_AUX_CAM1_PWDN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_VGP4 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7058,55 +4434,33 @@ struct PINMUX_AUX_CAM2_PWDN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_VGP5 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7117,55 +4471,33 @@ struct PINMUX_AUX_CAM1_STROBE_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_VGP6 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7176,55 +4508,33 @@ struct PINMUX_AUX_LCD_TE_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DISPLAYA = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7235,55 +4545,33 @@ struct PINMUX_AUX_LCD_BL_PWM_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DISPLAYA = (0 << PM_bit);
-    const uint32_t PM_PWM0 = (1 << PM_bit);
-    const uint32_t PM_SOR0 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7294,55 +4582,33 @@ struct PINMUX_AUX_LCD_BL_EN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7353,55 +4619,33 @@ struct PINMUX_AUX_LCD_RST_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7412,55 +4656,33 @@ struct PINMUX_AUX_LCD_GPIO1_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DISPLAYB = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7471,55 +4693,33 @@ struct PINMUX_AUX_LCD_GPIO2_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_DISPLAYB = (0 << PM_bit);
-    const uint32_t PM_PWM1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_SOR1 = (3 << PM_bit);
 
 };
 
@@ -7530,55 +4730,33 @@ struct PINMUX_AUX_AP_READY_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7589,55 +4767,33 @@ struct PINMUX_AUX_TOUCH_RST_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7648,55 +4804,33 @@ struct PINMUX_AUX_TOUCH_CLK_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_TOUCH = (0 << PM_bit); // Note: TOUCH maps to TOUCH_CLK and EXTPERIPH2
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7707,55 +4841,33 @@ struct PINMUX_AUX_MODEM_WAKE_AP_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7766,55 +4878,33 @@ struct PINMUX_AUX_TOUCH_INT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7825,55 +4915,33 @@ struct PINMUX_AUX_MOTION_INT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7884,55 +4952,33 @@ struct PINMUX_AUX_ALS_PROX_INT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -7943,55 +4989,33 @@ struct PINMUX_AUX_TEMP_ALERT_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8002,55 +5026,33 @@ struct PINMUX_AUX_BUTTON_POWER_ON_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8061,55 +5063,33 @@ struct PINMUX_AUX_BUTTON_VOL_UP_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8120,55 +5100,33 @@ struct PINMUX_AUX_BUTTON_VOL_DOWN_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8179,55 +5137,33 @@ struct PINMUX_AUX_BUTTON_SLIDE_SW_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8238,55 +5174,33 @@ struct PINMUX_AUX_BUTTON_HOME_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8297,55 +5211,33 @@ struct PINMUX_AUX_GPIO_PA6_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SATA = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8356,55 +5248,33 @@ struct PINMUX_AUX_GPIO_PE6_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_I2S5A = (1 << PM_bit);
-    const uint32_t PM_PWM2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8415,55 +5285,33 @@ struct PINMUX_AUX_GPIO_PE7_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_I2S5A = (1 << PM_bit);
-    const uint32_t PM_PWM3 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8474,55 +5322,33 @@ struct PINMUX_AUX_GPIO_PH6_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8533,54 +5359,30 @@ struct PINMUX_AUX_GPIO_PK0_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
    
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit); 
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_IQC0 = (0 << PM_bit);
-    const uint32_t PM_I2S5B = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8591,54 +5393,30 @@ struct PINMUX_AUX_GPIO_PK1_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_IQC0 = (0 << PM_bit);
-    const uint32_t PM_I2S5B = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8649,54 +5427,30 @@ struct PINMUX_AUX_GPIO_PK2_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_IQC0 = (0 << PM_bit);
-    const uint32_t PM_I2S5B = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8707,54 +5461,30 @@ struct PINMUX_AUX_GPIO_PK3_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_IQC0 = (0 << PM_bit);
-    const uint32_t PM_I2S5B = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8765,54 +5495,30 @@ struct PINMUX_AUX_GPIO_PK4_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_IQC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8823,54 +5529,30 @@ struct PINMUX_AUX_GPIO_PK5_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_IQC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8881,54 +5563,30 @@ struct PINMUX_AUX_GPIO_PK6_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_IQC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8939,54 +5597,30 @@ struct PINMUX_AUX_GPIO_PK7_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_IQC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -8997,54 +5631,30 @@ struct PINMUX_AUX_GPIO_PL0_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_RSVD0 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -9055,54 +5665,30 @@ struct PINMUX_AUX_GPIO_PL1_0
 
     const uint32_t DRV_TYPE_bit = 13;
     const uint32_t DRV_TYPE_bitWidth = 2;
-    const uint32_t DRV_TYPE_DRIVE_1X = (0 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_2X = (1 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_3X = (2 << DRV_TYPE_bit);
-    const uint32_t DRV_TYPE_DRIVE_4X = (3 << DRV_TYPE_bit);
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     const uint32_t E_HSM_bit = 9;
     const uint32_t E_HSM_bitWidth = 1;
-    const uint32_t E_HSM_DISABLE = (0 << E_HSM_bit);
-    const uint32_t E_HSM_ENABLE = (1 << E_HSM_bit);
  
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SOC = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -9113,55 +5699,33 @@ struct PINMUX_AUX_GPIO_PZ0_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
     
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_VIMCLK2 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -9172,55 +5736,33 @@ struct PINMUX_AUX_GPIO_PZ1_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
  
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
 
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_VIMCLK2 = (0 << PM_bit);
-    const uint32_t PM_SDMMC1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -9231,55 +5773,33 @@ struct PINMUX_AUX_GPIO_PZ2_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
  
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
 
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC3 = (0 << PM_bit);
-    const uint32_t PM_CCLA = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -9290,55 +5810,33 @@ struct PINMUX_AUX_GPIO_PZ3_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
  
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
 
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC3 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -9349,55 +5847,33 @@ struct PINMUX_AUX_GPIO_PZ4_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
  
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
 
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SDMMC1 = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 
@@ -9408,55 +5884,33 @@ struct PINMUX_AUX_GPIO_PZ5_0
 
     const uint32_t E_SCHMT_bit = 12;
     const uint32_t E_SCHMT_bitWidth = 1;
-    const uint32_t E_SCHMT_DISABLE = (0 << E_SCHMT_bit);
-    const uint32_t E_SCHMT_ENABLE = (1 << E_SCHMT_bit);
  
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
     const uint32_t E_OD_bit = 11;
     const uint32_t E_OD_bitWidth = 1;
-    const uint32_t E_OD_DISABLE = (0 << E_OD_bit);
-    const uint32_t E_OD_ENABLE = (1 << E_OD_bit);
     */
 
     const uint32_t E_LPDR_bit = 8;
     const uint32_t E_LPDR_bitWidth = 1;
-    const uint32_t E_LPDR_DISABLE = (0 << E_LPDR_bit);
-    const uint32_t E_LPDR_ENABLE = (1 << E_LPDR_bit);
 
     const uint32_t LOCK_bit = 7;
     const uint32_t LOCK_bitWidth = 1;
-    const uint32_t LOCK_DISABLE = (0 << LOCK_bit);
-    const uint32_t LOCK_ENABLE = (1 << LOCK_bit);
 
     const uint32_t E_INPUT_bit = 6;
     const uint32_t E_INPUT_bitWidth = 1;
-    const uint32_t E_INPUT_DISABLE = (0 << E_INPUT_bit);
-    const uint32_t E_INPUT_ENABLE = (1 << E_INPUT_bit);
  
     const uint32_t PARK_bit = 5;
     const uint32_t PARK_bitWidth = 1;
-    const uint32_t PARK_NORMAL = (0 << PARK_bit);
-    const uint32_t PARK_PARKED = (1 << PARK_bit);
 
     const uint32_t TRISTATE_bit = 4;
     const uint32_t TRISTATE_bitWidth = 1;
-    const uint32_t TRISTATE_PASSTHROUGH = (0 << TRISTATE_bit);
-    const uint32_t TRISTATE_TRISTATE = (1 << TRISTATE_bit);
     
     const uint32_t PUPD_bit = 2;
     const uint32_t PUPD_bitWidth = 2;
-    const uint32_t PUPD_NONE = (0 << PUPD_bit);
-    const uint32_t PUPD_PULL_DOWN = (1 << PUPD_bit);
-    const uint32_t PUPD_PULL_UP = (2 << PUPD_bit);
-    const uint32_t PUPD_RSVD = (3 << PUPD_bit);
 
     const uint32_t PM_bit = 0;
     const uint32_t PM_bitWidth = 2;
-    const uint32_t PM_SOC = (0 << PM_bit);
-    const uint32_t PM_RSVD1 = (1 << PM_bit);
-    const uint32_t PM_RSVD2 = (2 << PM_bit);
-    const uint32_t PM_RSVD3 = (3 << PM_bit);
 
 };
 

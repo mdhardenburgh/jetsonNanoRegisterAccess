@@ -32,10 +32,12 @@ PeripheralController::~PeripheralController()
     assert(error != 0);
 }
         
-void PeripheralController::setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t bitmask)
+void PeripheralController::setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t baseBit, int32_t bitWidth)
 {
+    uint32_t bitMask = (((1 << bitWidth) - 1) << baseBit);   
+
     *(memMap + (volatile uint32_t*)addrOffset) &= (~bitMask);
-    *(memMap + (volatile uint32_t*)addrOffset) |= value;   
+    *(memMap + (volatile uint32_t*)addrOffset) |= (value << baseBit);   
 }
 
 uint32_t PeripheralController::getRegisterField(uint32_t addrOffset, int32_t bitmask)

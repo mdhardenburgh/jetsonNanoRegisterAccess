@@ -42,6 +42,45 @@
 
 #include <cstdint>
 
+const uint32_t LOCK_N_DISABLE = 0;
+const uint32_t LOCK_N_ENABLE = 1;
+
+const uint32_t BIT_N_SPIO = 0;
+const uint32_t BIT_N_GPIO = 1;
+
+const uint32_t BIT_N_TRI_STATE = 0;
+const uint32_t BIT_N_DRIVEN = 1;
+ 
+const uint32_t BIT_N_LOW = 0;
+const uint32_t BIT_N_HIGH = 1;
+ 
+const uint32_t BIT_N_INACTIVE = 0;
+const uint32_t BIT_N_ACTIVE = 1;
+ 
+const uint32_t BIT_N_DISABLE = 0;
+const uint32_t BIT_N_ENABLE = 1;
+ 
+const uint32_t DELTA_N_DISABLE = 0;
+const uint32_t DELTA_N_ENABLE = 1; // 1 means Trigger Interrupt on ANY change of input if EDGE is TRUE
+ 
+const uint32_t EDGE_N_DISABLE = 0;
+const uint32_t EDGE_N_ENABLE = 1; // 1 means Configure as Edge-Triggered Interrupt
+ 
+const uint32_t BIT_N_SET = 0;
+const uint32_t BIT_N_CLEAR = 1;
+ 
+const uint32_t MSK_N_DISABLE = 0;
+const uint32_t MSK_N_ENABLE = 1; 
+ 
+const uint32_t MSK_PORT_%C_DBC_EN_N_DISABLE = 0;
+const uint32_t MSK_PORT_%C_DBC_EN_N_ENABLE = 1; 
+ 
+const uint32_t PORT_%C_DBC_EN_N_LOW = 0;
+const uint32_t PORT_%C_DBC_EN_N_HIGH = 1; 
+ 
+const uint32_t BIT_N_DISABLE = 0;
+const uint32_t BIT_N_ENABLE = 1; 
+ 
 class PeripheralController
 {
     public:
