@@ -41,46 +41,8 @@
 #define PERIPHERAL_CONTROLLER_H
 
 #include <cstdint>
+#include <cstddef>
 
-const uint32_t LOCK_N_DISABLE = 0;
-const uint32_t LOCK_N_ENABLE = 1;
-
-const uint32_t BIT_N_SPIO = 0;
-const uint32_t BIT_N_GPIO = 1;
-
-const uint32_t BIT_N_TRI_STATE = 0;
-const uint32_t BIT_N_DRIVEN = 1;
- 
-const uint32_t BIT_N_LOW = 0;
-const uint32_t BIT_N_HIGH = 1;
- 
-const uint32_t BIT_N_INACTIVE = 0;
-const uint32_t BIT_N_ACTIVE = 1;
- 
-const uint32_t BIT_N_DISABLE = 0;
-const uint32_t BIT_N_ENABLE = 1;
- 
-const uint32_t DELTA_N_DISABLE = 0;
-const uint32_t DELTA_N_ENABLE = 1; // 1 means Trigger Interrupt on ANY change of input if EDGE is TRUE
- 
-const uint32_t EDGE_N_DISABLE = 0;
-const uint32_t EDGE_N_ENABLE = 1; // 1 means Configure as Edge-Triggered Interrupt
- 
-const uint32_t BIT_N_SET = 0;
-const uint32_t BIT_N_CLEAR = 1;
- 
-const uint32_t MSK_N_DISABLE = 0;
-const uint32_t MSK_N_ENABLE = 1; 
- 
-const uint32_t MSK_PORT_%C_DBC_EN_N_DISABLE = 0;
-const uint32_t MSK_PORT_%C_DBC_EN_N_ENABLE = 1; 
- 
-const uint32_t PORT_%C_DBC_EN_N_LOW = 0;
-const uint32_t PORT_%C_DBC_EN_N_HIGH = 1; 
- 
-const uint32_t BIT_N_DISABLE = 0;
-const uint32_t BIT_N_ENABLE = 1; 
- 
 class PeripheralController
 {
     public:
@@ -93,12 +55,12 @@ class PeripheralController
          * set or get the values for the registers therefore
          * multiple bit fields can be set or get at once.
          */
-        void setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t bitmask);
-        uint32_t getRegisterField(uint32_t, addrOffset, uint32_t bitmask);
+        void setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t baseBit, uint32_t bitWidth);
+        uint32_t getRegisterField(uint32_t addrOffset, uint32_t baseBit, uint32_t bitWidth);
 
        
     private:
-        const uint32_t BLOCK_SIZE = 0x1000; //4096
+        const uint32_t BLOCK_SIZE = 4096;
         volatile uint32_t* memMap = NULL;
 
 };

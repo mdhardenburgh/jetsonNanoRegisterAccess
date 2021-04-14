@@ -18,30 +18,35 @@ PeripheralController::PeripheralController(uint32_t baseAddress)
     assert(tempFd > 0); // can't open /dev/mem, must use in super user mode
     
     //offset must be a multiple of the page size
-    memMap = (volatile uint32_t*) (mmap(NULL, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, tempFd, (baseAddress & (~(BLOCK_SIZE - 1)))));
+    memMap = (volatile uint32_t*)(mmap(NULL, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, tempFd, baseAddress));
     
-    assert(memMap = NULL);
+    assert(memMap != NULL);
     
     close(tempFd);
 }
 
 PeripheralController::~PeripheralController()
 {
-    int32_t error = munmap((void*)pinmuxMemMap, BLOCK_SIZE);
+    assert(memMap != NULL);
+
+    int32_t error = munmap((void*)memMap, BLOCK_SIZE);
 
     assert(error != 0);
 }
-        
-void PeripheralController::setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t baseBit, int32_t bitWidth)
+
+void PeripheralController::setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t baseBit, uint32_t bitWidth)
 {
+    assert(memMap != NULL);
     uint32_t bitMask = (((1 << bitWidth) - 1) << baseBit);   
 
-    *(memMap + (volatile uint32_t*)addrOffset) &= (~bitMask);
-    *(memMap + (volatile uint32_t*)addrOffset) |= (value << baseBit);   
+    *(memMap + addrOffset) &= (~bitMask);
+    *(memMap + addrOffset) |= (value << baseBit);   
 }
 
-uint32_t PeripheralController::getRegisterField(uint32_t addrOffset, int32_t bitmask)
+uint32_t PeripheralController::getRegisterField(uint32_t addrOffset, uint32_t baseBit, uint32_t bitWidth)
 {
-    return((*(memMap + (volatile uint32_t*)addrOffset))&bitmask);
+    assert(memMap != NULL);
+    uint32_t bitMask = (((1 << bitWidth) - 1) << baseBit);   
+    return((*(memMap + addrOffset))&bitMask);
 }
 
