@@ -61,7 +61,7 @@ class PeripheralController
        
     private:
         const uint32_t BLOCK_SIZE = 4096;
-        volatile uint32_t* memMap = NULL;
+        uint32_t* memMap = 0;
 
 };
 
