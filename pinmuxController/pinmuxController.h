@@ -44,103 +44,106 @@
 
 #include <cstdint>
 
-const uint32_t DRV_TYPE_BIT_DRIVE_1X = 0;
-const uint32_t DRV_TYPE_BIT_DRIVE_2X = 1;
-const uint32_t DRV_TYPE_BIT_DRIVE_3X = 2;
-const uint32_t DRV_TYPE_BIT_DRIVE_4X = 3;
+struct pinmuxController
+{
+    static const uint32_t baseAddress = 0x70000000;
 
-const uint32_t E_SCHMT_TRIG_BIT_DISABLE = 0;
-const uint32_t E_SCHMT_TRIG_BIT_ENABLE = 1;
- 
-const uint32_t E_HSM_BIT_DISABLE = 0;
-const uint32_t E_HSM_BIT_ENABLE = 1;
+    static const uint32_t DRV_TYPE_BIT_DRIVE_1X = 0;
+    static const uint32_t DRV_TYPE_BIT_DRIVE_2X = 1;
+    static const uint32_t DRV_TYPE_BIT_DRIVE_3X = 2;
+    static const uint32_t DRV_TYPE_BIT_DRIVE_4X = 3;
+    
+    static const uint32_t E_SCHMT_TRIG_BIT_DISABLE = 0;
+    static const uint32_t E_SCHMT_TRIG_BIT_ENABLE = 1;
+    
+    static const uint32_t E_HSM_BIT_DISABLE = 0;
+    static const uint32_t E_HSM_BIT_ENABLE = 1;
 
-const uint32_t LOCK_BIT_DISABLE = 0;
-const uint32_t LOCK_BIT_ENABLE = 1;
+    static const uint32_t LOCK_BIT_DISABLE = 0;
+    static const uint32_t LOCK_BIT_ENABLE = 1;
 
-const uint32_t E_INPUT_BIT_DISABLE = 0;
-const uint32_t E_INPUT_BIT_ENABLE = 1;
+    static const uint32_t E_INPUT_BIT_DISABLE = 0;
+    static const uint32_t E_INPUT_BIT_ENABLE = 1;
 
-const uint32_t PARK_BIT_NORMAL = 0;
-const uint32_t PARK_BIT_PARKED = 1;
+    static const uint32_t PARK_BIT_NORMAL = 0;
+    static const uint32_t PARK_BIT_PARKED = 1;
 
-const uint32_t TRISTATE_BIT_PASSTHROUGH = 0;
-const uint32_t TRISTATE_BIT_TRISTATE = 1;
+    static const uint32_t TRISTATE_BIT_PASSTHROUGH = 0;
+    static const uint32_t TRISTATE_BIT_TRISTATE = 1;
 
-const uint32_t PUPD_BIT_NONE = 0;
-const uint32_t PUPD_BIT_PULL_DOWN = 1;
-const uint32_t PUPD_BIT_PULL_UP = 2;
-const uint32_t PUPD_BIT_RSVD = 3;
+    static const uint32_t PUPD_BIT_NONE = 0;
+    static const uint32_t PUPD_BIT_PULL_DOWN = 1;
+    static const uint32_t PUPD_BIT_PULL_UP = 2;
+    static const uint32_t PUPD_BIT_RSVD = 3;
 
-const uint32_t PM_BIT_SDMMC1 = 0;
-const uint32_t PM_BIT_RSVD0 = 0;
-const uint32_t PM_BIT_PE0 = 0;
-const uint32_t PM_BIT_PE1 = 0;
-const uint32_t PM_BIT_SATA = 0;
-const uint32_t PM_BIT_SPI1 = 0;
-const uint32_t PM_BIT_SPI2 = 0;
-const uint32_t PM_BIT_SPI4 = 0;
-const uint32_t PM_BIT_QSPI = 0;
-const uint32_t PM_BIT_DMIC1 = 0;
-const uint32_t PM_BIT_DMIC2 = 0;
-const uint32_t PM_BIT_DMIC3 = 0;
-const uint32_t PM_BIT_I2C1 = 0;
-const uint32_t PM_BIT_I2C2 = 0;
-const uint32_t PM_BIT_I2C3 = 0;
-const uint32_t PM_BIT_I2CPMU = 0;
-const uint32_t PM_BIT_UARTA = 0;
-const uint32_t PM_BIT_UARTB = 0;
-const uint32_t PM_BIT_UARTC = 0;
-const uint32_t PM_BIT_UARTD = 0;
-const uint32_t PM_BIT_I2S4B = 0;
-const uint32_t PM_BIT_I2S1 = 0;
-const uint32_t PM_BIT_I2S2 = 0;
-const uint32_t PM_BIT_EXTPERIPH3 = 0;
-const uint32_t PM_BIT_JTAG = 0;
-const uint32_t PM_BIT_SOC = 0;
-const uint32_t PM_BIT_BCL = 0;
-const uint32_t PM_BIT_AUD = 0;
-const uint32_t PM_BIT_CEC = 0;
-const uint32_t PM_BIT_DP = 0;
-const uint32_t PM_BIT_SPDIF_STATE_0 = 0;
-const uint32_t PM_BIT_USB = 0;
-const uint32_t PM_BIT_VGP1 = 0;
-const uint32_t PM_BIT_VIMCLK = 0;
-const uint32_t PM_BIT_VIMCLK2 = 0;
-const uint32_t PM_BIT_VGP4 = 0;
-const uint32_t PM_BIT_VGP5 = 0;
-const uint32_t PM_BIT_VGP6 = 0;
-const uint32_t PM_BIT_DISPLAYA = 0;
-const uint32_t PM_BIT_DISPLAYB = 0;
-const uint32_t PM_BIT_TOUCH = 0;
-const uint32_t PM_BIT_IQC0 = 0;
-const uint32_t PM_BIT_IQC1 = 0;
-const uint32_t PM_BIT_SDMMC3 = 0;
-const uint32_t PM_BIT_VGP3 = 1;
-const uint32_t PM_BIT_VGP2 = 1;
-const uint32_t PM_BIT_BLINK = 1;
-const uint32_t PM_BIT_UART = 1;
-const uint32_t PM_BIT_SPI4_STATE_1 = 1;
-const uint32_t PM_BIT_I2S4A = 1;
-const uint32_t PM_BIT_I2CVI = 1;
-const uint32_t PM_BIT_I2S3 = 1;
-const uint32_t PM_BIT_I2S4 = 1;
-const uint32_t PM_BIT_I2S5A = 1;
-const uint32_t PM_BIT_I2S5A = 1;
-const uint32_t PM_BIT_DTV = 1;
-const uint32_t PM_BIT_RSVD1 = 1;
-const uint32_t PM_BIT_CLDVFS = 1;
-const uint32_t PM_BIT_UARTB_STATE_1 = 1;
-const uint32_t PM_BIT_SDMMC1_STATE_1 = 1;
-const uint32_t PM_BIT_CCLA = 1;
-const uint32_t PM_BIT_SPDIF = 2;
-const uint32_t PM_BIT_RSVD2 = 2;
-const uint32_t PM_BIT_SPI3 = 2;
-const uint32_t PM_BIT_PWM2 = 2;
-const uint32_t PM_BIT_PWM3 = 2;
-const uint32_t PM_BIT_UART_STATE_3 = 3;
-const uint32_t PM_BIT_RSVD3 = 3;
-
+    static const uint32_t PM_BIT_SDMMC1 = 0;
+    static const uint32_t PM_BIT_RSVD0 = 0;
+    static const uint32_t PM_BIT_PE0 = 0;
+    static const uint32_t PM_BIT_PE1 = 0;
+    static const uint32_t PM_BIT_SATA = 0;
+    static const uint32_t PM_BIT_SPI1 = 0;
+    static const uint32_t PM_BIT_SPI2 = 0;
+    static const uint32_t PM_BIT_SPI4 = 0;
+    static const uint32_t PM_BIT_QSPI = 0;
+    static const uint32_t PM_BIT_DMIC1 = 0;
+    static const uint32_t PM_BIT_DMIC2 = 0;
+    static const uint32_t PM_BIT_DMIC3 = 0;
+    static const uint32_t PM_BIT_I2C1 = 0;
+    static const uint32_t PM_BIT_I2C2 = 0;
+    static const uint32_t PM_BIT_I2C3 = 0;
+    static const uint32_t PM_BIT_I2CPMU = 0;
+    static const uint32_t PM_BIT_UARTA = 0;
+    static const uint32_t PM_BIT_UARTB = 0;
+    static const uint32_t PM_BIT_UARTC = 0;
+    static const uint32_t PM_BIT_UARTD = 0;
+    static const uint32_t PM_BIT_I2S4B = 0;
+    static const uint32_t PM_BIT_I2S1 = 0;
+    static const uint32_t PM_BIT_I2S2 = 0;
+    static const uint32_t PM_BIT_EXTPERIPH3 = 0;
+    static const uint32_t PM_BIT_JTAG = 0;
+    static const uint32_t PM_BIT_SOC = 0;
+    static const uint32_t PM_BIT_BCL = 0;
+    static const uint32_t PM_BIT_AUD = 0;
+    static const uint32_t PM_BIT_CEC = 0;
+    static const uint32_t PM_BIT_DP = 0;
+    static const uint32_t PM_BIT_SPDIF_STATE_0 = 0;
+    static const uint32_t PM_BIT_USB = 0;
+    static const uint32_t PM_BIT_VGP1 = 0;
+    static const uint32_t PM_BIT_VIMCLK = 0;
+    static const uint32_t PM_BIT_VIMCLK2 = 0;
+    static const uint32_t PM_BIT_VGP4 = 0;
+    static const uint32_t PM_BIT_VGP5 = 0;
+    static const uint32_t PM_BIT_VGP6 = 0;
+    static const uint32_t PM_BIT_DISPLAYA = 0;
+    static const uint32_t PM_BIT_DISPLAYB = 0;
+    static const uint32_t PM_BIT_TOUCH = 0;
+    static const uint32_t PM_BIT_IQC0 = 0;
+    static const uint32_t PM_BIT_IQC1 = 0;
+    static const uint32_t PM_BIT_SDMMC3 = 0;
+    static const uint32_t PM_BIT_VGP3 = 1;
+    static const uint32_t PM_BIT_VGP2 = 1;
+    static const uint32_t PM_BIT_BLINK = 1;
+    static const uint32_t PM_BIT_UART = 1;
+    static const uint32_t PM_BIT_SPI4_STATE_1 = 1;
+    static const uint32_t PM_BIT_I2S4A = 1;
+    static const uint32_t PM_BIT_I2CVI = 1;
+    static const uint32_t PM_BIT_I2S3 = 1;
+    static const uint32_t PM_BIT_I2S4 = 1;
+    static const uint32_t PM_BIT_I2S5A = 1;
+    static const uint32_t PM_BIT_DTV = 1;
+    static const uint32_t PM_BIT_RSVD1 = 1;
+    static const uint32_t PM_BIT_CLDVFS = 1;
+    static const uint32_t PM_BIT_UARTB_STATE_1 = 1;
+    static const uint32_t PM_BIT_SDMMC1_STATE_1 = 1;
+    static const uint32_t PM_BIT_CCLA = 1;
+    static const uint32_t PM_BIT_SPDIF = 2;
+    static const uint32_t PM_BIT_RSVD2 = 2;
+    static const uint32_t PM_BIT_SPI3 = 2;
+    static const uint32_t PM_BIT_PWM2 = 2;
+    static const uint32_t PM_BIT_PWM3 = 2;
+    static const uint32_t PM_BIT_UART_STATE_3 = 3;
+    static const uint32_t PM_BIT_RSVD3 = 3;
+};
 /*
 DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
 onst uint32_t E_OD_BIT_DISABLE = 0;
@@ -3025,37 +3028,37 @@ struct PINMUX_AUX_DAP4_DOUT_0
 // 9.15.82
 struct PINMUX_AUX_DAP4_SCLK_0
 {
-    const uint32_t address = 0x70000000 + 0x3150;
+    static const uint32_t addressOffset = 0x3150;
 
-    const uint32_t E_SCHMT_bit = 12;
-    const uint32_t E_SCHMT_bitWidth = 1;
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
-    const uint32_t E_OD_bit = 11;
-    const uint32_t E_OD_bitWidth = 1;
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
     */
 
-    const uint32_t E_LPDR_bit = 8;
-    const uint32_t E_LPDR_bitWidth = 1;
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
  
-    const uint32_t LOCK_bit = 7;
-    const uint32_t LOCK_bitWidth = 1;
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
 
-    const uint32_t E_INPUT_bit = 6;
-    const uint32_t E_INPUT_bitWidth = 1;
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
  
-    const uint32_t PARK_bit = 5;
-    const uint32_t PARK_bitWidth = 1;
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
 
-    const uint32_t TRISTATE_bit = 4;
-    const uint32_t TRISTATE_bitWidth = 1;
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
     
-    const uint32_t PUPD_bit = 2;
-    const uint32_t PUPD_bitWidth = 2;
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
 
-    const uint32_t PM_bit = 0;
-    const uint32_t PM_bitWidth = 2;
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
 
 };
 
@@ -4504,37 +4507,37 @@ struct PINMUX_AUX_CAM1_STROBE_0
 // 9.15.124
 struct PINMUX_AUX_LCD_TE_0
 {
-    const uint32_t address = 0x70000000 + 0x31F8;
+    static const uint32_t addressOffset = 0x31F8;
 
-    const uint32_t E_SCHMT_bit = 12;
-    const uint32_t E_SCHMT_bitWidth = 1;
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
     
     /*
     DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
-    const uint32_t E_OD_bit = 11;
-    const uint32_t E_OD_bitWidth = 1;
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
     */
 
-    const uint32_t E_LPDR_bit = 8;
-    const uint32_t E_LPDR_bitWidth = 1;
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
  
-    const uint32_t LOCK_bit = 7;
-    const uint32_t LOCK_bitWidth = 1;
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
 
-    const uint32_t E_INPUT_bit = 6;
-    const uint32_t E_INPUT_bitWidth = 1;
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
  
-    const uint32_t PARK_bit = 5;
-    const uint32_t PARK_bitWidth = 1;
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
 
-    const uint32_t TRISTATE_bit = 4;
-    const uint32_t TRISTATE_bitWidth = 1;
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
     
-    const uint32_t PUPD_bit = 2;
-    const uint32_t PUPD_bitWidth = 2;
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
 
-    const uint32_t PM_bit = 0;
-    const uint32_t PM_bitWidth = 2;
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
 
 };
 

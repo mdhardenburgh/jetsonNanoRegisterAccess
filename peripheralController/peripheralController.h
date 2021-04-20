@@ -61,7 +61,8 @@ class PeripheralController
        
     private:
         const uint32_t BLOCK_SIZE = 4096;
-        uint32_t* memMap = 0;
+        volatile uint32_t* memMap = NULL;
+	int32_t fileDescriptor;
 
 };
 
