@@ -46,7 +46,7 @@
 
 struct pinmuxController
 {
-    static const uint32_t baseAddress = 0x70000000;
+    static const uint32_t baseAddress = 0x70003000;
 
     static const uint32_t DRV_TYPE_BIT_DRIVE_1X = 0;
     static const uint32_t DRV_TYPE_BIT_DRIVE_2X = 1;
@@ -1037,34 +1037,34 @@ struct PINMUX_AUX_SPI2_MISO_0
 // 9.15.26
 struct PINMUX_AUX_SPI2_SCK_0
 {
-    const uint32_t address = 0x70000000 + 0x306C;
+    static const uint32_t addressOffset = 0x6C;
 
-    const uint32_t DRV_TYPE_bit = 13;
-    const uint32_t DRV_TYPE_bitWidth = 2;
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
 
-    const uint32_t E_SCHMT_bit = 12;
-    const uint32_t E_SCHMT_bitWidth = 1;
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
      
-    const uint32_t E_HSM_bit = 9;
-    const uint32_t E_HSM_bitWidth = 1;
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
     
-    const uint32_t LOCK_bit = 7;
-    const uint32_t LOCK_bitWidth = 1;
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
 
-    const uint32_t E_INPUT_bit = 6;
-    const uint32_t E_INPUT_bitWidth = 1;
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
  
-    const uint32_t PARK_bit = 5;
-    const uint32_t PARK_bitWidth = 1;
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
 
-    const uint32_t TRISTATE_bit = 4;
-    const uint32_t TRISTATE_bitWidth = 1;
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
     
-    const uint32_t PUPD_bit = 2;
-    const uint32_t PUPD_bitWidth = 2;
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
 
-    const uint32_t PM_bit = 0;
-    const uint32_t PM_bitWidth = 2;
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
 };
 
 // 9.15.27
