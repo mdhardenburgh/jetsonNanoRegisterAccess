@@ -143,19 +143,3012 @@
  * GPIO_DB_CTRL_[CC/DD/EE/-]_0  | -—- | -—- | -—- | -—-             | 7B0 | 7B4 | 7B8 | -—-
  * GPIO_DB_CNT _[CC/DD/EE/-]_0  | -—- | -—- | -—- | -—-             | 7F0 | 7F4 | 7F8 | -—-
  * 
+ */ 
+struct gpioController{
+    static const uint32_t gpioController1BaseAddress = 0x6000d000;
+    static const uint32_t gpioController2BaseAddress = 0x6000d100;
+    static const uint32_t gpioController3BaseAddress = 0x6000d200;
+    static const uint32_t gpioController4BaseAddress = 0x6000d300;
+    static const uint32_t gpioController5BaseAddress = 0x6000d400;
+    static const uint32_t gpioController6BaseAddress = 0x6000d500;
+    static const uint32_t gpioController7BaseAddress = 0x6000d600;
+    static const uint32_t gpioController8BaseAddress = 0x6000d700;
+     
+    static const uint32_t LOCK_BIT_DISABLE = 0;
+    static const uint32_t LOCK_BIT_ENABLE = 1;
+     
+    static const uint32_t BIT_N_SPIO = 0;
+    static const uint32_t BIT_N_GPIO = 1;
+     
+    static const uint32_t BIT_N_TRI_STATE = 0;
+    static const uint32_t BIT_N_DRIVEN = 1;
+     
+    static const uint32_t BIT_N_LOW = 0;
+    static const uint32_t BIT_N_HIGH = 1;
+     
+    static const uint32_t BIT_N_INACTIVE = 0;
+    static const uint32_t BIT_N_ACTIVE = 1;
+     
+    static const uint32_t BIT_N_DISABLE = 0;
+    static const uint32_t BIT_N_ENABLE = 1;
+     
+    static const uint32_t DELTA_BIT_N_DISABLE = 0;
+    static const uint32_t DELTA_BIT_N_ENABLE = 1; // 1 means Trigger Interrupt on ANY change of input if EDGE is TRUE
+     
+    static const uint32_t EDGE_BIT_N_DISABLE = 0;
+    static const uint32_t EDGE_BIT_N_ENABLE = 1; // 1 means Configure as Edge-Triggered Interrupt
+     
+    static const uint32_t BIT_N_SET = 0;
+    static const uint32_t BIT_N_CLEAR = 1;
+     
+    static const uint32_t MSK_BIT_N_DISABLE = 0;
+    static const uint32_t MSK_BIT_N_ENABLE = 1;
+     
+    //ABC being the associtated port A through EE
+    static const uint32_t MSK_PORT_ABC_DBC_EN_BIT_N_DISABLE = 0;
+    static const uint32_t MSK_PORT_ABC_DBC_EN_BIT_N_ENABLE = 1;
+    
+    static const uint32_t PORT_ABC_DBC_EN_BIT_N_LOW = 0;
+    static const uint32_t PORT_ABC_DBC_EN_BIT_N_HIGH = 1;
+};
+
+// GPIO Controller 1 – Start Addr 6000:d000
+
+/**
+ * 9.13.1 GPIO_CNF_0 
+ *
+ * Designates whether each pin operates as a GPIO or as an SFIO. By default all 
+ * pins come up in SFIO mode. These can be programmed to GPIO mode at any stage.
+ *
+ * Lock bits are used to control the access to the CNF and OE registers. When 
+ * set, no one can write to the CNF and OE bits. They can be programmed ONLY 
+ * during Boot and get reset by chip reset only.
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_CNF_0_RMW
+{
+    static const uint32_t addressOffset = 0x000;
+
+    static const uint32_t LOCK_7_baseBit  = 15;
+    static const uint32_t LOCK_7_bitWidth = 1;
+   
+    static const uint32_t LOCK_6_baseBit  = 14;
+    static const uint32_t LOCK_6_bitWidth = 1;
+     
+    static const uint32_t LOCK_5_baseBit  = 13;
+    static const uint32_t LOCK_5_bitWidth = 1;
+
+    static const uint32_t LOCK_4_baseBit  = 12;
+    static const uint32_t LOCK_4_bitWidth = 1;
+     
+    static const uint32_t LOCK_3_baseBit  = 11;
+    static const uint32_t LOCK_3_bitWidth = 1;
+     
+    static const uint32_t LOCK_2_baseBit  = 10;
+    static const uint32_t LOCK_2_bitWidth = 1;
+
+    static const uint32_t LOCK_1_baseBit  = 9;
+    static const uint32_t LOCK_1_bitWidth = 1;
+     
+    static const uint32_t LOCK_0_baseBit  = 8;
+    static const uint32_t LOCK_0_bitWidth = 1;
+ 
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_CNF_1_RMW
+{
+    static const uint32_t addressOffset = 0x004;
+
+    static const uint32_t LOCK_7_baseBit = 15;
+    static const uint32_t LOCK_7_bitWidth = 1;
+
+    static const uint32_t LOCK_6_baseBit = 14;
+    static const uint32_t LOCK_6_bitWidth = 1;
+
+    static const uint32_t LOCK_5_baseBit = 13;
+    static const uint32_t LOCK_5_bitWidth = 1;
+
+    static const uint32_t LOCK_4_baseBit = 12;
+    static const uint32_t LOCK_4_bitWidth = 1;
+
+    static const uint32_t LOCK_3_baseBit = 11;
+    static const uint32_t LOCK_3_bitWidth = 1;
+
+    static const uint32_t LOCK_2_baseBit = 10;
+    static const uint32_t LOCK_2_bitWidth = 1;
+
+    static const uint32_t LOCK_1_baseBit = 9;
+    static const uint32_t LOCK_1_bitWidth = 1;
+
+    static const uint32_t LOCK_0_baseBit = 8;
+    static const uint32_t LOCK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_CNF_2_RMW
+{
+    static const uint32_t addressOffset = 0x008;
+
+    static const uint32_t LOCK_7_baseBit = 15;
+    static const uint32_t LOCK_7_bitWidth = 1;
+
+    static const uint32_t LOCK_6_baseBit = 14;
+    static const uint32_t LOCK_6_bitWidth = 1;
+
+    static const uint32_t LOCK_5_baseBit = 13;
+    static const uint32_t LOCK_5_bitWidth = 1;
+
+    static const uint32_t LOCK_4_baseBit = 12;
+    static const uint32_t LOCK_4_bitWidth = 1;
+
+    static const uint32_t LOCK_3_baseBit = 11;
+    static const uint32_t LOCK_3_bitWidth = 1;
+
+    static const uint32_t LOCK_2_baseBit = 10;
+    static const uint32_t LOCK_2_bitWidth = 1;
+
+    static const uint32_t LOCK_1_baseBit = 9;
+    static const uint32_t LOCK_1_bitWidth = 1;
+
+    static const uint32_t LOCK_0_baseBit = 8;
+    static const uint32_t LOCK_0_bitWidth = 1;
+     
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_CNF_3_RMW
+{
+    static const uint32_t addressOffset = 0x00C;
+
+    static const uint32_t LOCK_7_baseBit = 15;
+    static const uint32_t LOCK_7_bitWidth = 1;
+
+    static const uint32_t LOCK_6_baseBit = 14;
+    static const uint32_t LOCK_6_bitWidth = 1;
+
+    static const uint32_t LOCK_5_baseBit = 13;
+    static const uint32_t LOCK_5_bitWidth = 1;
+
+    static const uint32_t LOCK_4_baseBit = 12;
+    static const uint32_t LOCK_4_bitWidth = 1;
+
+    static const uint32_t LOCK_3_baseBit = 11;
+    static const uint32_t LOCK_3_bitWidth = 1;
+
+    static const uint32_t LOCK_2_baseBit = 10;
+    static const uint32_t LOCK_2_bitWidth = 1;
+
+    static const uint32_t LOCK_1_baseBit = 9;
+    static const uint32_t LOCK_1_bitWidth = 1;
+
+    static const uint32_t LOCK_0_baseBit = 8;
+    static const uint32_t LOCK_0_bitWidth = 1;
+ 
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+    
+};
+
+/**
+ * 9.13.2 GPIO_OE_0
+ *
+ * GPIO mode (GPIO_CNF.x=1) must be true for this condition to be valid.
  * 
+ * The set of registers below are used to either drive the signal out or as an 
+ * Input. This needs to be programmed depending upon whether the pin needs to 
+ * be in either Input or Output.
+ * 
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
 
+struct GPIO_OE_0_RMW
+{
+    static const uint32_t addressOffset = 0x010;
 
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
 
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
 
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
 
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
 
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
 
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
 
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
 
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
 
+};
 
+struct GPIO_OE_1_RMW
+{
+    static const uint32_t addressOffset = 0x014;
 
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
 
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
 
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_OE_2_RMW
+{
+    static const uint32_t addressOffset = 0x018;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_OE_3_RMW
+{
+    static const uint32_t addressOffset = 0x01C;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.3 GPIO_OUT_0
+ *
+ * GPIO_CNF.x=1 (in GPIO mode) AND GPIO_OE.x=1 (GPIO output enabled) must be 
+ * true for this to be valid. This register will take affect only in GPIO 
+ * mode. This register is used to drive the value out on a given pin.
+ * 
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_OUT_0_RMW
+{
+    static const uint32_t addressOffset = 0x020;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_OUT_1_RMW
+{
+    static const uint32_t addressOffset = 0x024;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_OUT_2_RMW
+{
+    static const uint32_t addressOffset = 0x028;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_OUT_3_RMW
+{
+    static const uint32_t addressOffset = 0x02C;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.4 GPIO_IN_0
+ *
+ * GPIO mode (GPIO_CNF.x=1) must be true for this condition to be valid. This 
+ * is a read-only register used to read the value from the pin. This is an 
+ * array of 4 identical register entries; the register fields below apply to each entry.
+ */
+
+struct GPIO_IN_0_RMW
+{
+    static const uint32_t addressOffset = 0x030;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_IN_1_RMW
+{
+    static const uint32_t addressOffset = 0x034;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_IN_2_RMW
+{
+    static const uint32_t addressOffset = 0x038;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_IN_3_RMW
+{
+    static const uint32_t addressOffset = 0x03C;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * All GPIO inputs can be independently programmed to generate an interrupt 
+ * request.
+ * 
+ * In addition, the individual trigger level for interrupt on each input pin 
+ * can be programmed as either active-on-high or active-on-low. For example, to 
+ * program an active-on-high interrupt on baseBit 3 of GPIO-PORT_C, write '1' into 
+ * baseBit 3 of GPIO_INT.LVL.C register (this sets the interrupt to be 
+ * active-on-high), and then write '1' into baseBit 3 of GPIO_INT.ENB.C (this 
+ * enables interrupt on the named bit).
+ *
+ * The interrupt flag status can be read in the appropriate baseBit of the 
+ * GPIO_INT.STA.C register. Once the programmed interrupt occurs, status should 
+ * be cleared by writing into the appropriate baseBit of the GPIO_INT.CLR.C 
+ * register. Note that the interrupt thus generated is routed to the processor 
+ * only if the corresponding baseBit for GPIO interrupts in the Secondary interrupt
+ *  controller is enabled.
+ */
+
+/**
+ * 9.13.5 GPIO_INT_STA_0
+ *
+ * GPIO mode (GPIO_CNF.x=1) and GPIO_INT.ENB.x=1 must be true for this condition 
+ * to be valid. Every GPIO pin generates an Interrupt when switching from 
+ * Low-High to High-Low. Interrupt status for each port is saved in an 
+ * Interrupt status register.
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_INT_STATUS_0_RMW
+{
+    static const uint32_t addressOffset = 0x040;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_STATUS_1_RMW
+{
+    static const uint32_t addressOffset = 0x044;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_STATUS_2_RMW
+{
+    static const uint32_t addressOffset = 0x048;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_STATUS_3_RMW
+{
+    static const uint32_t addressOffset = 0x04C;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.6 GPIO_INT_ENB_0
+ *
+ * Every baseBit of the GPIO pin has an enable which, when enabled, routes the 
+ * Interrupt to the Interrupt controller. This is an array of 4 identical 
+ * register entries; the register fields below apply to each entry.
+ */
+
+struct GPIO_INT_ENB_0
+{
+    static const uint32_t addressOffset = 0x050;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_ENB_1
+{
+    static const uint32_t addressOffset = 0x054;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_ENB_2
+{
+    static const uint32_t addressOffset = 0x058;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_ENB_3
+{
+    static const uint32_t addressOffset = 0x05C;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.7 GPIO_INT_LVL_0
+ *
+ * The GPIO can detect an interrupt for any edge- or level-sensitive signal.
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry
+ */
+
+struct GPIO_INT_LEVEL_0_RMW
+{
+    static const uint32_t addressOffset = 0x060;
+
+    static const uint32_t DELTA_7_baseBit = 23;
+    static const uint32_t DELTA_7_bitWidth = 1;
+
+    static const uint32_t DELTA_6_baseBit = 22;
+    static const uint32_t DELTA_6_bitWidth = 1;
+ 
+    static const uint32_t DELTA_5_baseBit = 21;
+    static const uint32_t DELTA_5_bitWidth = 1;
+  
+    static const uint32_t DELTA_4_baseBit = 20;
+    static const uint32_t DELTA_4_bitWidth = 1;
+   
+    static const uint32_t DELTA_3_baseBit = 19;
+    static const uint32_t DELTA_3_bitWidth = 1;
+     
+    static const uint32_t DELTA_2_baseBit = 18;
+    static const uint32_t DELTA_2_bitWidth = 1;
+      
+    static const uint32_t DELTA_1_baseBit = 17;
+    static const uint32_t DELTA_1_bitWidth = 1;
+       
+    static const uint32_t DELTA_0_baseBit = 16;
+    static const uint32_t DELTA_0_bitWidth = 1;
+
+    static const uint32_t EDGE_7_baseBit = 15;
+    static const uint32_t EDGE_7_bitWidth = 1;
+         
+    static const uint32_t EDGE_6_baseBit = 14;
+    static const uint32_t EDGE_6_bitWidth = 1;
+          
+    static const uint32_t EDGE_5_baseBit = 13;
+    static const uint32_t EDGE_5_bitWidth = 1;
+           
+    static const uint32_t EDGE_4_baseBit = 12;
+    static const uint32_t EDGE_4_bitWidth = 1;
+            
+    static const uint32_t EDGE_3_baseBit = 11;
+    static const uint32_t EDGE_3_bitWidth = 1;
+             
+    static const uint32_t EDGE_2_baseBit = 10;
+    static const uint32_t EDGE_2_bitWidth = 1;
+              
+    static const uint32_t EDGE_1_baseBit = 9;
+    static const uint32_t EDGE_1_bitWidth = 1;
+               
+    static const uint32_t EDGE_0_baseBit = 8;
+    static const uint32_t EDGE_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_LEVEL_1_RMW
+{
+    static const uint32_t addressOffset = 0x064;
+
+    static const uint32_t DELTA_7_baseBit = 23;
+    static const uint32_t DELTA_7_bitWidth = 1;
+
+    static const uint32_t DELTA_6_baseBit = 22;
+    static const uint32_t DELTA_6_bitWidth = 1;
+ 
+    static const uint32_t DELTA_5_baseBit = 21;
+    static const uint32_t DELTA_5_bitWidth = 1;
+  
+    static const uint32_t DELTA_4_baseBit = 20;
+    static const uint32_t DELTA_4_bitWidth = 1;
+   
+    static const uint32_t DELTA_3_baseBit = 19;
+    static const uint32_t DELTA_3_bitWidth = 1;
+    
+    static const uint32_t DELTA_2_baseBit = 18;
+    static const uint32_t DELTA_2_bitWidth = 1;
+      
+    static const uint32_t DELTA_1_baseBit = 17;
+    static const uint32_t DELTA_1_bitWidth = 1;
+       
+    static const uint32_t DELTA_0_baseBit = 16;
+    static const uint32_t DELTA_0_bitWidth = 1;
+        
+    static const uint32_t EDGE_7_baseBit = 15;
+    static const uint32_t EDGE_7_bitWidth = 1;
+         
+    static const uint32_t EDGE_6_baseBit = 14;
+    static const uint32_t EDGE_6_bitWidth = 1;
+          
+    static const uint32_t EDGE_5_baseBit = 13;
+    static const uint32_t EDGE_5_bitWidth = 1;
+           
+    static const uint32_t EDGE_4_baseBit = 12;
+    static const uint32_t EDGE_4_bitWidth = 1;
+            
+    static const uint32_t EDGE_3_baseBit = 11;
+    static const uint32_t EDGE_3_bitWidth = 1;
+             
+    static const uint32_t EDGE_2_baseBit = 10;
+    static const uint32_t EDGE_2_bitWidth = 1;
+              
+    static const uint32_t EDGE_1_baseBit = 9;
+    static const uint32_t EDGE_1_bitWidth = 1;
+               
+    static const uint32_t EDGE_0_baseBit = 8;
+    static const uint32_t EDGE_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_LEVEL_2_RMW
+{
+    static const uint32_t addressOffset = 0x068;
+
+    static const uint32_t DELTA_7_baseBit = 23;
+    static const uint32_t DELTA_7_bitWidth = 1;
+
+    static const uint32_t DELTA_6_baseBit = 22;
+    static const uint32_t DELTA_6_bitWidth = 1;
+ 
+    static const uint32_t DELTA_5_baseBit = 21;
+    static const uint32_t DELTA_5_bitWidth = 1;
+  
+    static const uint32_t DELTA_4_baseBit = 20;
+    static const uint32_t DELTA_4_bitWidth = 1;
+   
+    static const uint32_t DELTA_3_baseBit = 19;
+    static const uint32_t DELTA_3_bitWidth = 1;
+     
+    static const uint32_t DELTA_2_baseBit = 18;
+    static const uint32_t DELTA_2_bitWidth = 1;
+      
+    static const uint32_t DELTA_1_baseBit = 17;
+    static const uint32_t DELTA_1_bitWidth = 1;
+       
+    static const uint32_t DELTA_0_baseBit = 16;
+    static const uint32_t DELTA_0_bitWidth = 1;
+        
+    static const uint32_t EDGE_7_baseBit = 15;
+    static const uint32_t EDGE_7_bitWidth = 1;
+         
+    static const uint32_t EDGE_6_baseBit = 14;
+    static const uint32_t EDGE_6_bitWidth = 1;
+          
+    static const uint32_t EDGE_5_baseBit = 13;
+    static const uint32_t EDGE_5_bitWidth = 1;
+           
+    static const uint32_t EDGE_4_baseBit = 12;
+    static const uint32_t EDGE_4_bitWidth = 1;
+            
+    static const uint32_t EDGE_3_baseBit = 11;
+    static const uint32_t EDGE_3_bitWidth = 1;
+             
+    static const uint32_t EDGE_2_baseBit = 10;
+    static const uint32_t EDGE_2_bitWidth = 1;
+              
+    static const uint32_t EDGE_1_baseBit = 9;
+    static const uint32_t EDGE_1_bitWidth = 1;
+              
+    static const uint32_t EDGE_0_baseBit = 8;
+    static const uint32_t EDGE_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_LEVEL_3_RMW
+{
+    static const uint32_t addressOffset = 0x06C;
+
+    static const uint32_t DELTA_7_baseBit = 23;
+    static const uint32_t DELTA_7_bitWidth = 1;
+
+    static const uint32_t DELTA_6_baseBit = 22;
+    static const uint32_t DELTA_6_bitWidth = 1;
+ 
+    static const uint32_t DELTA_5_baseBit = 21;
+    static const uint32_t DELTA_5_bitWidth = 1;
+  
+    static const uint32_t DELTA_4_baseBit = 20;
+    static const uint32_t DELTA_4_bitWidth = 1;
+   
+    static const uint32_t DELTA_3_baseBit = 19;
+    static const uint32_t DELTA_3_bitWidth = 1;
+     
+    static const uint32_t DELTA_2_baseBit = 18;
+    static const uint32_t DELTA_2_bitWidth = 1;
+    
+    static const uint32_t DELTA_1_baseBit = 17;
+    static const uint32_t DELTA_1_bitWidth = 1;
+       
+    static const uint32_t DELTA_0_baseBit = 16;
+    static const uint32_t DELTA_0_bitWidth = 1;
+        
+    static const uint32_t EDGE_7_baseBit = 15;
+    static const uint32_t EDGE_7_bitWidth = 1;
+         
+    static const uint32_t EDGE_6_baseBit = 14;
+    static const uint32_t EDGE_6_bitWidth = 1;
+          
+    static const uint32_t EDGE_5_baseBit = 13;
+    static const uint32_t EDGE_5_bitWidth = 1;
+    
+    static const uint32_t EDGE_4_baseBit = 12;
+    static const uint32_t EDGE_4_bitWidth = 1;
+         
+    static const uint32_t EDGE_3_baseBit = 11;
+    static const uint32_t EDGE_3_bitWidth = 1;
+    
+    static const uint32_t EDGE_2_baseBit = 10;
+    static const uint32_t EDGE_2_bitWidth = 1;
+    
+    static const uint32_t EDGE_1_baseBit = 9;
+    static const uint32_t EDGE_1_bitWidth = 1;
+    
+    static const uint32_t EDGE_0_baseBit = 8;
+    static const uint32_t EDGE_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.8 GPIO_INT_CLR_0
+ * 
+ * This write-only register clears the Interrupts that are set. This is valid 
+ * only in GPIO mode when GPIO_INT.ENB is set.
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_INT_CLEAR_0_RMW
+{
+    static const uint32_t addressOffset = 0x070;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_CLEAR_1_RMW
+{
+    static const uint32_t addressOffset = 0x074;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_CLEAR_2_RMW
+{
+    static const uint32_t addressOffset = 0x078;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_INT_CLEAR_3_RMW
+{
+    static const uint32_t addressOffset = 0x07C;
+
+    const uint32_t BIT_7_baseBit = 7;
+    const uint32_t BIT_7_bitWidth = 1;
+
+    const uint32_t BIT_6_baseBit = 6;
+    const uint32_t BIT_6_bitWidth = 1;
+
+    const uint32_t BIT_5_baseBit = 5;
+    const uint32_t BIT_5_bitWidth = 1;
+
+    const uint32_t BIT_4_baseBit = 4;
+    const uint32_t BIT_4_bitWidth = 1;
+
+    const uint32_t BIT_3_baseBit = 3;
+    const uint32_t BIT_3_bitWidth = 1;
+
+    const uint32_t BIT_2_baseBit = 2;
+    const uint32_t BIT_2_bitWidth = 1;
+
+    const uint32_t BIT_1_baseBit = 1;
+    const uint32_t BIT_1_bitWidth = 1;
+
+    const uint32_t BIT_0_baseBit = 0;
+    const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.9 GPIO_MSK_CNF_0
+ *
+ * Each register is provided with an individual 16-baseBit version for enabling 
+ * Masked Writes to avoid a Read-Modify-Write operation by the firmware. The 
+ * exception is for the interrupt clear register, whose functionality is 
+ * combined in the interrupt status register. Individual pins only can be 
+ * programmed by suitably enabling the write masks in the upper byte of these 
+ * 16-baseBit registers.
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_MSK_CNF_0
+{
+    static const uint32_t addressOffset = 0x080;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+     
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+   
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+    
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+   
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+   
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+    
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+    
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_CNF_1
+{
+    static const uint32_t addressOffset = 0x084;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+    
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+          
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+      
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+         
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+         
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+           
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+          
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_CNF_2
+{
+    static const uint32_t addressOffset = 0x088;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+         
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+          
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+         
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+        
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+            
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+         
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+          
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_CNF_3
+{
+    static const uint32_t addressOffset = 0x08C;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+     
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+       
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+     
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+    
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+         
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+           
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+              
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.10 GPIO_MSK_OE_0
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_MSK_OE_0
+{
+    static const uint32_t addressOffset = 0x090;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+         
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+          
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+           
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+            
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+             
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+             
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+            
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_OE_1
+{
+    static const uint32_t addressOffset = 0x094;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+         
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+          
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+         
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+         
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+           
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+            
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+            
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_OE_2
+{
+    static const uint32_t addressOffset = 0x098;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+       
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+   
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+  
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+ 
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+   
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+   
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+  
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_OE_3
+{
+    static const uint32_t addressOffset = 0x09C;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+   
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+  
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+  
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+  
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+   
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+  
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+  
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.11 GPIO_MSK_OUT_0
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_MSK_OUT_0
+{
+    static const uint32_t addressOffset = 0x0A0;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+ 
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+  
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+    
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+    
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+    
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+    
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+   
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_OUT_1
+{
+    static const uint32_t addressOffset = 0x0A4;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+     
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+  
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+   
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+  
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+  
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+   
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+   
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_OUT_2
+{
+    static const uint32_t addressOffset = 0x0A8;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+     
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+   
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+ 
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+ 
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+ 
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+    
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_OUT_3
+{
+    static const uint32_t addressOffset = 0x0AC;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+ 
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+ 
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+   
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+  
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+   
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+ 
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+ 
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.12 GPIO_DB_CTRL_P0_0
+ */
+struct GPIO_DB_CTRL_P0
+{
+    static const uint32_t addressOffset = 0x0B0;
+
+    static const uint32_t MSK_PA_DBC_EN_7_baseBit = 15;
+    static const uint32_t MSK_PA_DBC_EN_7_bitWidth = 1;
+        
+    static const uint32_t MSK_PA_DBC_EN_6_baseBit = 14;
+    static const uint32_t MSK_PA_DBC_EN_6_bitWidth = 1;
+          
+    static const uint32_t MSK_PA_DBC_EN_5_baseBit = 13;
+    static const uint32_t MSK_PA_DBC_EN_5_bitWidth = 1;
+        
+    static const uint32_t MSK_PA_DBC_EN_4_baseBit = 12;
+    static const uint32_t MSK_PA_DBC_EN_4_bitWidth = 1;
+         
+    static const uint32_t MSK_PA_DBC_EN_3_baseBit = 11;
+    static const uint32_t MSK_PA_DBC_EN_3_bitWidth = 1;
+          
+    static const uint32_t MSK_PA_DBC_EN_2_baseBit = 10;
+    static const uint32_t MSK_PA_DBC_EN_2_bitWidth = 1;
+           
+    static const uint32_t MSK_PA_DBC_EN_1_baseBit = 9;
+    static const uint32_t MSK_PA_DBC_EN_1_bitWidth = 1;
+            
+    static const uint32_t MSK_PA_DBC_EN_0_baseBit = 8;
+    static const uint32_t MSK_PA_DBC_EN_0_bitWidth = 1;
+
+    static const uint32_t PA_DBC_EN_7_baseBit = 7;
+    static const uint32_t PA_DBC_EN_7_bitWidth = 1;
+
+    static const uint32_t PA_DBC_EN_6_baseBit = 6;
+    static const uint32_t PA_DBC_EN_6_bitWidth = 1;
+
+    static const uint32_t PA_DBC_EN_5_baseBit = 5;
+    static const uint32_t PA_DBC_EN_5_bitWidth = 1;
+
+    static const uint32_t PA_DBC_EN_4_baseBit = 4;
+    static const uint32_t PA_DBC_EN_4_bitWidth = 1;
+
+    static const uint32_t PA_DBC_EN_3_baseBit = 3;
+    static const uint32_t PA_DBC_EN_3_bitWidth = 1;
+
+    static const uint32_t PA_DBC_EN_2_baseBit = 2;
+    static const uint32_t PA_DBC_EN_2_bitWidth = 1;
+
+    static const uint32_t PA_DBC_EN_1_baseBit = 1;
+    static const uint32_t PA_DBC_EN_1_bitWidth = 1;
+
+    static const uint32_t PA_DBC_EN_0_baseBit = 0;
+    static const uint32_t PA_DBC_EN_0_bitWidth = 1;
+
+};
+
+// 9.13.13 GPIO_DB_CTRL_P1_0
+struct GPIO_DB_CTRL_P1
+{
+    static const uint32_t addressOffset = 0x0B4;
+
+    static const uint32_t MSK_PB_DBC_EN_7_baseBit = 15;
+    static const uint32_t MSK_PB_DBC_EN_7_bitWidth = 1;
+     
+    static const uint32_t MSK_PB_DBC_EN_6_baseBit = 14;
+    static const uint32_t MSK_PB_DBC_EN_6_bitWidth = 1;
+      
+    static const uint32_t MSK_PB_DBC_EN_5_baseBit = 13;
+    static const uint32_t MSK_PB_DBC_EN_5_bitWidth = 1;
+       
+    static const uint32_t MSK_PB_DBC_EN_4_baseBit = 12;
+    static const uint32_t MSK_PB_DBC_EN_4_bitWidth = 1;
+        
+    static const uint32_t MSK_PB_DBC_EN_3_baseBit = 11;
+    static const uint32_t MSK_PB_DBC_EN_3_bitWidth = 1;
+         
+    static const uint32_t MSK_PB_DBC_EN_2_baseBit = 10;
+    static const uint32_t MSK_PB_DBC_EN_2_bitWidth = 1;
+          
+    static const uint32_t MSK_PB_DBC_EN_1_baseBit = 9;
+    static const uint32_t MSK_PB_DBC_EN_1_bitWidth = 1;
+           
+    static const uint32_t MSK_PB_DBC_EN_0_baseBit = 8;
+    static const uint32_t MSK_PB_DBC_EN_0_bitWidth = 1;
+
+    static const uint32_t PB_DBC_EN_7_baseBit = 7;
+    static const uint32_t PB_DBC_EN_7_bitWidth = 1;
+
+    static const uint32_t PB_DBC_EN_6_baseBit = 6;
+    static const uint32_t PB_DBC_EN_6_bitWidth = 1;
+
+    static const uint32_t PB_DBC_EN_5_baseBit = 5;
+    static const uint32_t PB_DBC_EN_5_bitWidth = 1;
+
+    static const uint32_t PB_DBC_EN_4_baseBit = 4;
+    static const uint32_t PB_DBC_EN_4_bitWidth = 1;
+
+    static const uint32_t PB_DBC_EN_3_baseBit = 3;
+    static const uint32_t PB_DBC_EN_3_bitWidth = 1;
+
+    static const uint32_t PB_DBC_EN_2_baseBit = 2;
+    static const uint32_t PB_DBC_EN_2_bitWidth = 1;
+
+    static const uint32_t PB_DBC_EN_1_baseBit = 1;
+    static const uint32_t PB_DBC_EN_1_bitWidth = 1;
+
+    static const uint32_t PB_DBC_EN_0_baseBit = 0;
+    static const uint32_t PB_DBC_EN_0_bitWidth = 1;
+
+};
+
+// 9.13.14 GPIO_DB_CTRL_P2_0
+struct GPIO_DB_CTRL_P2
+{
+    static const uint32_t addressOffset = 0x0B8;
+
+    static const uint32_t MSK_PC_DBC_EN_7_baseBit = 15;
+    static const uint32_t MSK_PC_DBC_EN_7_bitWidth = 1;
+   
+    static const uint32_t MSK_PC_DBC_EN_6_baseBit = 14;
+    static const uint32_t MSK_PC_DBC_EN_6_bitWidth = 1;
+     
+    static const uint32_t MSK_PC_DBC_EN_5_baseBit = 13;
+    static const uint32_t MSK_PC_DBC_EN_5_bitWidth = 1;
+      
+    static const uint32_t MSK_PC_DBC_EN_4_baseBit = 12;
+    static const uint32_t MSK_PC_DBC_EN_4_bitWidth = 1;
+      
+    static const uint32_t MSK_PC_DBC_EN_3_baseBit = 11;
+    static const uint32_t MSK_PC_DBC_EN_3_bitWidth = 1;
+       
+    static const uint32_t MSK_PC_DBC_EN_2_baseBit = 10;
+    static const uint32_t MSK_PC_DBC_EN_2_bitWidth = 1;
+        
+    static const uint32_t MSK_PC_DBC_EN_1_baseBit = 9;
+    static const uint32_t MSK_PC_DBC_EN_1_bitWidth = 1;
+          
+    static const uint32_t MSK_PC_DBC_EN_0_baseBit = 8;
+    static const uint32_t MSK_PC_DBC_EN_0_bitWidth = 1;
+
+    static const uint32_t PC_DBC_EN_7_baseBit = 7;
+    static const uint32_t PC_DBC_EN_7_bitWidth = 1;
+
+    static const uint32_t PC_DBC_EN_6_baseBit = 6;
+    static const uint32_t PC_DBC_EN_6_bitWidth = 1;
+
+    static const uint32_t PC_DBC_EN_5_baseBit = 5;
+    static const uint32_t PC_DBC_EN_5_bitWidth = 1;
+
+    static const uint32_t PC_DBC_EN_4_baseBit = 4;
+    static const uint32_t PC_DBC_EN_4_bitWidth = 1;
+
+    static const uint32_t PC_DBC_EN_3_baseBit = 3;
+    static const uint32_t PC_DBC_EN_3_bitWidth = 1;
+
+    static const uint32_t PC_DBC_EN_2_baseBit = 2;
+    static const uint32_t PC_DBC_EN_2_bitWidth = 1;
+
+    static const uint32_t PC_DBC_EN_1_baseBit = 1;
+    static const uint32_t PC_DBC_EN_1_bitWidth = 1;
+
+    static const uint32_t PC_DBC_EN_0_baseBit = 0;
+    static const uint32_t PC_DBC_EN_0_bitWidth = 1;
+
+};
+
+// 9.13.15 GPIO_DB_CTRL_P3_0
+struct GPIO_DB_CTRL_P3
+{
+    static const uint32_t addressOffset = 0x0BC;
+
+    static const uint32_t MSK_PD_DBC_EN_7_baseBit = 15;
+    static const uint32_t MSK_PD_DBC_EN_7_bitWidth = 1;
+     
+    static const uint32_t MSK_PD_DBC_EN_6_baseBit = 14;
+    static const uint32_t MSK_PD_DBC_EN_6_bitWidth = 1;
+     
+    static const uint32_t MSK_PD_DBC_EN_5_baseBit = 13;
+    static const uint32_t MSK_PD_DBC_EN_5_bitWidth = 1;
+      
+    static const uint32_t MSK_PD_DBC_EN_4_baseBit = 12;
+    static const uint32_t MSK_PD_DBC_EN_4_bitWidth = 1;
+     
+    static const uint32_t MSK_PD_DBC_EN_3_baseBit = 11;
+    static const uint32_t MSK_PD_DBC_EN_3_bitWidth = 1;
+       
+    static const uint32_t MSK_PD_DBC_EN_2_baseBit = 10;
+    static const uint32_t MSK_PD_DBC_EN_2_bitWidth = 1;
+        
+    static const uint32_t MSK_PD_DBC_EN_1_baseBit = 9;
+    static const uint32_t MSK_PD_DBC_EN_1_bitWidth = 1;
+         
+    static const uint32_t MSK_PD_DBC_EN_0_baseBit = 8;
+    static const uint32_t MSK_PD_DBC_EN_0_bitWidth = 1;
+
+    static const uint32_t PD_DBC_EN_7_baseBit = 7;
+    static const uint32_t PD_DBC_EN_7_bitWidth = 1;
+
+    static const uint32_t PD_DBC_EN_6_baseBit = 6;
+    static const uint32_t PD_DBC_EN_6_bitWidth = 1;
+
+    static const uint32_t PD_DBC_EN_5_baseBit = 5;
+    static const uint32_t PD_DBC_EN_5_bitWidth = 1;
+
+    static const uint32_t PD_DBC_EN_4_baseBit = 4;
+    static const uint32_t PD_DBC_EN_4_bitWidth = 1;
+
+    static const uint32_t PD_DBC_EN_3_baseBit = 3;
+    static const uint32_t PD_DBC_EN_3_bitWidth = 1;
+
+    static const uint32_t PD_DBC_EN_2_baseBit = 2;
+    static const uint32_t PD_DBC_EN_2_bitWidth = 1;
+
+    static const uint32_t PD_DBC_EN_1_baseBit = 1;
+    static const uint32_t PD_DBC_EN_1_bitWidth = 1;
+
+    static const uint32_t PD_DBC_EN_0_baseBit = 0;
+    static const uint32_t PD_DBC_EN_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.16 GPIO_MSK_INT_STA_0
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_MSK_INT_STATUS_0
+{
+    static const uint32_t addressOffset = 0x0C0;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+ 
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+   
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+    
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+   
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+   
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+ 
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+      
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_STATUS_1
+{
+    static const uint32_t addressOffset = 0x0C4;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+    
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+     
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+      
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+     
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+       
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+        
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+         
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_STATUS_2
+{
+    static const uint32_t addressOffset = 0x0C8;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+      
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+      
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+       
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+        
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+         
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+           
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+          
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_STATUS_3
+{
+    static const uint32_t addressOffset = 0x0CC;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+  
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+     
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+     
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+      
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+       
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+        
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+         
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.17 GPIO_MSK_INT_ENB_0
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_MSK_INT_ENB_0
+{
+    static const uint32_t addressOffset = 0x0D0;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+  
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+ 
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+  
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+   
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+    
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+   
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+    
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_ENB_1
+{
+    static const uint32_t addressOffset = 0x0D4;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+ 
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+  
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+  
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+    
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+    
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+     
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+     
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_ENB_2
+{
+    static const uint32_t addressOffset = 0x0D8;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+ 
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+   
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+  
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+  
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+  
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+   
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+  
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_ENB_3
+{
+    static const uint32_t addressOffset = 0x0DC;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+    
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+     
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+      
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+      
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+       
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+        
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+/**
+ * 9.13.18 GPIO_MSK_INT_LVL_0
+ *
+ * This is an array of 4 identical register entries; the register fields below 
+ * apply to each entry.
+ */
+
+struct GPIO_MSK_INT_LVL_0
+{
+    static const uint32_t addressOffset = 0x0E0;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+  
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+    
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+     
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+      
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+       
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+      
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+         
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_LVL_1
+{
+    static const uint32_t addressOffset = 0x0E4;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+   
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+    
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+    
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+      
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+       
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+        
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+         
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_LVL_2
+{
+    static const uint32_t addressOffset = 0x0E8;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+   
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+    
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+     
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+      
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+       
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+       
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+        
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+struct GPIO_MSK_INT_LVL_3
+{
+    static const uint32_t addressOffset = 0x0EC;
+
+    static const uint32_t MSK_7_baseBit = 15;
+    static const uint32_t MSK_7_bitWidth = 1;
+
+    static const uint32_t MSK_6_baseBit = 14;
+    static const uint32_t MSK_6_bitWidth = 1;
+
+    static const uint32_t MSK_5_baseBit = 13;
+    static const uint32_t MSK_5_bitWidth = 1;
+    
+    static const uint32_t MSK_4_baseBit = 12;
+    static const uint32_t MSK_4_bitWidth = 1;
+   
+    static const uint32_t MSK_3_baseBit = 11;
+    static const uint32_t MSK_3_bitWidth = 1;
+     
+    static const uint32_t MSK_2_baseBit = 10;
+    static const uint32_t MSK_2_bitWidth = 1;
+      
+    static const uint32_t MSK_1_baseBit = 9;
+    static const uint32_t MSK_1_bitWidth = 1;
+      
+    static const uint32_t MSK_0_baseBit = 8;
+    static const uint32_t MSK_0_bitWidth = 1;
+
+    static const uint32_t BIT_7_baseBit = 7;
+    static const uint32_t BIT_7_bitWidth = 1;
+
+    static const uint32_t BIT_6_baseBit = 6;
+    static const uint32_t BIT_6_bitWidth = 1;
+
+    static const uint32_t BIT_5_baseBit = 5;
+    static const uint32_t BIT_5_bitWidth = 1;
+
+    static const uint32_t BIT_4_baseBit = 4;
+    static const uint32_t BIT_4_bitWidth = 1;
+
+    static const uint32_t BIT_3_baseBit = 3;
+    static const uint32_t BIT_3_bitWidth = 1;
+
+    static const uint32_t BIT_2_baseBit = 2;
+    static const uint32_t BIT_2_bitWidth = 1;
+
+    static const uint32_t BIT_1_baseBit = 1;
+    static const uint32_t BIT_1_bitWidth = 1;
+
+    static const uint32_t BIT_0_baseBit = 0;
+    static const uint32_t BIT_0_bitWidth = 1;
+
+};
+
+// 9.13.19 GPIO_DB_CNT_P0_0
+struct GPIO_DB_CNT_P0
+{
+    static const uint32_t addressOffset = 0x0F0;
+
+    static const uint32_t PA_DBC_CNT_baseBit = 0;
+    static const uint32_t PA_DBC_CNT_bitWidth = 8;
+
+};
+
+// 9.13.20 GPIO_DB_CNT_P1_0
+struct GPIO_DB_CNT_P1
+{
+    static const uint32_t addressOffset = 0x0F4;
+
+    static const uint32_t PB_DBC_CNT_baseBit = 0;
+    static const uint32_t PB_DBC_CNT_bitWidth = 8;
+
+};
+
+// 9.13.21 GPIO_DB_CNT_P2_0
+struct GPIO_DB_CNT_P2
+{
+    static const uint32_t addressOffset = 0x0F8;
+
+    static const uint32_t PC_DBC_CNT_baseBit = 0;
+    static const uint32_t PC_DBC_CNT_bitWidth = 8;
+
+};
+
+// 9.13.22 GPIO_DB_CNT_P3_0
+struct GPIO_DB_CNT_P3
+{
+    static const uint32_t addressOffset = 0x0FC;
+
+    static const uint32_t PD_DBC_CNT_baseBit = 0;
+    static const uint32_t PD_DBC_CNT_bitWidth = 8;
+        
+};
 

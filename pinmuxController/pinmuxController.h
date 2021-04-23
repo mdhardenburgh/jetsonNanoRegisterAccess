@@ -44,213 +44,5877 @@
 
 #include <cstdint>
 
-enum class E_PREEMP : uint32_t{DISABLE = (0x0 << 15), ENABLE = (0x1 << 15), bitMask = (0x1 << 15)};
-
-enum class DRV_TYPE : uint32_t{DRIVE_1X = (0x0 << 13), DRIVE_2X = (0x1 << 13), DRIVE_3X = (0x2 << 13), DRIVE_4X = (0x3 << 13), bitMask = (0x3 << 13)};
-
-enum class E_SCHMT : uint32_t{DISABLE = (0x0 << 12), ENABLE = (0x1 << 12), bitMask = (0x1 << 12)};
-
-// enum class E_OD : uint32_t{DISABLE = (0x0 << 11), ENABLE = (0x1 << 11), bitMask = (0x1 << 11)}; //This bit field with PERMENTLY BRICK YOUR JETSON
-
-enum class E_IO_HV : uint32_t{DISABLE = (0x0 << 10), ENABLE = (0x1 << 10), bitMask = (0x1 << 10)};
-
-enum class E_HSM : uint32_t{DISABLE = (0x0 << 9), ENABLE = (0x1 << 9), bitMask = (0x1 << 9)};
-
-enum class E_LPDR : uint32_t{DISABLE = (0x0 << 8), ENABLE = (0x1 << 8), bitMask = (0x1 << 8)};
-
-enum class E_LOCK : uint32_t{DISABLE = (0x0 << 7), ENABLE = (0x1 << 7), bitMask = (0x1 << 7)};
-
-enum class E_INPUT : uint32_t{DISABLE = (0x0 << 6), ENABLE = (0x1 << 6), bitMask = (0x1 << 6)};
-
-enum class PARK : uint32_t{NORMAL = (0x0 << 5), PARKED = (0x1 << 5), bitMask = (0x1 << 5)};
-
-enum class TRISTATE : uint32_t{PASSTHROUGH = (0x0 << 4), TRISTATE = (0x1 << 4), bitMask = (0x1 << 4)};
-
-/**
- *
- */ 
-enum class PUPD : uint32_t{NONE = (0x0 << 2), PULL_DOWN = (0x1 << 2), PULL_UP = (0x2 << 2), RSVD = (0x3 << 2), bitMask = (0x3 << 2)};
-   
-/**
- * refer to bit field [1:0] in section 9.15.1 to 9.15.162
- * to find what the pinmux can be multiplexed to. 
- */
-enum class PM : uint32_t{PINMUX_0 = (0x0 << 1), PINMUX_1 = (0x1 << 1), PINMUX_2 = (0x2 << 1), PINMUX_3 = (0x3 << 1), bitMask = (0x3 << 1)};  
-
-
-class PinmuxController
+struct pinmuxController
 {
-    public:
-        PinmuxController();
-        ~PinmuxController();
-        
-        static const uint32_t baseAddress = 0x70000000;
+    static const uint32_t baseAddress = 0x70003000;
 
-        static const uint32_t PINMUX_AUX_SDMMC1_CLK_0 = 0x3000;
-        static const uint32_t PINMUX_AUX_SDMMC1_CMD_0 = 0x3004;
-        static const uint32_t PINMUX_AUX_SDMMC1_DAT3_0 = 0x3008;
-        static const uint32_t PINMUX_AUX_SDMMC1_DAT2_0 = 0x300c;
-        static const uint32_t PINMUX_AUX_SDMMC1_DAT1_0 = 0x3010;
-        static const uint32_t PINMUX_AUX_SDMMC1_DAT0_0 = 0x3014;
-        static const uint32_t PINMUX_AUX_SDMMC3_CLK_0 = 0x301c;
-        static const uint32_t PINMUX_AUX_SDMMC3_CMD_0 = 0x3020;
-        static const uint32_t PINMUX_AUX_SDMMC3_DAT0_0 = 0x3024;
-        static const uint32_t PINMUX_AUX_SDMMC3_DAT1_0 = 0x3028;
-        static const uint32_t PINMUX_AUX_SDMMC3_DAT2_0 = 0x302c'
-        static const uint32_t PINMUX_AUX_SDMMC3_DAT3_0 = 0x3030; //  R/W     0x00002078
-        static const uint32_t PINMUX_AUX_PEX_L0_RST_N_0 = 0x3038; // R/W     0x00000460
-        static const uint32_t PINMUX_AUX_PEX_L0_CLKREQ_N_0 = 0x303c; // R/W     0x00000470
-        static const uint32_t PINMUX_AUX_PEX_WAKE_N_0 = 0x3040; // R/W     0x00000470
-        static const uint32_t PINMUX_AUX_PEX_L1_RST_N_0 = 0x3044; // R/W     0x00000460
-        static const uint32_t PINMUX_AUX_PEX_L1_CLKREQ_N_0 = 0x3048; // R/W     0x00000470
-        static const uint32_t PINMUX_AUX_SATA_LED_ACTIVE_0 = 0x304c; // R/W     0x00000060
-        static const uint32_t PINMUX_AUX_SPI1_MOSI_0 =  0x3050; // R/W     0x0000e074
-        static const uint32_t PINMUX_AUX_SPI1_MISO_0 = 0x3054; // R/W     0x0000e074
-        static const uint32_t PINMUX_AUX_SPI1_SCK_0 = 0x3058; // R/W     0x0000e074
-        static const uint32_t PINMUX_AUX_SPI1_CS0_0 = 0x305c; // R/W     0x0000e078
-        static const uint32_t PINMUX_AUX_SPI1_CS1_0   = 0x3060; // R/W     0x0000e078
-        static const uint32_t PINMUX_AUX_SPI2_MOSI_0  = 0x3064; //  R/W     0x00006074
-        static const uint32_t PINMUX_AUX_SPI2_MISO_0  = 0x3068; //  R/W     0x00006074
-        static const uint32_t PINMUX_AUX_SPI2_SCK_0   = 0x306c; //  R/W     0x00006074
-        static const uint32_t PINMUX_AUX_SPI2_CS0_0   = 0x3070; //  R/W     0x00006078
-        static const uint32_t PINMUX_AUX_SPI2_CS1_0   = 0x3074; //  R/W     0x00006078
-        static const uint32_t PINMUX_AUX_SPI4_MOSI_0  = 0x3078; //  R/W     0x0000e074
-        static const uint32_t PINMUX_AUX_SPI4_MISO_0  = 0x307c; //  R/W     0x0000e074
-        static const uint32_t PINMUX_AUX_SPI4_SCK_0   = 0x3080; //  R/W     0x0000e074
-        static const uint32_t PINMUX_AUX_SPI4_CS0_0   = 0x3084; //  R/W     0x0000e078
-        static const uint32_t PINMUX_AUX_QSPI_SCK_0   = 0x3088; //  R/W     0x00003078
-        static const uint32_t PINMUX_AUX_QSPI_CS_N_0  = 0x308c; //  R/W     0x00003078
-        static const uint32_t PINMUX_AUX_QSPI_IO0_0   = 0x3090; //  R/W     0x00003078
-        static const uint32_t PINMUX_AUX_QSPI_IO1_0   = 0x3094; //  R/W     0x00003078
-        static const uint32_t PINMUX_AUX_QSPI_IO2_0   = 0x3098; //  R/W     0x00003078
-        static const uint32_t PINMUX_AUX_QSPI_IO3_0   = 0x309c; //  R/W     0x00003078
-        static const uint32_t PINMUX_AUX_DMIC1_CLK_0  = 0x30a4; //  R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DMIC1_DAT_0  = 0x30a8; //  R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DMIC2_CLK_0  = 0x30ac; //  R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DMIC2_DAT_0  = 0x30b0; //  R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DMIC3_CLK_0  = 0x30b4; //  R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DMIC3_DAT_0  = 0x30b8; //  R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GEN1_I2C_SCL_0 = 0x30bc; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_GEN1_I2C_SDA_0 = 0x30c0; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_GEN2_I2C_SCL_0 = 0x30c4; // R/W     0x00000572
-        static const uint32_t PINMUX_AUX_GEN2_I2C_SDA_0 = 0x30c8; // R/W     0x00000572
-        static const uint32_t PINMUX_AUX_GEN3_I2C_SCL_0 = 0x30cc; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_GEN3_I2C_SDA_0 = 0x30d0; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_CAM_I2C_SCL_0  = 0x30d4; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_CAM_I2C_SDA_0  = 0x30d8; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_PWR_I2C_SCL_0  = 0x30dc; // R/W     0x00000170
-        static const uint32_t PINMUX_AUX_PWR_I2C_SDA_0  = 0x30e0; // R/W     0x00000170
-        static const uint32_t PINMUX_AUX_UART1_TX_0  = 0x30e4; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART1_RX_0  = 0x30e8; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART1_RTS_0 = 0x30ec; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART1_CTS_0 = 0x30f0; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART2_TX_0  = 0x30f4; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART2_RX_0  = 0x30f8; // R/W     0x00000078
-        static const uint32_t PINMUX_AUX_UART2_RTS_0 = 0x30fc; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART2_CTS_0 = 0x3100; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART3_TX_0  = 0x3104; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART3_RX_0  = 0x3108; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART3_RTS_0 = 0x310c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART3_CTS_0 = 0x3110; // R/W     0x00000078
-        static const uint32_t PINMUX_AUX_UART4_TX_0  = 0x3114; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART4_RX_0  = 0x3118; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART4_RTS_0 = 0x311c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_UART4_CTS_0 = 0x3120; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DAP1_FS_0   = 0x3124; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_DAP1_DIN_0  = 0x3128; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_DAP1_DOUT_0 = 0x312c; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_DAP1_SCLK_0 = 0x3130; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_DAP2_FS_0   = 0x3134; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_DAP2_DIN_0  = 0x3138; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_DAP2_DOUT_0 = 0x313c; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_DAP2_SCLK_0 = 0x3140; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_DAP4_FS_0   = 0x3144; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DAP4_DIN_0  = 0x3148; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DAP4_DOUT_0 = 0x314c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DAP4_SCLK_0 = 0x3150; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_CAM1_MCLK_0 = 0x3154; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_CAM2_MCLK_0 = 0x3158; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_JTAG_RTCK_0 = 0x315c; // R/W     0x00000068
-        static const uint32_t PINMUX_AUX_CLK_32K_IN_0 = 0x3160; // R/W     0x00000000
-        static const uint32_t PINMUX_AUX_CLK_32K_OUT_0 = 0x3164; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_BATT_BCL_0 = 0x3168; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_CLK_REQ_0 = 0x316c; // R/W     0x00000040
-        static const uint32_t PINMUX_AUX_CPU_PWR_REQ_0 = 0x3170; // R/W     0x00000040
-        static const uint32_t PINMUX_AUX_PWR_INT_N_0 = 0x3174; // R/W     0x00000040
-        static const uint32_t PINMUX_AUX_SHUTDOWN_0 = 0x3178; // R/W     0x00000040
-        static const uint32_t PINMUX_AUX_CORE_PWR_REQ_0 = 0x317c; // R/W     0x00000040
-        static const uint32_t PINMUX_AUX_AUD_MCLK_0 = 0x3180; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DVFS_PWM_0 = 0x3184; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_DVFS_CLK_0 = 0x3188; // R/W     0x00000078
-        static const uint32_t PINMUX_AUX_GPIO_X1_AUD_0 = 0x318c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_X3_AUD_0 = 0x3190; // R/W     0x00000078
-        static const uint32_t PINMUX_AUX_GPIO_PCC7_0 = 0x3194; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_HDMI_CEC_0 = 0x3198; // R/W     0x00000570
-        static const uint32_t PINMUX_AUX_HDMI_INT_DP_HPD_0 = 0x319c; // R/W     0x00000574
-        static const uint32_t PINMUX_AUX_SPDIF_OUT_0 = 0x31a0; // R/W     0x00000078
-        static const uint32_t PINMUX_AUX_SPDIF_IN_0 = 0x31a4; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_USB_VBUS_EN0_0 = 0x31a8; // R/W     0x00000560
-        static const uint32_t PINMUX_AUX_USB_VBUS_EN1_0 = 0x31ac; // R/W     0x00000560
-        static const uint32_t PINMUX_AUX_DP_HPD0_0 = 0x31b0; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_WIFI_EN_0 = 0x31b4; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_WIFI_RST_0 = 0x31b8; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_WIFI_WAKE_AP_0 = 0x31bc; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_AP_WAKE_BT_0 = 0x31c0; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_BT_RST_0 = 0x31c4; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_BT_WAKE_AP_0 = 0x31c8; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_AP_WAKE_NFC_0 = 0x31cc; //  R/W     0x00000074
-        static const uint32_t PINMUX_AUX_NFC_EN_0 = 0x31d0; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_NFC_INT_0 = 0x31d4; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPS_EN_0 = 0x31d8; //  R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPS_RST_0 = 0x31dc; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_CAM_RST_0 = 0x31e0; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_CAM_AF_EN_0 = 0x31e4; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_CAM_FLASH_EN_0 = 0x31e8; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_CAM1_PWDN_0 = 0x31ec; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_CAM2_PWDN_0 = 0x31f0; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_CAM1_STROBE_0 = 0x31f4; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_LCD_TE_0     = 0x31f8; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_LCD_BL_PWM_0 = 0x31fc; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_LCD_BL_EN_0  = 0x3200; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_LCD_RST_0    = 0x3204; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_LCD_GPIO1_0  = 0x3208; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_LCD_GPIO2_0  = 0x320c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_AP_READY_0   = 0x3210; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_TOUCH_RST_0  = 0x3214; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_TOUCH_CLK_0  = 0x3218; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_MODEM_WAKE_AP_0 = 0x321c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_TOUCH_INT_0 = 0x3220; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_MOTION_INT_0 = 0x3224; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_ALS_PROX_INT_0 = 0x3228; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_TEMP_ALERT_0 = 0x322c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_BUTTON_POWER_ON_0 = 0x3230; // R/W     0x00000078
-        static const uint32_t PINMUX_AUX_BUTTON_VOL_UP_0   = 0x3234; //  R/W     0x00000078
-        static const uint32_t PINMUX_AUX_BUTTON_VOL_DOWN_0 = 0x3238; //  R/W     0x00000078
-        static const uint32_t PINMUX_AUX_BUTTON_SLIDE_SW_0 = 0x323c; //  R/W     0x00000078
-        static const uint32_t PINMUX_AUX_BUTTON_HOME_0     = 0x3240; //  R/W     0x00000078
-        static const uint32_t PINMUX_AUX_GPIO_PA6_0 = 0x3244; // R/W     0x00000030
-        static const uint32_t PINMUX_AUX_GPIO_PE6_0 = 0x3248; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_PE7_0 = 0x324c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_PH6_0 = 0x3250; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_PK0_0 = 0x3254; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PK1_0 = 0x3258; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PK2_0 = 0x325c; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PK3_0 = 0x3260; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PK4_0 = 0x3264; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PK5_0 = 0x3268; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PK6_0 = 0x326c; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PK7_0 = 0x3270; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PL0_0 = 0x3274; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PL1_0 = 0x3278; // R/W     0x00006074
-        static const uint32_t PINMUX_AUX_GPIO_PZ0_0 = 0x327c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_PZ1_0 = 0x3280; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_PZ2_0 = 0x3284; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_PZ3_0 = 0x3288; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_PZ4_0 = 0x328c; // R/W     0x00000074
-        static const uint32_t PINMUX_AUX_GPIO_PZ5_0 = 0x3290; // R/W     0x00000074
+    static const uint32_t DRV_TYPE_BIT_DRIVE_1X = 0;
+    static const uint32_t DRV_TYPE_BIT_DRIVE_2X = 1;
+    static const uint32_t DRV_TYPE_BIT_DRIVE_3X = 2;
+    static const uint32_t DRV_TYPE_BIT_DRIVE_4X = 3;
     
+    static const uint32_t E_SCHMT_TRIG_BIT_DISABLE = 0;
+    static const uint32_t E_SCHMT_TRIG_BIT_ENABLE = 1;
     
-    private:
+    static const uint32_t E_HSM_BIT_DISABLE = 0;
+    static const uint32_t E_HSM_BIT_ENABLE = 1;
+
+    static const uint32_t LOCK_BIT_DISABLE = 0;
+    static const uint32_t LOCK_BIT_ENABLE = 1;
+
+    static const uint32_t E_INPUT_BIT_DISABLE = 0;
+    static const uint32_t E_INPUT_BIT_ENABLE = 1;
+
+    static const uint32_t PARK_BIT_NORMAL = 0;
+    static const uint32_t PARK_BIT_PARKED = 1;
+
+    static const uint32_t TRISTATE_BIT_PASSTHROUGH = 0;
+    static const uint32_t TRISTATE_BIT_TRISTATE = 1;
+
+    static const uint32_t PUPD_BIT_NONE = 0;
+    static const uint32_t PUPD_BIT_PULL_DOWN = 1;
+    static const uint32_t PUPD_BIT_PULL_UP = 2;
+    static const uint32_t PUPD_BIT_RSVD = 3;
+
+    static const uint32_t PM_BIT_SDMMC1 = 0;
+    static const uint32_t PM_BIT_RSVD0 = 0;
+    static const uint32_t PM_BIT_PE0 = 0;
+    static const uint32_t PM_BIT_PE1 = 0;
+    static const uint32_t PM_BIT_SATA = 0;
+    static const uint32_t PM_BIT_SPI1 = 0;
+    static const uint32_t PM_BIT_SPI2 = 0;
+    static const uint32_t PM_BIT_SPI4 = 0;
+    static const uint32_t PM_BIT_QSPI = 0;
+    static const uint32_t PM_BIT_DMIC1 = 0;
+    static const uint32_t PM_BIT_DMIC2 = 0;
+    static const uint32_t PM_BIT_DMIC3 = 0;
+    static const uint32_t PM_BIT_I2C1 = 0;
+    static const uint32_t PM_BIT_I2C2 = 0;
+    static const uint32_t PM_BIT_I2C3 = 0;
+    static const uint32_t PM_BIT_I2CPMU = 0;
+    static const uint32_t PM_BIT_UARTA = 0;
+    static const uint32_t PM_BIT_UARTB = 0;
+    static const uint32_t PM_BIT_UARTC = 0;
+    static const uint32_t PM_BIT_UARTD = 0;
+    static const uint32_t PM_BIT_I2S4B = 0;
+    static const uint32_t PM_BIT_I2S1 = 0;
+    static const uint32_t PM_BIT_I2S2 = 0;
+    static const uint32_t PM_BIT_EXTPERIPH3 = 0;
+    static const uint32_t PM_BIT_JTAG = 0;
+    static const uint32_t PM_BIT_SOC = 0;
+    static const uint32_t PM_BIT_BCL = 0;
+    static const uint32_t PM_BIT_AUD = 0;
+    static const uint32_t PM_BIT_CEC = 0;
+    static const uint32_t PM_BIT_DP = 0;
+    static const uint32_t PM_BIT_SPDIF_STATE_0 = 0;
+    static const uint32_t PM_BIT_USB = 0;
+    static const uint32_t PM_BIT_VGP1 = 0;
+    static const uint32_t PM_BIT_VIMCLK = 0;
+    static const uint32_t PM_BIT_VIMCLK2 = 0;
+    static const uint32_t PM_BIT_VGP4 = 0;
+    static const uint32_t PM_BIT_VGP5 = 0;
+    static const uint32_t PM_BIT_VGP6 = 0;
+    static const uint32_t PM_BIT_DISPLAYA = 0;
+    static const uint32_t PM_BIT_DISPLAYB = 0;
+    static const uint32_t PM_BIT_TOUCH = 0;
+    static const uint32_t PM_BIT_IQC0 = 0;
+    static const uint32_t PM_BIT_IQC1 = 0;
+    static const uint32_t PM_BIT_SDMMC3 = 0;
+    static const uint32_t PM_BIT_VGP3 = 1;
+    static const uint32_t PM_BIT_VGP2 = 1;
+    static const uint32_t PM_BIT_BLINK = 1;
+    static const uint32_t PM_BIT_UART = 1;
+    static const uint32_t PM_BIT_SPI4_STATE_1 = 1;
+    static const uint32_t PM_BIT_I2S4A = 1;
+    static const uint32_t PM_BIT_I2CVI = 1;
+    static const uint32_t PM_BIT_I2S3 = 1;
+    static const uint32_t PM_BIT_I2S4 = 1;
+    static const uint32_t PM_BIT_I2S5A = 1;
+    static const uint32_t PM_BIT_DTV = 1;
+    static const uint32_t PM_BIT_RSVD1 = 1;
+    static const uint32_t PM_BIT_CLDVFS = 1;
+    static const uint32_t PM_BIT_UARTB_STATE_1 = 1;
+    static const uint32_t PM_BIT_SDMMC1_STATE_1 = 1;
+    static const uint32_t PM_BIT_CCLA = 1;
+    static const uint32_t PM_BIT_SPDIF = 2;
+    static const uint32_t PM_BIT_RSVD2 = 2;
+    static const uint32_t PM_BIT_SPI3 = 2;
+    static const uint32_t PM_BIT_PWM2 = 2;
+    static const uint32_t PM_BIT_PWM3 = 2;
+    static const uint32_t PM_BIT_UART_STATE_3 = 3;
+    static const uint32_t PM_BIT_RSVD3 = 3;
+
+    /*
+     * DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+     * const uint32_t E_OD_BIT_DISABLE = 0;
+     * const uint32_t E_OD_BIT_ENABLE = 1;
+     */
+
+    static const uint32_t E_IO_HV_BIT_DISABLE = 0;
+    static const uint32_t E_IO_HV_BIT_ENABLE = 1;
+
+    static const uint32_t E_LPDR_BIT_DISABLE = 0;
+    static const uint32_t E_LPDR_BIT_ENABLE = 1;
+
+    static const uint32_t E_PREEMP_BIT_DISABLE = 0;
+    static const uint32_t E_PREEMP_BIT_ENABLE = 1;
+
+};
+ 
+// 9.15.1
+struct PINMUX_AUX_SDMMC1_CLK_0
+{
+    static const uint32_t addressOffset = 0x00;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+      
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+     
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+     
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.2
+struct PINMUX_AUX_SDMMC1_CMD_0
+{
+    static const uint32_t addressOffset = 0x04;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+  
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.3
+struct PINMUX_AUX_SDMMC1_DAT3_0
+{
+    static const uint32_t addressOffset = 0x08;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+   
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.4
+struct PINMUX_AUX_SDMMC1_DAT2_0
+{
+    static const uint32_t addressOffset = 0x0C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.5
+struct PINMUX_AUX_SDMMC1_DAT1_0
+{
+    static const uint32_t addressOffset = 0x10;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.6
+struct PINMUX_AUX_SDMMC1_DAT0_0
+{
+    static const uint32_t addressOffset = 0x14;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+   
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+  
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.7
+struct PINMUX_AUX_SDMMC3_CLK_0
+{
+    static const uint32_t addressOffset = 0x1C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.8
+struct PINMUX_AUX_SDMMC3_CMD_0
+{
+    static const uint32_t addressOffset = 0x20;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.9
+struct PINMUX_AUX_SDMMC3_DAT0_0
+{
+    static const uint32_t addressOffset = 0x24;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+  
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.10
+struct PINMUX_AUX_SDMMC3_DAT1_0
+{
+    static const uint32_t addressOffset = 0x28;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.11
+struct PINMUX_AUX_SDMMC3_DAT2_0
+{
+    static const uint32_t addressOffset = 0x2C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+   
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.12
+struct PINMUX_AUX_SDMMC3_DAT3_0
+{
+    static const uint32_t addressOffset = 0x30;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.13
+struct PINMUX_AUX_PEX_L0_RST_N_0
+{
+    static const uint32_t addressOffset = 0x38;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    /*
+    static DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+   
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.14
+struct PINMUX_AUX_PEX_L0_CLKREQ_N_0
+{
+    static const uint32_t addressOffset = 0x3C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    /*
+    static DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+     
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+     
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.15
+struct PINMUX_AUX_PEX_WAKE_N_0
+{
+    static const uint32_t addressOffset = 0x40;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+  
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.16
+struct PINMUX_AUX_PEX_L1_RST_N_0
+{
+    static const uint32_t addressOffset = 0x44;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+     
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+   
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.17
+struct PINMUX_AUX_PEX_L1_CLKREQ_N_0
+{
+    static const uint32_t addressOffset = 0x48;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+   
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.18
+struct PINMUX_AUX_SATA_LED_ACTIVE_0
+{
+    static const uint32_t addressOffset = 0x04C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.19
+struct PINMUX_AUX_SPI1_MOSI_0
+{
+    static const uint32_t addressOffset = 0x50;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+ 
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+     
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+     
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.20
+struct PINMUX_AUX_SPI1_MISO_0
+{
+    static const uint32_t addressOffset = 0x54;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+ 
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+     
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+     
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.21
+struct PINMUX_AUX_SPI1_SCK_0
+{
+    static const uint32_t addressOffset = 0x58;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+ 
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+      
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+     
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+     
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.22
+struct PINMUX_AUX_SPI1_CS0_0
+{
+    static const uint32_t addressOffset = 0x5C;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+ 
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+      
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+     
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+     
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.23
+struct PINMUX_AUX_SPI1_CS1_0
+{
+    static const uint32_t addressOffset = 0x60;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+ 
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    const uint32_t PUPD_bit = 2;
+    const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.24
+struct PINMUX_AUX_SPI2_MOSI_0
+{
+    static const uint32_t addressOffset = 0x64;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.25
+struct PINMUX_AUX_SPI2_MISO_0
+{
+    static const uint32_t addressOffset = 0x68;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.26
+struct PINMUX_AUX_SPI2_SCK_0
+{
+    static const uint32_t addressOffset = 0x6C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.27
+struct PINMUX_AUX_SPI2_CSO_0
+{
+    static const uint32_t addressOffset = 0x70;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.28
+struct PINMUX_AUX_SPI2_CS1_0
+{
+    static const uint32_t addressOffset = 0x74;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.29
+struct PINMUX_AUX_SPI4_MOSI_0
+{
+    static const uint32_t addressOffset = 0x78;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.30
+struct PINMUX_AUX_SPI4_MISO_0
+{
+    static const uint32_t addressOffset = 0x7C;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.31
+struct PINMUX_AUX_SPI4_SCK_0
+{
+    static const uint32_t addressOffset = 0x80;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.32
+struct PINMUX_AUX_SPI4_CS0_0
+{
+    static const uint32_t addressOffset = 0x84;
+
+    static const uint32_t E_PREEMP_bit = 15;
+    static const uint32_t E_PREEMP_bitWidth = 1;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.33
+struct PINMUX_AUX_QSPI_SCK_0
+{
+    static const uint32_t addressOffset = 0x88;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.34
+struct PINMUX_AUX_QSPI_CS_N_0
+{
+    static const uint32_t addressOffset = 0x8C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.35
+struct PINMUX_AUX_QSPI_IO0_0
+{
+    static const uint32_t addressOffset = 0x90;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.36
+struct PINMUX_AUX_QSPI_IO1_0
+{
+    static const uint32_t addressOffset = 0x94;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.37
+struct PINMUX_AUX_QSPI_IO2_0
+{
+    static const uint32_t addressOffset = 0x98;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.38
+struct PINMUX_AUX_QSPI_IO3_0
+{
+    static const uint32_t addressOffset = 0x9C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.39
+struct PINMUX_AUX_DMIC1_CLK_0
+{
+    static const uint32_t addressOffset = 0xA4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.40
+struct PINMUX_AUX_DMIC1_DAT_0
+{
+    static const uint32_t addressOffset = 0xA8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.41
+struct PINMUX_AUX_DMIC2_CLK_0
+{
+    static const uint32_t addressOffset = 0xAC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.42
+struct PINMUX_AUX_DMIC2_DAT_0
+{
+    static const uint32_t addressOffset = 0xB0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.43
+struct PINMUX_AUX_DMIC3_CLK_0
+{
+    static const uint32_t addressOffset = 0xB4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.44
+struct PINMUX_AUX_DMIC3_DAT_0
+{
+    static const uint32_t addressOffset = 0xB8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.45
+struct PINMUX_AUX_GEN1_I2C_SCL_0
+{
+    static const uint32_t addressOffset = 0xBC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.46
+struct PINMUX_AUX_GEN1_I2C_SDA_0
+{
+    static const uint32_t addressOffset = 0xC0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.47
+struct PINMUX_AUX_GEN2_I2C_SCL_0
+{
+    static const uint32_t addressOffset = 0xC4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.48
+struct PINMUX_AUX_GEN2_I2C_SDA_0
+{
+    static const uint32_t addressOffset = 0xC8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.49
+struct PINMUX_AUX_GEN3_I2C_SCL_0
+{
+    static const uint32_t addressOffset = 0xCC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.50
+struct PINMUX_AUX_GEN3_I2C_SDA_0
+{
+    static const uint32_t addressOffset = 0xD0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.51
+struct PINMUX_AUX_CAM_I2C_SCL_0
+{
+    static const uint32_t addressOffset = 0xD4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.52
+struct PINMUX_AUX_CAM_I2C_SDA_0
+{
+    static const uint32_t addressOffset = 0xD8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.53
+struct PINMUX_AUX_PWR_I2C_SCL_0
+{
+    static const uint32_t addressOffset = 0xDC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.54
+struct PINMUX_AUX_PWR_I2C_SDA_0
+{
+    static const uint32_t addressOffset = 0xE0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.55
+struct PINMUX_AUX_UART1_TX_0
+{
+    static const uint32_t addressOffset = 0xE4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.56
+struct PINMUX_AUX_UART1_RX_0
+{
+    static const uint32_t addressOffset = 0xE48;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.57
+struct PINMUX_AUX_UART1_RTS_0
+{
+    static const uint32_t addressOffset = 0xEC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.58
+struct PINMUX_AUX_UART1_CTS_0
+{
+    static const uint32_t addressOffset = 0xF0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.59
+struct PINMUX_AUX_UART2_TX_0
+{
+    static const uint32_t addressOffset = 0xF4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.60
+struct PINMUX_AUX_UART2_RX_0
+{
+    static const uint32_t addressOffset = 0xF8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.61
+struct PINMUX_AUX_UART2_RTS_0
+{
+    static const uint32_t addressOffset = 0xFC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.62
+struct PINMUX_AUX_UART2_CTS_0
+{
+    static const uint32_t addressOffset = 0x100;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.63
+struct PINMUX_AUX_UART3_TX_0
+{
+    static const uint32_t addressOffset = 0x104;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.64
+struct PINMUX_AUX_UART3_RX_0
+{
+    static const uint32_t addressOffset = 0x108;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.65
+struct PINMUX_AUX_UART3_RTS_0
+{
+    static const uint32_t addressOffset = 0x10C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.66
+struct PINMUX_AUX_UART3_CTS_0
+{
+    static const uint32_t addressOffset = 0x110;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.67
+struct PINMUX_AUX_UART4_TX_0
+{
+    static const uint32_t addressOffset = 0x114;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.68
+struct PINMUX_AUX_UART4_RX_0
+{
+    static const uint32_t addressOffset = 0x118;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.69
+struct PINMUX_AUX_UART4_RTS_0
+{
+    static const uint32_t addressOffset = 0x11C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.70
+struct PINMUX_AUX_UART4_CTS_0
+{
+    static const uint32_t addressOffset = 0x120;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.71
+struct PINMUX_AUX_DAP1_FS_0
+{
+    static const uint32_t addressOffset = 0x124;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.72
+struct PINMUX_AUX_DAP1_DIN_0
+{
+    static const uint32_t addressOffset = 0x128;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.73
+struct PINMUX_AUX_DAP1_DOUT_0
+{
+    static const uint32_t addressOffset = 0x12C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.74
+struct PINMUX_AUX_DAP1_SCLK_0
+{
+    static const uint32_t addressOffset = 0x130;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.75
+struct PINMUX_AUX_DAP2_FS_0
+{
+    static const uint32_t addressOffset = 0x134;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.76
+struct PINMUX_AUX_DAP2_DIN_0
+{
+    static const uint32_t addressOffset = 0x138;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+   
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.77
+struct PINMUX_AUX_DAP2_DOUT_0
+{
+    static const uint32_t addressOffset = 0x13C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.78
+struct PINMUX_AUX_DAP2_SCLK_0
+{
+    static const uint32_t addressOffset = 0x140;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+     
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.79
+struct PINMUX_AUX_DAP4_FS_0
+{
+    static const uint32_t addressOffset = 0x144;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+};
+
+// 9.15.80
+struct PINMUX_AUX_DAP4_DIN_0
+{
+    static const uint32_t addressOffset = 0x148;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.81
+struct PINMUX_AUX_DAP4_DOUT_0
+{
+    static const uint32_t addressOffset = 0x14C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.82
+struct PINMUX_AUX_DAP4_SCLK_0
+{
+    static const uint32_t addressOffset = 0x150;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.83
+struct PINMUX_AUX_CAM1_MCLK_0
+{
+    static const uint32_t addressOffset = 0x154;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.84
+struct PINMUX_AUX_CAM2_MCLK_0
+{
+    static const uint32_t addressOffset = 0x158;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.85
+struct PINMUX_AUX_JTAG_RTCK_0
+{
+    static const uint32_t addressOffset = 0x15C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.86
+struct PINMUX_AUX_CLK_32K_IN_0
+{
+    static const uint32_t addressOffset = 0x160;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+};
+
+// 9.15.87
+struct PINMUX_AUX_CLK_32K_OUT_0
+{
+    static const uint32_t addressOffset = 0x164;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.88
+struct PINMUX_AUX_BATT_BCL_0
+{
+    static const uint32_t addressOffset = 0x168;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.89
+struct PINMUX_AUX_CLK_REQ_0
+{
+    static const uint32_t addressOffset = 0x16C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+};
+
+// 9.15.90
+struct PINMUX_AUX_CPU_PWR_REQ_0
+{
+    static const uint32_t addressOffset = 0x170;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+};
+
+// 9.15.91
+struct PINMUX_AUX_PWR_INT_N_0
+{
+    static const uint32_t addressOffset = 0x174;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+};
+
+// 9.15.92
+struct PINMUX_AUX_SHUTDOWN_0
+{
+    static const uint32_t addressOffset = 0x178;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+};
+
+// 9.15.93
+struct PINMUX_AUX_CORE_PWR_REQ_0
+{
+    static const uint32_t addressOffset = 0x17C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+};
+
+// 9.15.94
+struct PINMUX_AUX_AUD_MCLK_0
+{
+    static const uint32_t addressOffset = 0x180;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.95
+struct PINMUX_AUX_DVFS_PWM_0
+{
+    static const uint32_t addressOffset = 0x184;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.96
+struct PINMUX_AUX_DVFS_CLK_0
+{
+    static const uint32_t addressOffset = 0x188;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.97
+struct PINMUX_AUX_GPIO_X1_AUD_0
+{
+    static const uint32_t addressOffset = 0x18C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.98
+struct PINMUX_AUX_GPIO_X3_AUD_0
+{
+    static const uint32_t addressOffset = 0x190;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    const uint32_t TRISTATEf_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.99
+struct PINMUX_AUX_GPIO_PCC7_0
+{
+    static const uint32_t addressOffset = 0x194;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.100
+struct PINMUX_AUX_HDMI_CEC_0
+{
+    static const uint32_t addressOffset = 0x198;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.101
+struct PINMUX_AUX_HDMI_INT_DP_HPD_0
+{
+    static const uint32_t addressOffset = 0x19C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.102
+struct PINMUX_AUX_SPDIF_OUT_0
+{
+    static const uint32_t addressOffset = 0x1A0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.103
+struct PINMUX_AUX_SPDIF_IN_0
+{
+    static const uint32_t addressOffset = 0x1A4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.104
+struct PINMUX_AUX_USB_VBUS_EN0_0
+{
+    static const uint32_t addressOffset = 0x1A8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.105
+struct PINMUX_AUX_USB_VBUS_EN1_0
+{
+    static const uint32_t addressOffset = 0x1AC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_IO_HV_bit = 10;
+    static const uint32_t E_IO_HV_bitWidth = 1;
+ 
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.106
+struct PINMUX_AUX_DP_HPD0_0
+{
+    static const uint32_t addressOffset = 0x1B0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.107
+struct PINMUX_AUX_WIFI_EN_0
+{
+    static const uint32_t addressOffset = 0x1B4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.108
+struct PINMUX_AUX_WIFI_RST_0
+{
+    static const uint32_t addressOffset = 0x1B8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.109
+struct PINMUX_AUX_WIFI_WAKE_AP_0
+{
+    static const uint32_t addressOffset = 0x1BC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.110
+struct PINMUX_AUX_AP_WAKE_BT_0
+{
+    static const uint32_t addressOffset = 0x1C0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.111
+struct PINMUX_AUX_BT_RST_0
+{
+    static const uint32_t addressOffset = 0x1C4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.112
+struct PINMUX_AUX_BT_WAKE_AP_0
+{
+    static const uint32_t addressOffset = 0x1C8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.113
+struct PINMUX_AUX_AP_WAKE_NFC_0
+{
+    static const uint32_t addressOffset = 0x1CC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.114
+struct PINMUX_AUX_NFC_EN_0
+{
+    static const uint32_t addressOffset = 0x1D0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.115
+struct PINMUX_AUX_NFC_INT_0
+{
+    static const uint32_t addressOffset = 0x1D4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.116
+struct PINMUX_AUX_GPS_EN_0
+{
+    static const uint32_t addressOffset = 0x1D8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.117
+struct PINMUX_AUX_GPS_RST_0
+{
+    static const uint32_t addressOffset = 0x1DC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.118
+struct PINMUX_AUX_CAM_RST_0
+{
+    static const uint32_t addressOffset = 0x1E0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.119
+struct PINMUX_AUX_CAM_AF_EN_0
+{
+    static const uint32_t addressOffset = 0x1E4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.120
+struct PINMUX_AUX_CAM_FLASH_EN_0
+{
+    static const uint32_t addressOffset = 0x1E8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.121
+struct PINMUX_AUX_CAM1_PWDN_0
+{
+    static const uint32_t addressOffset = 0x1EC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.122
+struct PINMUX_AUX_CAM2_PWDN_0
+{
+    static const uint32_t addressOffset = 0x1F0;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.123
+struct PINMUX_AUX_CAM1_STROBE_0
+{
+    static const uint32_t addressOffset = 0x1F4;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.124
+struct PINMUX_AUX_LCD_TE_0
+{
+    static const uint32_t addressOffset = 0x1F8;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.125
+struct PINMUX_AUX_LCD_BL_PWM_0
+{
+    static const uint32_t addressOffset = 0x1FC;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.126
+struct PINMUX_AUX_LCD_BL_EN_0
+{
+    static const uint32_t addressOffset = 0x200;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.127
+struct PINMUX_AUX_LCD_RST_0
+{
+    static const uint32_t addressOffset = 0x204;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.128
+struct PINMUX_AUX_LCD_GPIO1_0
+{
+    static const uint32_t addressOffset = 0x208;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.129
+struct PINMUX_AUX_LCD_GPIO2_0
+{
+    static const uint32_t addressOffset = 0x20C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.130
+struct PINMUX_AUX_AP_READY_0 
+{
+    static const uint32_t addressOffset = 0x210;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.131
+struct PINMUX_AUX_TOUCH_RST_0
+{
+    static const uint32_t addressOffset = 0x214;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.132
+struct PINMUX_AUX_TOUCH_CLK_0
+{
+    static const uint32_t addressOffset = 0x218;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.133
+struct PINMUX_AUX_MODEM_WAKE_AP_0
+{
+    static const uint32_t addressOffset = 0x21C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.134
+struct PINMUX_AUX_TOUCH_INT_0
+{
+    static const uint32_t addressOffset = 0x220;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.135
+struct PINMUX_AUX_MOTION_INT_0
+{
+    static const uint32_t addressOffset = 0x224;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.136
+struct PINMUX_AUX_ALS_PROX_INT_0
+{
+    static const uint32_t addressOffset = 0x228;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.137
+struct PINMUX_AUX_TEMP_ALERT_0
+{
+    static const uint32_t addressOffset = 0x22C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.138
+struct PINMUX_AUX_BUTTON_POWER_ON_0
+{
+    static const uint32_t addressOffset = 0x230;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.139
+struct PINMUX_AUX_BUTTON_VOL_UP_0
+{
+    static const uint32_t addressOffset = 0x234;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.140
+struct PINMUX_AUX_BUTTON_VOL_DOWN_0
+{
+    static const uint32_t addressOffset = 0x238;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.141
+struct PINMUX_AUX_BUTTON_SLIDE_SW_0
+{
+    static const uint32_t addressOffset = 0x23C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.142
+struct PINMUX_AUX_BUTTON_HOME_0
+{
+    static const uint32_t addressOffset = 0x240;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.143
+struct PINMUX_AUX_GPIO_PA6_0
+{
+    static const uint32_t addressOffset = 0x244;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.144
+struct PINMUX_AUX_GPIO_PE6_0
+{
+    static const uint32_t addressOffset = 0x248;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.145
+struct PINMUX_AUX_GPIO_PE7_0
+{
+    static const uint32_t addressOffset = 0x24C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.146
+struct PINMUX_AUX_GPIO_PH6_0
+{
+    static const uint32_t addressOffset = 0x250;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.147
+struct PINMUX_AUX_GPIO_PK0_0
+{
+    static const uint32_t addressOffset = 0x254;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+   
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.148
+struct PINMUX_AUX_GPIO_PK1_0
+{
+    static const uint32_t addressOffset = 0x258;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.149
+struct PINMUX_AUX_GPIO_PK2_0
+{
+    static const uint32_t addressOffset = 0x25C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.150
+struct PINMUX_AUX_GPIO_PK3_0
+{
+    static const uint32_t addressOffset = 0x260;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.151
+struct PINMUX_AUX_GPIO_PK4_0
+{
+    static const uint32_t addressOffset = 0x264;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.152
+struct PINMUX_AUX_GPIO_PK5_0
+{
+    static const uint32_t addressOffset = 0x268;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.153
+struct PINMUX_AUX_GPIO_PK6_0
+{
+    static const uint32_t addressOffset = 0x26C;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.154
+struct PINMUX_AUX_GPIO_PK7_0
+{
+    static const uint32_t addressOffset = 0x270;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.155
+struct PINMUX_AUX_GPIO_PL0_0
+{
+    static const uint32_t addressOffset = 0x274;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.156
+struct PINMUX_AUX_GPIO_PL1_0
+{
+    static const uint32_t addressOffset = 0x278;
+
+    static const uint32_t DRV_TYPE_bit = 13;
+    static const uint32_t DRV_TYPE_bitWidth = 2;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    static const uint32_t E_HSM_bit = 9;
+    static const uint32_t E_HSM_bitWidth = 1;
+ 
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.157
+struct PINMUX_AUX_GPIO_PZ0_0
+{
+    static const uint32_t addressOffset = 0x27C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+    
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+    
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.158
+struct PINMUX_AUX_GPIO_PZ1_0
+{
+    static const uint32_t addressOffset = 0x280;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+ 
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.159
+struct PINMUX_AUX_GPIO_PZ2_0
+{
+    static const uint32_t addressOffset = 0x284;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+ 
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.160
+struct PINMUX_AUX_GPIO_PZ3_0
+{
+    static const uint32_t addressOffset = 0x288;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+ 
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.161
+struct PINMUX_AUX_GPIO_PZ4_0
+{
+    static const uint32_t addressOffset = 0x28C;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+ 
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
+};
+
+// 9.15.162
+struct PINMUX_AUX_GPIO_PZ5_0
+{
+    static const uint32_t addressOffset = 0x290;
+
+    static const uint32_t E_SCHMT_bit = 12;
+    static const uint32_t E_SCHMT_bitWidth = 1;
+ 
+    /*
+    DO NOT USE. LEAVE IT AT THE DEFAULT VALUE.
+    static const uint32_t E_OD_bit = 11;
+    static const uint32_t E_OD_bitWidth = 1;
+    */
+
+    static const uint32_t E_LPDR_bit = 8;
+    static const uint32_t E_LPDR_bitWidth = 1;
+
+    static const uint32_t LOCK_bit = 7;
+    static const uint32_t LOCK_bitWidth = 1;
+
+    static const uint32_t E_INPUT_bit = 6;
+    static const uint32_t E_INPUT_bitWidth = 1;
+ 
+    static const uint32_t PARK_bit = 5;
+    static const uint32_t PARK_bitWidth = 1;
+
+    static const uint32_t TRISTATE_bit = 4;
+    static const uint32_t TRISTATE_bitWidth = 1;
+    
+    static const uint32_t PUPD_bit = 2;
+    static const uint32_t PUPD_bitWidth = 2;
+
+    static const uint32_t PM_bit = 0;
+    static const uint32_t PM_bitWidth = 2;
+
 };
 
 #endif //PINMUX_CONTROLLER_H

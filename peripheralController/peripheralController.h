@@ -41,6 +41,7 @@
 #define PERIPHERAL_CONTROLLER_H
 
 #include <cstdint>
+#include <cstddef>
 
 class PeripheralController
 {
@@ -54,13 +55,14 @@ class PeripheralController
          * set or get the values for the registers therefore
          * multiple bit fields can be set or get at once.
          */
-        void setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t bitmask);
-        uint32_t getRegisterField(uint32_t, addrOffset, uint32_t bitmask);
+        void setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t baseBit, uint32_t bitWidth);
+        uint32_t getRegisterField(uint32_t addrOffset, uint32_t baseBit, uint32_t bitWidth);
 
        
     private:
         const uint32_t BLOCK_SIZE = 0x1000; //4096
-        volatile uint32_t* memMap = NULL;
+        void* memMap = NULL;
+	uint32_t baseAddress = 0;
 
 };
 
