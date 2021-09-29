@@ -1068,7 +1068,7 @@ struct PINMUX_AUX_SPI2_SCK_0
 };
 
 // 9.15.27
-struct PINMUX_AUX_SPI2_CSO_0
+struct PINMUX_AUX_SPI2_CS0_0
 {
     static const uint32_t addressOffset = 0x70;
 
