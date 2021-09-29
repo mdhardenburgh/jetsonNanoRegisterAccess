@@ -51,7 +51,10 @@
  * PA.05, PA.06, and PA.07. This is the same for every port. As you can see in the above table the pin PE.06 is at default a 
  * GPIO (with alternate function of PWM). This GPIO coresponds the the physical Tegra pin pad GPIO_PE6, the pysical jetson 
  * module pin 228, and that module pin has the name GPIO13. That module pin is connected to the GPIO header on the carrier
- * board, and it is pin 33.  
+ * board, and it is pin 33. E is found within GPIO Controller 2, so the Controller2 offset address must be used.
+ * E is the zeroth element (of ABCD, EFGH, ect). 
+ * A command to set the GPIO/SPIO mode of J41-pin33 to GPIO mode:
+ * myGpioController2.setRegisterField(GPIO_CNF_0_RMW::addressOffset, gpioController::BIT_N_GPIO, GPIO_CNF_0_RMW::BIT_6_baseBit, GPIO_CNF_0_RMW::BIT_6_bitWidth); 
  * _____________________________________________________________________________________________________
  * Register Name                | Offset (Lower: Read-Modify-Write) | Offset (Upper: Per-Pin Mask Write)
  * GPIO Controller 1 – Port     | A   | B   | C   | D               | A   | B   | C   | D 
