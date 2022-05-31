@@ -3,9 +3,9 @@
 #include <cassert>
 #include <unistd.h>
 
-#include "peripheralController.h"
-#include "gpioController/gpio.h"
-#include "pinmuxController/pinmuxController.h"
+#include "../../peripheralController/peripheralController.h"
+#include "../../gpioController/gpio.h"
+#include "../../pinmuxController/pinmuxController.h"
 
 int main()
 {   
