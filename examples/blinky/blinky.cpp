@@ -4,8 +4,8 @@
 #include <unistd.h>
 
 #include "peripheralController.h"
-#include "gpioController/gpio.h"
-#include "pinmuxController/pinmuxController.h"
+#include "gpio.h"
+#include "pinmuxController.h"
 
 int main()
 {   
