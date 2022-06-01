@@ -29,12 +29,10 @@ methods of doing this.
    * [Jetson nano platform adaptation and bring uo - pinmux changes and other things](https://docs.nvidia.com/jetson/l4t/index.html#page/Tegra%20Linux%20Driver%20Package%20Development%20Guide/adaptation_and_bringup_nano.html%23wwpID0E0EQ0HA)
 
 ## Building Examples
-To build the examples you need the jetson nano gcc which can be downloaded from 
-[here](https://developer.nvidia.com/embedded/linux-tegra-r3271) and CMake verion 
-3.23.1 or later which can be downloaded from [here](https://cmake.org/download/).
-This script assumes that the jetson nano gcc is called gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
-and is located in the home directory
-
+To build the examples you need the [Jetson Nano GCC](https://developer.nvidia.com/embedded/linux-tegra-r3271) 
+and [CMake version 3.23.1 or later](https://cmake.org/download/). This script 
+assumes that the jetson nano gcc folder is called `gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu`
+and is located in the home directory.
 
 To source the enviroment the run:
 
@@ -46,7 +44,7 @@ A successful output looks like:
 
 To run cmake:
 
-`$ <cmake_location>/bin/cmake -DCMAKE_TOOLCHAIN_FILE=jetsonToolChain.cmake .`
+`$ <cmake_location>/bin/cmake .`
 
 Where <cmake_location> is the location of your cmake folder. For example, my
 cmake folder is in the home directory so my command will look like:
