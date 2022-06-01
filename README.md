@@ -49,7 +49,7 @@ To run cmake:
 Where <cmake_location> is the location of your cmake folder. For example, my
 cmake folder is in the home directory so my command will look like:
 
-`$ ~/cmake-3.23.1-linux-x86_64/bin/cmake -DCMAKE_TOOLCHAIN_FILE=jetsonToolChain.cmake .`
+`$ ~/cmake-3.23.1-linux-x86_64/bin/cmake .`
 
 This command will create the makefiles for all of the examples.
 
