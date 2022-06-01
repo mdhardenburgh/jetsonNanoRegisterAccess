@@ -4,3 +4,4 @@ JETSON_GCC_LOCATION=$HOME/$(find -type d -name "gcc-linaro-7.3.1-2018.05-x86_64_
 export JETSON_GCC_LOCATION
 echo JETSON_GCC_LOCATION is $JETSON_GCC_LOCATION
 cd $rootDir
+export CMAKE_TOOLCHAIN_FILE=jetsonToolChain.cmake

@@ -27,9 +27,40 @@ methods of doing this.
    * [Jetson nano platform adatpation and bring up guide](https://developer.download.nvidia.com/embedded/L4T/r32-2_Release_v1.0/Tegra_Linux_Driver_Package_Nano_Adaptation_Guide.pdf?LXJYFxZKcq85VeLYsOVlrdF-YdUbKgX4Hd1eBPhpHV7rcpRcEYxJOKZQ7_W7JNexNwllmrjQPagLBLY9tnKUfIPpGl_kmyZOPjFXM130Z05vfURWk0IgtmWsQMn9eBYc6SSKoX-kayx0oyLox0pRAO87LR42ydM7FyjeiAdiOTIv6FV6F9ZMIi7l02GA227X1bFm#page235)
    * [Where is the jetson nano tehcnical reference manual with registers?](https://forums.developer.nvidia.com/t/technical-reference-manual/73593)
    * [Jetson nano platform adaptation and bring uo - pinmux changes and other things](https://docs.nvidia.com/jetson/l4t/index.html#page/Tegra%20Linux%20Driver%20Package%20Development%20Guide/adaptation_and_bringup_nano.html%23wwpID0E0EQ0HA)
- 
+
+## Building Examples
+To build the examples you need the jetson nano gcc which can be downloaded from 
+[here](https://developer.nvidia.com/embedded/linux-tegra-r3271) and CMake verion 
+3.23.1 or later which can be downloaded from [here](https://cmake.org/download/).
+This script assumes that the jetson nano gcc is called gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
+and is located in the home directory
+
+
+To source the enviroment the run:
+
+`$ source jetsonNanoEnv`
+
+A successful output looks like:
+
+`JETSON_GCC_LOCATION is /home/matthew/jetsonNanoBsp/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu`
+
+To run cmake:
+
+`$ <cmake_location>/bin/cmake -DCMAKE_TOOLCHAIN_FILE=jetsonToolChain.cmake .`
+
+Where <cmake_location> is the location of your cmake folder. For example, my
+cmake folder is in the home directory so my command will look like:
+
+`$ ~/cmake-3.23.1-linux-x86_64/bin/cmake -DCMAKE_TOOLCHAIN_FILE=jetsonToolChain.cmake .`
+
+This command will create the makefiles for all of the examples.
+
+To build, in the root directory run:
+
+`$ make all`
+
 ## Copyright
-jetsonNanoRegisterAccess. Copyright (C) Matthew Hardenburgh 2021. All rights reserved. mdhardenburgh@protonmail.com
+jetsonNanoRegisterAccess. Copyright (C) Matthew Hardenburgh 2022. All rights reserved. mdhardenburgh@protonmail.com
 
 ## Licensing
 This program is free software: you can redistribute it and/or modify

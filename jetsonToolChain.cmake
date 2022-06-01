@@ -2,11 +2,11 @@
 set(CMAKE_SYSTEM_NAME Linux)
 
 # which compilers to use for C and C++
-set(CMAKE_C_COMPILER   /home/matthew/jetsonNanoBsp/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-gcc)
-set(CMAKE_CXX_COMPILER /home/matthew/jetsonNanoBsp/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-g++)
+set(CMAKE_C_COMPILER   $ENV{JETSON_GCC_LOCATION}/bin/aarch64-linux-gnu-gcc)
+set(CMAKE_CXX_COMPILER $ENV{JETSON_GCC_LOCATION}/bin/aarch64-linux-gnu-g++)
 
 # where is the target environment located
-set(CMAKE_FIND_ROOT_PATH  /home/matthew/jetsonNanoBsp/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu)
+set(CMAKE_FIND_ROOT_PATH  $ENV{JETSON_GCC_LOCATION})
 
 # adjust the default behavior of the FIND_XXX() commands:
 # search programs in the host environment
