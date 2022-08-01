@@ -14,6 +14,9 @@ module spiRecieve
     reg[1:0] stateTracker;
     reg[32:0] 
     
+    /**
+     * When chip sel is low (active low) then data is being sent
+     */
     
     always@(posedge clk, posedge rst)
     begin

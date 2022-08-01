@@ -20,3 +20,5 @@ peripheralController/libperipheralController.a
 pinmuxController/CMakeFiles/
 pinmuxController/Makefile
 pinmuxController/cmake_install.cmake
+examples/spiExample/.Makefile
+examples/spiExample/verilog/
