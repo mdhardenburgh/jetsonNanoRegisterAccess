@@ -35,6 +35,9 @@ PeripheralController::~PeripheralController()
     //assert(error <= 0);
 }
 
+
+// direct addressing such as *((volatile uint32_t*)(baseAddress + addrOffset)) &= ~bitMask causes a segfault and that is why 
+// we don't do it
 void PeripheralController::setRegisterField(uint32_t addrOffset, uint32_t value, uint32_t baseBit, uint32_t bitWidth)
 {
     assert(memMap != NULL);
@@ -42,6 +45,10 @@ void PeripheralController::setRegisterField(uint32_t addrOffset, uint32_t value,
 
     *((volatile uint8_t*)memMap + (baseAddress&(BLOCK_SIZE - 1)) + addrOffset) &= ~bitMask;   
     *((volatile uint8_t*)memMap + (baseAddress&(BLOCK_SIZE - 1)) + addrOffset) |= (value << baseBit);
+    
+    //*((volatile uint32_t*)(baseAddress + addrOffset)) &= ~bitMask;   
+    //*((volatile uint32_t*)(baseAddress + addrOffset)) |= (value << baseBit);
+
 }
 
 uint32_t PeripheralController::getRegisterField(uint32_t addrOffset, uint32_t baseBit, uint32_t bitWidth)
@@ -49,6 +56,7 @@ uint32_t PeripheralController::getRegisterField(uint32_t addrOffset, uint32_t ba
     assert(memMap != NULL);
     
     uint32_t registerValue = *((volatile uint8_t*)memMap + (baseAddress&(BLOCK_SIZE - 1)) + addrOffset);
+    //uint32_t registerValue = *((volatile uint32_t*)(baseAddress + addrOffset));
     return (registerValue >> baseBit)&((1<<bitWidth)-1); 
 }
 
